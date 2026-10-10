@@ -1,1 +1,1064 @@
-DNN
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DNN Visual Study Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5FA;--panel:#FFFFFF;--ink:#13203B;--muted:#58647E;--line:#D9E0ED;--soft:#EBEFF8;--focus:#2F5BFF;
+  --u1:#2F5BFF;--u2:#00877F;--u3:#B86500;--u4:#C0287A;--u5:#23894F;
+  --u1s:#E5EBFF;--u2s:#DAF2EF;--u3s:#FFEFD6;--u4s:#FBE3EF;--u5s:#DDF2E5;
+  --on:#FFFFFF;--good:#1E8F4E;--bad:#D23B35;--warn:#B77A00;--goods:#DDF2E5;--bads:#FCE4E2;
+  --font-d:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --font-b:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0C1120;--panel:#151C30;--ink:#E7ECF8;--muted:#9AA6C4;--line:#27314D;--soft:#1C2540;--focus:#8AA4FF;
+  --u1:#7C9BFF;--u2:#3FD1C6;--u3:#FFB454;--u4:#FF7DB6;--u5:#5ED494;
+  --u1s:#1B2650;--u2s:#0F3A38;--u3s:#40300F;--u4s:#43182F;--u5s:#123A26;
+  --on:#0C1120;--good:#5ED494;--bad:#FF7A72;--warn:#FFB454;--goods:#123A26;--bads:#47201E;}}
+:root[data-theme="dark"]{--bg:#0C1120;--panel:#151C30;--ink:#E7ECF8;--muted:#9AA6C4;--line:#27314D;--soft:#1C2540;--focus:#8AA4FF;
+  --u1:#7C9BFF;--u2:#3FD1C6;--u3:#FFB454;--u4:#FF7DB6;--u5:#5ED494;
+  --u1s:#1B2650;--u2s:#0F3A38;--u3s:#40300F;--u4s:#43182F;--u5s:#123A26;
+  --on:#0C1120;--good:#5ED494;--bad:#FF7A72;--warn:#FFB454;--goods:#123A26;--bads:#47201E;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 118px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--font-b);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--font-d);line-height:1.15;margin:0;letter-spacing:-.01em}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar-row{display:flex;align-items:center;gap:12px;padding:10px 0}
+.brand{font:700 18px/1 var(--font-d);white-space:nowrap}
+.prog{flex:1;min-width:90px;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;white-space:nowrap}
+.prog i{display:block;flex:1;height:6px;border-radius:6px;background:var(--soft);overflow:hidden;min-width:40px}
+.prog i b{display:block;height:100%;width:0;background:var(--u5);transition:width .3s}
+.search{width:190px;max-width:36vw;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 14px;font-size:14px}
+.ibtn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 12px;cursor:pointer;font-size:13px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:7px 12px;cursor:pointer;font-size:14px;font-weight:600}
+.tab .dot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.tab small{font-weight:500;color:var(--muted);font-size:12px}
+.tab[aria-selected="true"]{background:var(--c);border-color:var(--c);color:var(--on)}
+.tab[aria-selected="true"] small{color:var(--on);opacity:.8}
+.tab[aria-selected="true"] .dot{background:var(--on)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;padding:28px 0 12px}
+.hero h1{font-size:clamp(28px,4.4vw,44px);font-weight:800;max-width:15ch}
+.hero p{margin-top:12px;color:var(--muted);max-width:46ch}
+.stats{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap}
+.stats div{font-size:13px;color:var(--muted)}
+.stats b{display:block;font:800 26px/1 var(--font-d);color:var(--ink)}
+.heronet{--a:var(--u1);--as:var(--u1s);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 12px 12px}
+.heronet .cap{margin-top:4px}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:18px}.search{width:120px}.brand{font-size:16px}.prog span{display:none}}
+
+/* sections */
+.sec{display:none;--a:var(--u1);--as:var(--u1s)}
+.sec.show,.searching .sec{display:block}
+.sec[data-u="u2"]{--a:var(--u2);--as:var(--u2s)}
+.sec[data-u="u3"]{--a:var(--u3);--as:var(--u3s)}
+.sec[data-u="u4"]{--a:var(--u4);--as:var(--u4s)}
+.sec[data-u="q"]{--a:var(--u5);--as:var(--u5s)}
+.sechead{padding:18px 0 8px}
+.sechead h2{font-size:28px;color:var(--a)}
+.sechead p{color:var(--muted);margin-top:6px;max-width:64ch}
+.tools{display:flex;gap:8px;margin:12px 0 14px;flex-wrap:wrap}
+.chipbtn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer}
+.chipbtn:hover{border-color:var(--a)}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--a);border-radius:10px;margin:0 0 12px;overflow:hidden}
+.card.done{border-left-color:var(--good)}
+.chead{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:none;border:0;padding:14px 16px;cursor:pointer}
+.qref{flex:0 0 auto;background:var(--as);color:var(--a);font-weight:700;font-size:13px;border-radius:6px;padding:3px 8px;white-space:nowrap}
+.ctitle{flex:1;font:700 18px/1.25 var(--font-d)}
+.tick{flex:0 0 auto;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:transparent;font-size:13px}
+.card.done .tick{background:var(--good);border-color:var(--good);color:var(--on)}
+.chev{flex:0 0 auto;width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin:0 4px 4px 0}
+.card.open .chev{transform:rotate(-135deg);margin:4px 4px 0 0}
+.cbody{display:none;padding:2px 16px 18px}
+.card.open .cbody{display:block}
+.qtext{border-left:3px solid var(--line);padding:2px 0 2px 12px;margin:2px 0 12px;color:var(--muted);font-size:14px}
+.qtext p+p{margin-top:4px}
+.key{background:var(--as);border-radius:10px;padding:12px 14px;font-weight:600;margin:0 0 14px}
+.viz{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px;margin:0 0 14px}
+.viz+.viz{margin-top:-4px}
+.viz svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+.viz .two svg,.viz .gc svg{max-width:300px}
+.vt{font:700 14px var(--font-d);margin-bottom:8px}
+.pts{margin:0 0 14px;padding:0;list-style:none;display:grid;gap:7px;max-width:76ch}
+.pts li{padding-left:22px;position:relative}
+.pts li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:2px;background:var(--a)}
+.sub{font:700 15px var(--font-d);margin:16px 0 8px}
+.ex{border:1px dashed var(--a);border-radius:10px;padding:10px 14px;margin:6px 0 12px;color:var(--ink)}
+.ex b{color:var(--a)}
+.cfoot{display:flex;justify-content:flex-end}
+.donebtn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 16px;cursor:pointer;font-weight:600;font-size:14px}
+.card.done .donebtn{background:var(--good);border-color:var(--good);color:var(--on)}
+
+/* flows, tables, grids */
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px;padding:0;list-style:none;counter-reset:s}
+.flow li{counter-increment:s;flex:1 1 150px;max-width:260px;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--a);border-radius:8px;padding:9px 11px 10px;font-size:14px;position:relative}
+.flow li::before{content:counter(s);display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--a);color:var(--on);font-weight:700;font-size:12px;margin-right:7px}
+.flow li b{font-weight:700}
+.tw{overflow-x:auto;margin:0 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:420px}
+th,td{text-align:left;padding:8px 11px;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--as);color:var(--ink);font-weight:700}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:0 0 14px}
+.gc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.gc b{display:block;font-family:var(--font-d);font-size:15px;margin-bottom:3px;color:var(--a)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.chip{background:var(--as);color:var(--ink);border-radius:999px;padding:3px 11px;font-size:13px}
+
+/* widget controls */
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:8px 0}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:14px;font-weight:600}
+.btn.pri{background:var(--a);border-color:var(--a);color:var(--on)}
+.btn:disabled{opacity:.5;cursor:default}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel);flex-wrap:wrap}
+.segb{border:0;background:none;padding:6px 11px;cursor:pointer;font-size:13px;font-weight:600;border-right:1px solid var(--line)}
+.segb:last-child{border-right:0}
+.segb.on{background:var(--a);color:var(--on)}
+.rng{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.rng input{accent-color:var(--a);width:150px;max-width:44vw}
+.rng output{min-width:38px;color:var(--ink);font-weight:700}
+.cap{font-size:14px;color:var(--ink);min-height:1.5em;margin-top:6px}
+.cap.m{color:var(--muted)}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;background:var(--soft)}
+.badge.g{background:var(--goods);color:var(--good)}.badge.b{background:var(--bads);color:var(--bad)}
+.cells{display:grid;gap:3px}
+.cell{display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);border-radius:4px;font-size:13px;min-height:34px;transition:background .2s,color .2s}
+.cell.hi{background:var(--a);color:var(--on);border-color:var(--a)}
+.cell.pad{border-style:dashed;color:var(--muted);background:transparent}
+.cell.sm{min-height:28px;font-size:12px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;align-items:start}
+.lbl{font-size:12px;color:var(--muted);margin-bottom:4px}
+.barrow{display:grid;grid-template-columns:96px 1fr 52px;gap:8px;align-items:center;margin:5px 0;font-size:13px}
+.track{height:14px;border-radius:7px;background:var(--soft);overflow:hidden}
+.fill{height:100%;background:var(--a);border-radius:7px;transition:width .25s}
+.fill.g{background:var(--good)}.fill.r{background:var(--bad)}.fill.w{background:var(--warn)}
+.big{font:800 22px var(--font-d)}
+
+/* svg classes */
+.t{font:13px var(--font-b);fill:var(--ink)}.ts{font:11.5px var(--font-b);fill:var(--muted)}.tb{font:700 13px var(--font-b);fill:var(--ink)}.tw2{font:700 12px var(--font-b);fill:var(--on)}
+.f-ink{fill:var(--ink)}.f-muted{fill:var(--muted)}.f-a{fill:var(--a)}.f-as{fill:var(--as)}.f-panel{fill:var(--panel)}.f-soft{fill:var(--soft)}.f-line{fill:var(--line)}.f-good{fill:var(--good)}.f-bad{fill:var(--bad)}.f-warn{fill:var(--warn)}
+.f-u1{fill:var(--u1)}.f-u2{fill:var(--u2)}.f-u3{fill:var(--u3)}.f-u4{fill:var(--u4)}.f-u5{fill:var(--u5)}
+.s-ink{stroke:var(--ink)}.s-muted{stroke:var(--muted)}.s-a{stroke:var(--a)}.s-line{stroke:var(--line)}.s-good{stroke:var(--good)}.s-bad{stroke:var(--bad)}.s-warn{stroke:var(--warn)}.s-panel{stroke:var(--panel)}
+.s-u1{stroke:var(--u1)}.s-u2{stroke:var(--u2)}.s-u3{stroke:var(--u3)}.s-u4{stroke:var(--u4)}
+.nf{fill:none}.tr{transition:all .25s}
+.dim{opacity:.22}
+
+/* quizzes */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.fcard{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--a);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;font-size:14px;min-height:104px;display:flex;flex-direction:column;gap:8px}
+.fcard .ans{display:none;font:700 17px var(--font-d);color:var(--good)}
+.fcard.show .ans{display:block}
+.fcard .hint{font-size:12px;color:var(--muted)}
+.fcard.show .hint{display:none}
+.blank{display:inline-block;min-width:70px;border-bottom:2px solid var(--a);margin:0 2px}
+.mq{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--a);border-radius:10px;padding:14px 16px;margin:0 0 12px}
+.mq h3{font:600 16px/1.4 var(--font-b);margin-bottom:10px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 12px;margin:6px 0;cursor:pointer;font-size:15px}
+.opt:hover{border-color:var(--a)}
+.opt.ok{background:var(--goods);border-color:var(--good);color:var(--ink)}
+.opt.no{background:var(--bads);border-color:var(--bad)}
+.mq.locked .opt{cursor:default}
+.score{position:sticky;top:calc(env(safe-area-inset-top,0px) + 104px);z-index:5;background:var(--as);border-radius:10px;padding:8px 14px;font-weight:700;margin:6px 0 12px}
+
+.sheet{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--a);border-radius:10px;padding:14px 16px;margin:18px 0 28px}
+.sheet h3{font-size:18px;color:var(--a);margin-bottom:8px}
+.sheet ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14.5px}
+.empty{padding:30px 0;color:var(--muted)}
+.foot{padding:26px 0 40px;color:var(--muted);font-size:13px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <div class="bar-row"><div class="brand">DNN, drawn out</div><div class="prog"><i><b id="pb"></b></i><span id="pt"></span></div><input class="search" id="q" type="search" placeholder="Search topics" aria-label="Search topics"><button class="ibtn" id="theme" type="button">Dark mode</button></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Units"></div>
+</div></div>
+<main class="wrap">
+  <section class="hero" aria-label="Introduction">
+    <div>
+      <h1>Deep Neural Networks, drawn out</h1>
+      <p>Fifty visual cards cover all 59 questions from Units I to IV, plus the fill-in-the-blanks and multiple choice questions. Open a card, play with the visual, then read the short notes under it.</p>
+      <div class="stats"><div><b>59</b>questions covered</div><div><b>50</b>visual cards</div><div><b>26</b>blanks</div><div><b>25</b>MCQs</div></div>
+    </div>
+    <div class="heronet"><div id="hero"></div></div>
+  </section>
+  <div id="app"></div>
+  <div id="none" class="empty" style="display:none">No topic matches your search. Try a word like gradient, pooling or BERT.</div>
+  <div class="foot">Prepared by Yash Waghadhare</div>
+</main>
+<script>
+(function(){
+'use strict';
+/* ---------- core helpers ---------- */
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const W = {};
+const timers = new WeakMap();
+function every(el, ms, fn) { stop(el); const id = setInterval(fn, ms); timers.set(el, id); return id; }
+function stop(el) { const id = timers.get(el); if (id) { clearInterval(id); timers.delete(el); } }
+let SVGN = 0;
+function svg(w, h, inner, label) {
+  const u = ++SVGN; inner = inner.replace(/id="(ar[AMB])"/g, `id="$1${u}"`).replace(/url\(#(ar[AMB])\)/g, `url(#$1${u})`);
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label || 'diagram')}">${inner}</svg>`;
+}
+function seg(items, active) {
+  return `<div class="seg" role="group">${items.map(([v, l]) => `<button type="button" class="segb${v === active ? ' on' : ''}" data-v="${v}" aria-pressed="${v === active}">${l}</button>`).join('')}</div>`;
+}
+function wireSeg(g, fn) {
+  $$('.segb', g).forEach(b => b.addEventListener('click', () => {
+    $$('.segb', g).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    fn(b.dataset.v);
+  }));
+}
+function rng(id, label, min, max, step, val) {
+  return `<label class="rng"><span>${label}</span><input type="range" data-r="${id}" min="${min}" max="${max}" step="${step}" value="${val}"><output data-o="${id}">${val}</output></label>`;
+}
+function onRng(root, id, fn) {
+  const i = $(`[data-r="${id}"]`, root), o = $(`[data-o="${id}"]`, root);
+  const go = () => { o.textContent = i.value; fn(parseFloat(i.value)); };
+  i.addEventListener('input', go); return { set(v) { i.value = v; o.textContent = v; }, get: () => parseFloat(i.value), el: i };
+}
+function btn(id, label, pri) { return `<button type="button" class="btn${pri ? ' pri' : ''}" data-b="${id}">${label}</button>`; }
+function onBtn(root, id, fn) { const b = $(`[data-b="${id}"]`, root); b.addEventListener('click', fn); return b; }
+function pct(v) { return Math.round(v * 100) + '%'; }
+function seeded(seed) { let s = seed; return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+/* content builders */
+function flow(steps) { return `<ol class="flow">${steps.map(s => `<li>${s}</li>`).join('')}</ol>`; }
+function tbl(head, rows) {
+  return `<div class="tw"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function grid(items) { return `<div class="grid">${items.map(([t, d]) => `<div class="gc"><b>${t}</b>${d}</div>`).join('')}</div>`; }
+function chips(list) { return `<div class="chips">${list.map(c => `<span class="chip">${c}</span>`).join('')}</div>`; }
+function ex(t) { return `<div class="ex"><b>Example.</b> ${t}</div>`; }
+function sub(t) { return `<div class="sub">${t}</div>`; }
+function bars(rows) {
+  return rows.map(r => `<div class="barrow"><span>${r[0]}</span><div class="track"><div class="fill ${r[3] || ''}" style="width:${clamp(r[1], 0, 1) * 100}%"></div></div><span>${r[2]}</span></div>`).join('');
+}
+/* a small feedforward network drawing: layers = [3,4,4,2] */
+function netGeom(layers, w, h, padx) {
+  const xs = layers.map((_, i) => padx + i * ((w - 2 * padx) / (layers.length - 1)));
+  return layers.map((n, i) => Array.from({ length: n }, (_, j) => ({ x: xs[i], y: h / 2 + (j - (n - 1) / 2) * Math.min(46, (h - 40) / n) })));
+}
+
+/* ---------- Unit I widgets ---------- */
+function netStep(el, o) {
+  const L = o.layers || [3, 4, 4, 2], w = 440, h = 230, G = netGeom(L, w, h, 50);
+  const names = o.names || ['Input', 'Hidden 1', 'Hidden 2', 'Output'];
+  let mode = o.mode || 'f', st = -1;
+  let s = '';
+  for (let i = 0; i < L.length - 1; i++) G[i].forEach(a => G[i + 1].forEach(b => { s += `<line data-e="${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="s-line" stroke-width="1.2"/>`; }));
+  G.forEach((ly, i) => ly.forEach(p => { s += `<circle data-n="${i}" cx="${p.x}" cy="${p.y}" r="12" class="f-panel s-muted" stroke-width="1.5"/>`; }));
+  G.forEach((ly, i) => { s += `<text class="ts" x="${ly[0].x}" y="${h - 4}" text-anchor="middle">${names[i] || ''}</text>`; });
+  const caps = { f: o.capsF || ['Inputs enter the network', 'Layer 1: weighted sum + bias, then activation', 'Layer 2 repeats with the new values', 'The output layer gives the prediction'],
+    b: o.capsB || ['The error is measured at the output', 'The error flows back to the previous layer', 'Each weight learns how much it contributed', 'Weights are adjusted to reduce the error'] };
+  const ctl = o.hero ? `<div class="ctrl">${seg([['f', 'Forward pass'], ['b', 'Backward pass']], mode)}${btn('play', RM ? 'Next step' : 'Pause')}</div>`
+    : `<div class="ctrl">${btn('step', 'Next step', 1)}${btn('play', 'Play')}${btn('reset', 'Reset')}${o.switch ? seg([['f', 'Forward'], ['b', 'Backward']], mode) : ''}</div>`;
+  el.innerHTML = svg(w, h, s, 'Neural network with layers lighting up') + `<div class="cap" aria-live="polite"></div>` + ctl;
+  const cap = $('.cap', el);
+  const paint = () => {
+    const last = L.length - 1;
+    $$('[data-n]', el).forEach(n => { const i = +n.dataset.n; const lit = st >= 0 && (mode === 'f' ? i <= st : last - i <= st); n.style.fill = lit ? (mode === 'f' ? 'var(--a)' : 'var(--bad)') : ''; n.style.stroke = lit ? 'transparent' : ''; });
+    $$('[data-e]', el).forEach(e => { const i = +e.dataset.e; const lit = st >= 0 && (mode === 'f' ? i + 1 <= st : last - i - 1 <= st); e.style.stroke = lit ? (mode === 'f' ? 'var(--a)' : 'var(--bad)') : ''; e.style.strokeWidth = lit ? 2 : ''; });
+    cap.textContent = st < 0 ? 'Press a button to send a signal through the network.' : (caps[mode][Math.min(st, caps[mode].length - 1)] || '');
+  };
+  const next = () => { st = (st + 1) % (L.length + 1); if (st === L.length) st = -1; if (st === -1 && o.hero && !RM) { mode = mode === 'f' ? 'b' : 'f'; const g = $('.seg', el); if (g) $$('.segb', g).forEach(b => { b.classList.toggle('on', b.dataset.v === mode); b.setAttribute('aria-pressed', b.dataset.v === mode); }); } paint(); };
+  const g = $('.seg', el); if (g) wireSeg(g, v => { mode = v; st = -1; paint(); });
+  const pb = onBtn(el, 'play', () => {
+    if (o.hero && RM) { next(); return; }
+    if (timers.get(el)) { stop(el); pb.textContent = o.hero ? 'Play' : 'Play'; } else { pb.textContent = 'Pause'; every(el, 900, next); }
+  });
+  if (!o.hero) { onBtn(el, 'step', () => { stop(el); pb.textContent = 'Play'; next(); }); onBtn(el, 'reset', () => { stop(el); pb.textContent = 'Play'; st = -1; paint(); }); }
+  if (o.hero && !RM) every(el, 1000, next);
+  paint();
+}
+W.hero = el => netStep(el, { hero: true, layers: [3, 5, 5, 2], mode: 'f' });
+W.fwd = el => netStep(el, { mode: 'f', capsF: ['Inputs enter: house size and location', 'Layer 1: multiply by weights, add bias, apply activation', 'Layer 2 takes layer 1 output as its input', 'Output layer gives the predicted price'] });
+W.bwd = el => netStep(el, { mode: 'b', switch: true, capsB: ['Loss function measures the error at the output', 'Error travels back; the chain rule finds each weight\u2019s share of blame', 'Gradients tell each weight which way to change', 'Weights move a small step to reduce the error'] });
+
+W.gd = function (el) {
+  const w = 440, h = 230, X = x => 40 + (x + 2.4) / 4.8 * 360, Y = y => 205 - y / 5.8 * 175;
+  let curve = ''; for (let i = 0; i <= 60; i++) { const x = -2.4 + i * 0.08; curve += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(x * x).toFixed(1); }
+  el.innerHTML = svg(w, h, `<path d="${curve}" class="nf s-ink" stroke-width="2.5"/><line x1="40" y1="205" x2="400" y2="205" class="s-line"/><polyline data-trail class="nf s-a" stroke-width="2" stroke-dasharray="4 3" points=""/><circle data-ball r="9" class="f-a"/><text class="ts" x="${X(0)}" y="222" text-anchor="middle">minimum error</text><text class="ts" x="46" y="22">error</text>`, 'Error curve with a ball rolling down')
+    + `<div class="ctrl">${rng('lr', 'Learning rate', 0.05, 1.1, 0.05, 0.3)}${btn('step', 'Take a step', 1)}${btn('auto', 'Run')}${btn('reset', 'Reset')}</div><div class="cap" aria-live="polite"></div>`;
+  let x, trail, steps; const ball = $('[data-ball]', el), tr = $('[data-trail]', el), cap = $('.cap', el);
+  const r = onRng(el, 'lr', () => {});
+  const draw = () => { ball.setAttribute('cx', X(clamp(x, -2.4, 2.4))); ball.setAttribute('cy', Y(Math.min(x * x, 5.7))); tr.setAttribute('points', trail.map(p => X(clamp(p, -2.4, 2.4)).toFixed(1) + ',' + Y(Math.min(p * p, 5.7)).toFixed(1)).join(' ')); };
+  const note = () => { const lr = r.get(); const e = (x * x).toFixed(2); const verdict = lr < 0.15 ? 'Too small: it crawls and needs many steps.' : lr <= 0.7 ? 'Good: smooth descent to the minimum.' : lr < 1 ? 'Too large: it overshoots and bounces around.' : 'Far too large: it jumps higher each time and diverges.'; cap.textContent = `Step ${steps}, error ${Math.abs(x) > 4 ? 'exploding' : e}. ${verdict}`; };
+  const reset = () => { x = -2; trail = [x]; steps = 0; stop(el); draw(); note(); };
+  const step = () => { x = x - r.get() * 2 * x; trail.push(x); steps++; draw(); note(); if (Math.abs(x) < 0.02 || Math.abs(x) > 4 || steps > 60) stop(el); };
+  onBtn(el, 'step', () => { stop(el); step(); }); onBtn(el, 'auto', () => { stop(el); every(el, 350, step); }); onBtn(el, 'reset', reset); r.el.addEventListener('input', () => { reset(); });
+  reset();
+};
+
+W.opt = function (el) {
+  const f = (x, y) => 0.1 * x * x + y * y, g = (x, y) => [0.2 * x, 2 * y];
+  const run = (kind, n) => {
+    let x = -4.5, y = 1.7, P = [[x, y]], vx = 0, vy = 0, sx = 0, sy = 0, mx = 0, my = 0, t = 0;
+    for (let i = 0; i < n; i++) {
+      const [gx, gy] = g(x, y); t++;
+      if (kind === 'gd') { x -= 0.9 * gx; y -= 0.9 * gy; }
+      if (kind === 'rms') { sx = 0.9 * sx + 0.1 * gx * gx; sy = 0.9 * sy + 0.1 * gy * gy; x -= 0.35 * gx / (Math.sqrt(sx) + 1e-8); y -= 0.35 * gy / (Math.sqrt(sy) + 1e-8); }
+      if (kind === 'adam') { mx = 0.9 * mx + 0.1 * gx; my = 0.9 * my + 0.1 * gy; sx = 0.999 * sx + 0.001 * gx * gx; sy = 0.999 * sy + 0.001 * gy * gy; const mhx = mx / (1 - Math.pow(0.9, t)), mhy = my / (1 - Math.pow(0.9, t)), shx = sx / (1 - Math.pow(0.999, t)), shy = sy / (1 - Math.pow(0.999, t)); x -= 0.4 * mhx / (Math.sqrt(shx) + 1e-8); y -= 0.4 * mhy / (Math.sqrt(shy) + 1e-8); }
+      P.push([x, y]);
+    } return P;
+  };
+  const N = 40, paths = { gd: run('gd', N), rms: run('rms', N), adam: run('adam', N) };
+  const w = 440, h = 230, X = x => 220 + x * 30, Y = y => 115 - y * 46;
+  let ell = ''; [0.4, 1.2, 2.6, 4.2].forEach(c => { ell += `<ellipse cx="${X(0)}" cy="${Y(0)}" rx="${Math.sqrt(c / 0.1) * 30}" ry="${Math.sqrt(c) * 46}" class="nf s-line" stroke-width="1.5"/>`; });
+  const cols = { gd: 's-muted', rms: 's-u3', adam: 's-a' };
+  el.innerHTML = svg(w, h, ell + `<circle cx="${X(0)}" cy="${Y(0)}" r="4" class="f-good"/><text class="ts" x="${X(0) + 7}" y="${Y(0) - 6}">goal</text>` +
+    ['gd', 'rms', 'adam'].map(k => `<polyline data-p="${k}" class="nf ${cols[k]}" stroke-width="2.4" points=""/><circle data-d="${k}" r="5" class="${k === 'gd' ? 'f-muted' : k === 'rms' ? 'f-u3' : 'f-a'}"/>`).join(''), 'Paths of three optimizers toward the minimum')
+    + `<div class="ctrl">${rng('n', 'Steps taken', 0, N, 1, N)}${btn('run', 'Replay', 1)}</div>
+     <div class="ctrl"><span class="badge" style="background:var(--soft)">Gray: plain gradient descent zigzags</span><span class="badge" style="background:var(--u3s);color:var(--u3)">Orange: RMSProp adapts step size</span><span class="badge" style="background:var(--as);color:var(--a)">Blue: Adam adds momentum</span></div><div class="cap m">The valley is steep up and down, shallow left to right. One learning rate suits only one direction; adaptive optimizers scale each direction separately.</div>`;
+  const draw = n => { Object.keys(paths).forEach(k => { const pts = paths[k].slice(0, n + 1); $(`[data-p="${k}"]`, el).setAttribute('points', pts.map(p => X(clamp(p[0], -5, 5)).toFixed(1) + ',' + Y(clamp(p[1], -2.2, 2.2)).toFixed(1)).join(' ')); const l = pts[pts.length - 1]; const d = $(`[data-d="${k}"]`, el); d.setAttribute('cx', X(clamp(l[0], -5, 5))); d.setAttribute('cy', Y(clamp(l[1], -2.2, 2.2))); }); };
+  const r = onRng(el, 'n', draw); draw(N);
+  onBtn(el, 'run', () => { r.set(0); draw(0); let i = 0; every(el, 110, () => { i++; r.set(i); draw(i); if (i >= N) stop(el); }); });
+};
+
+W.act = function (el) {
+  const F = { sigmoid: x => 1 / (1 + Math.exp(-x)), tanh: Math.tanh, relu: x => Math.max(0, x) };
+  const info = { sigmoid: 'Output stays between 0 and 1: good for probabilities.', tanh: 'Output between -1 and 1, centred on zero.', relu: 'Negative inputs become 0; positive inputs pass through unchanged.' };
+  const w = 440, h = 230, X = x => 220 + x * 45, Y = y => 125 - y * 42;
+  el.innerHTML = `<div class="ctrl">${seg([['sigmoid', 'Sigmoid'], ['tanh', 'Tanh'], ['relu', 'ReLU']], 'relu')}${rng('x', 'Input x', -4, 4, 0.1, 1.5)}</div>` +
+    svg(w, h, `<line x1="30" y1="${Y(0)}" x2="410" y2="${Y(0)}" class="s-line"/><line x1="${X(0)}" y1="20" x2="${X(0)}" y2="210" class="s-line"/><path data-c class="nf s-a" stroke-width="3" d=""/><line data-vl x1="0" x2="0" y1="${Y(0)}" y2="${Y(0)}" class="s-muted" stroke-dasharray="3 3"/><circle data-pt r="7" class="f-a"/><text class="ts" x="404" y="${Y(0) - 6}" text-anchor="end">x</text><text class="ts" x="${X(0) + 6}" y="26">output</text>`, 'Activation function curve') + `<div class="cap" aria-live="polite"></div>`;
+  let cur = 'relu'; const cap = $('.cap', el);
+  const draw = () => { let d = ''; for (let i = 0; i <= 80; i++) { const x = -4 + i * 0.1; d += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(F[cur](x)).toFixed(1); } $('[data-c]', el).setAttribute('d', d); const x = r.get(), y = F[cur](x); const p = $('[data-pt]', el); p.setAttribute('cx', X(x)); p.setAttribute('cy', Y(y)); const v = $('[data-vl]', el); v.setAttribute('x1', X(x)); v.setAttribute('x2', X(x)); v.setAttribute('y2', Y(y)); cap.textContent = `Input ${x.toFixed(1)} gives output ${y.toFixed(2)}. ${info[cur]}`; };
+  wireSeg($('.seg', el), v => { cur = v; draw(); }); const r = onRng(el, 'x', draw); draw();
+};
+
+W.softmax = function (el, o) {
+  o = o || {}; const names = o.names || ['Cat', 'Dog', 'Bird']; const init = o.init || [2.0, 1.0, 0.1];
+  el.innerHTML = `<div class="two"><div>${names.map((n, i) => rng('s' + i, `Score: ${n}`, -2, 5, 0.1, init[i])).join('<div style="height:6px"></div>')}</div><div><div class="lbl">Softmax turns the scores into probabilities</div><div data-out></div><div class="cap m" data-sum></div></div></div>`;
+  const out = $('[data-out]', el), sum = $('[data-sum]', el); const vals = init.slice();
+  const draw = () => { const e = vals.map(v => Math.exp(v)), s = e.reduce((a, b) => a + b, 0), p = e.map(v => v / s); const best = p.indexOf(Math.max(...p)); out.innerHTML = bars(names.map((n, i) => [n + (i === best ? ' (chosen)' : ''), p[i], pct(p[i]), i === best ? 'g' : ''])); sum.textContent = 'All probabilities add up to 100%. The highest one wins.'; };
+  names.forEach((_, i) => onRng(el, 's' + i, v => { vals[i] = v; draw(); })); draw();
+};
+
+W.fit = function (el) {
+  const xs = Array.from({ length: 11 }, (_, i) => i / 10), noise = [0.08, -0.1, 0.12, -0.07, 0.09, -0.11, 0.1, -0.06, 0.12, -0.09, 0.07], tnoise = [-0.09, 0.08, -0.1, 0.1, -0.08, 0.09, -0.11, 0.1, -0.07, 0.11, -0.1];
+  const truth = x => 0.5 + 0.3 * Math.sin(2 * Math.PI * x * 0.95);
+  const w = 440, h = 240, X = x => 30 + x * 380, Y = y => 215 - y * 180;
+  const tr = xs.map((x, i) => [x, truth(x) + noise[i]]), te = xs.map((x, i) => [x + 0.04, truth(x + 0.04) + tnoise[i]]);
+  const P = tr.map(p => [X(p[0]), Y(p[1])]); let sp = `M${P[0][0]} ${P[0][1]}`;
+  for (let i = 0; i < P.length - 1; i++) { const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2; sp += `C${(p1[0] + (p2[0] - p0[0]) / 4).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 4 * 1.6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 4).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 4 * 1.6).toFixed(1)} ${p2[0]} ${p2[1]}`; }
+  let good = ''; for (let i = 0; i <= 60; i++) { const x = i / 60; good += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(truth(x)).toFixed(1); }
+  const curves = { under: `M${X(0)} ${Y(0.5)} L${X(1)} ${Y(0.5)}`, good, over: sp };
+  const info = { under: ['Underfitting', 'Train 60%', 'Test 60%', 'Too simple: misses the pattern everywhere.'], good: ['Balanced fit', 'Train 90%', 'Test 88%', 'Captures the pattern, ignores the noise. This is the goal.'], over: ['Overfitting', 'Train 99%', 'Test 55%', 'Passes through every training point, noise included, so new points land far from the curve.'] };
+  el.innerHTML = `<div class="ctrl">${seg([['under', 'Underfit'], ['good', 'Good fit'], ['over', 'Overfit']], 'over')}</div>` + svg(w, h, `<line x1="30" y1="215" x2="410" y2="215" class="s-line"/><path data-c class="nf s-a" stroke-width="3"/>` + tr.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="f-ink"/>`).join('') + te.map(p => `<circle data-te cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="nf s-bad" stroke-width="2"/>`).join('') + `<circle cx="40" cy="18" r="4.5" class="f-ink"/><text class="ts" x="49" y="22">training data</text><circle cx="150" cy="18" r="4.5" class="nf s-bad" stroke-width="2"/><text class="ts" x="159" y="22">new data</text>`, 'Scatter plot with three fitted curves') + `<div class="ctrl" data-b2></div><div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $('[data-c]', el).setAttribute('d', curves[k]); const i = info[k]; $('[data-b2]', el).innerHTML = `<span class="big">${i[0]}</span><span class="badge ${k === 'over' ? 'b' : 'g'}">${i[1]}</span><span class="badge ${k === 'good' ? 'g' : 'b'}">${i[2]}</span>`; $('.cap', el).textContent = i[3]; };
+  wireSeg($('.seg', el), draw); draw('over');
+};
+
+W.drop = function (el) {
+  const L = [4, 6, 6, 3], w = 440, h = 240, G = netGeom(L, w, h, 40); let s = '';
+  for (let i = 0; i < 3; i++) G[i].forEach((a, ai) => G[i + 1].forEach((b, bi) => { s += `<line data-e="${i}-${ai}-${bi}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="s-line" stroke-width="1"/>`; }));
+  G.forEach((ly, i) => ly.forEach((p, j) => { s += `<circle data-n="${i}-${j}" cx="${p.x}" cy="${p.y}" r="11" class="f-a tr"/>`; }));
+  el.innerHTML = `<div class="ctrl">${btn('train', 'Next training step', 1)}${btn('test', 'Test mode (all neurons on)')}${rng('p', 'Drop probability', 0.1, 0.8, 0.1, 0.5)}</div>` + svg(w, h, s, 'Network with random neurons switched off') + `<div class="cap" aria-live="polite">Press the button to see which neurons are switched off in a training step.</div>`;
+  let off = new Set();
+  const paint = () => { $$('[data-n]', el).forEach(n => { n.style.opacity = off.has(n.dataset.n) ? 0.12 : 1; }); $$('[data-e]', el).forEach(e => { const [i, a, b] = e.dataset.e.split('-'); e.style.opacity = off.has(`${i}-${a}`) || off.has(`${+i + 1}-${b}`) ? 0.05 : 1; }); };
+  const p = onRng(el, 'p', () => { });
+  onBtn(el, 'train', () => { off = new Set(); for (const i of [1, 2]) for (let j = 0; j < 6; j++) if (Math.random() < p.get()) off.add(`${i}-${j}`); paint(); $('.cap', el).textContent = `Training: ${off.size} of 12 hidden neurons are off this step. A different random set is chosen every step, so no neuron can be relied on.`; });
+  onBtn(el, 'test', () => { off = new Set(); paint(); $('.cap', el).textContent = 'Testing: every neuron is on. Dropout is used only during training.'; });
+};
+
+W.reg = function (el) {
+  const wt = [3.2, -2.1, 0.8, 0.3, -0.2, 1.5];
+  el.innerHTML = `<div class="ctrl">${seg([['l1', 'L1 (Lasso)'], ['l2', 'L2 (Ridge)']], 'l1')}${rng('lam', 'Penalty strength', 0, 1, 0.05, 0.6)}</div><div data-out></div><div class="cap" aria-live="polite"></div>`;
+  let kind = 'l1'; const lam = onRng(el, 'lam', () => draw());
+  const draw = () => {
+    const l = lam.get(); const nw = wt.map(v => kind === 'l1' ? Math.sign(v) * Math.max(0, Math.abs(v) - 1.2 * l) : v / (1 + 3 * l)); const z = nw.filter(v => Math.abs(v) < 1e-9).length;
+    $('[data-out]', el).innerHTML = bars(nw.map((v, i) => [`Weight ${i + 1}`, Math.abs(v) / 3.4, (v < 0 ? '-' : '') + Math.abs(v).toFixed(2), Math.abs(v) < 1e-9 ? 'r' : '']));
+    $('.cap', el).textContent = kind === 'l1' ? `L1 pushes weak weights exactly to zero: ${z} weight${z === 1 ? ' is' : 's are'} removed. This works as built-in feature selection.` : `L2 shrinks every weight towards zero but keeps them all: ${z} weights are exactly zero.`;
+  };
+  wireSeg($('.seg', el), v => { kind = v; draw(); }); draw();
+};
+
+W.es = function (el) {
+  const tr = e => Math.exp(-0.09 * e) + 0.04, va = e => 0.95 * Math.exp(-0.14 * e) + 0.1 + 0.0009 * e * e; let best = 1, bv = 9; for (let e = 1; e <= 40; e++) if (va(e) < bv) { bv = va(e); best = e; }
+  const w = 440, h = 240, X = e => 40 + e / 40 * 360, Y = v => 215 - v / 1.1 * 190; let c1 = '', c2 = '';
+  for (let e = 1; e <= 40; e++) { c1 += (e > 1 ? 'L' : 'M') + X(e).toFixed(1) + ' ' + Y(tr(e)).toFixed(1); c2 += (e > 1 ? 'L' : 'M') + X(e).toFixed(1) + ' ' + Y(va(e)).toFixed(1); }
+  el.innerHTML = svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="${c1}" class="nf s-u1" stroke-width="3"/><path d="${c2}" class="nf s-bad" stroke-width="3"/><line data-m x1="0" x2="0" y1="20" y2="215" class="s-muted" stroke-dasharray="4 3"/><circle cx="${X(best)}" cy="${Y(va(best))}" r="7" class="f-good"/><text class="tb" x="${X(best)}" y="${Y(va(best)) - 12}" text-anchor="middle">stop here</text><text class="ts" x="400" y="232" text-anchor="end">training rounds (epochs)</text><line x1="150" y1="20" x2="174" y2="20" class="s-u1" stroke-width="3"/><text x="180" y="24" class="ts">training error</text><line x1="150" y1="38" x2="174" y2="38" class="s-bad" stroke-width="3"/><text x="180" y="42" class="ts">validation error</text>`, 'Training and validation error curves') + `<div class="ctrl">${rng('e', 'Epoch', 1, 40, 1, 8)}</div><div class="cap" aria-live="polite"></div>`;
+  const draw = e => { const m = $('[data-m]', el); m.setAttribute('x1', X(e)); m.setAttribute('x2', X(e)); $('.cap', el).textContent = e < best - 1 ? 'Both errors are falling: the model is still learning.' : e <= best + 1 ? `Best point (epoch ${best}): validation error is lowest. Save these weights and stop.` : 'Validation error is rising while training error keeps falling: the model is memorising. Stopping earlier would have been better.'; };
+  onRng(el, 'e', draw); draw(8);
+};
+
+W.aug = function (el) {
+  const T = { rot: ['Rotate', 'rotate(14deg)'], flip: ['Flip', 'scaleX(-1)'], zoom: ['Zoom', 'scale(1.3)'], shift: ['Shift', 'translate(16px,-8px)'] };
+  const glyph = `<svg viewBox="0 0 120 120" width="120" height="120"><polygon points="22,48 30,12 54,32" class="f-u4"/><polygon points="98,48 90,12 66,32" class="f-u4"/><circle cx="60" cy="68" r="40" class="f-u3"/><circle cx="44" cy="62" r="6" class="f-ink"/><circle cx="76" cy="62" r="6" class="f-ink"/><polygon points="55,76 65,76 60,83" class="f-bad"/><path d="M60 83 q-6 8 -14 4 M60 83 q6 8 14 4" class="nf s-ink" stroke-width="2"/><circle cx="100" cy="22" r="7" class="f-u1"/></svg>`;
+  el.innerHTML = `<div class="two"><div><div class="lbl">Turn techniques on and off</div><div class="ctrl" data-t>${Object.keys(T).map(k => `<button type="button" class="btn" data-k="${k}" aria-pressed="false">${T[k][0]}</button>`).join('')}<button type="button" class="btn" data-k="bright" aria-pressed="false">Brightness</button><button type="button" class="btn" data-k="noise" aria-pressed="false">Noise</button></div><div class="ctrl">${btn('rand', 'Random combo', 1)}${btn('clear', 'Reset')}</div></div>
+  <div style="display:grid;place-items:center;padding:10px"><div style="width:170px;height:170px;border:2px solid var(--line);border-radius:10px;display:grid;place-items:center;overflow:hidden;background:var(--panel);position:relative"><div data-img style="transition:transform .3s,filter .3s">${glyph}</div><svg data-nz width="170" height="170" style="position:absolute;inset:0;opacity:0;mix-blend-mode:multiply;pointer-events:none"><filter id="nzf${Math.random().toString(36).slice(2, 6)}"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="170" height="170" filter="url(#${'nzf'})" opacity=".6"/></svg></div><div class="badge g" style="margin-top:8px">Label stays: cat</div></div></div><div class="cap" aria-live="polite">One photo becomes many different training examples, and the label never changes.</div>`;
+  const on = new Set(); const img = $('[data-img]', el), nz = $('[data-nz]', el);
+  const fid = $('filter', nz).id; $('rect', nz).setAttribute('filter', `url(#${fid})`);
+  const paint = () => { img.style.transform = Object.keys(T).filter(k => on.has(k)).map(k => T[k][1]).join(' ') || 'none'; img.style.filter = on.has('bright') ? 'brightness(1.4) saturate(.8)' : 'none'; nz.style.opacity = on.has('noise') ? 1 : 0; $$('[data-k]', el).forEach(b => { b.classList.toggle('pri', on.has(b.dataset.k)); b.setAttribute('aria-pressed', on.has(b.dataset.k)); }); $('.cap', el).textContent = on.size ? `Applied: ${[...on].map(k => (T[k] ? T[k][0] : k === 'bright' ? 'Brightness' : 'Noise')).join(', ')}. It is still a cat.` : 'One photo becomes many different training examples, and the label never changes.'; };
+  $$('[data-k]', el).forEach(b => b.addEventListener('click', () => { on.has(b.dataset.k) ? on.delete(b.dataset.k) : on.add(b.dataset.k); paint(); }));
+  onBtn(el, 'rand', () => { on.clear(); ['rot', 'flip', 'zoom', 'shift', 'bright', 'noise'].forEach(k => { if (Math.random() < 0.5) on.add(k); }); if (!on.size) on.add('rot'); paint(); });
+  onBtn(el, 'clear', () => { on.clear(); paint(); });
+};
+
+W.cv = function (el) {
+  const N = 20, cls = Array.from({ length: N }, (_, i) => i < 15 ? 0 : 1); // 15 A then 5 B
+  const col = c => c ? 'var(--u3)' : 'var(--u1)';
+  const rows = {
+    kfold: Array.from({ length: 5 }, (_, f) => cls.map((c, i) => ({ c, test: Math.floor(i / 4) === f }))),
+    strat: Array.from({ length: 5 }, (_, f) => { const a = [], b = []; cls.forEach((c, i) => (c ? b : a).push(i)); const test = new Set([...a.filter((_, k) => k % 5 === f), ...b.filter((_, k) => k % 5 === f)]); return cls.map((c, i) => ({ c, test: test.has(i) })); }),
+    loo: Array.from({ length: 8 }, (_, f) => Array.from({ length: 8 }, (_, i) => ({ c: i % 3 === 2 ? 1 : 0, test: i === f }))),
+    hold: [cls.map((c, i) => ({ c, test: i >= 14 }))]
+  };
+  const text = { kfold: ['K-Fold (K = 5)', 'Split the data into K parts. Each part is the test set once while the other K minus 1 parts train. Average the K scores. Notice the last fold holds almost all of the orange class.'], strat: ['Stratified K-Fold', 'Same idea, but every fold keeps the same class mix as the full data (3 blue and 1 orange per fold). Best for unbalanced data.'], loo: ['Leave-One-Out (LOOCV)', 'Every single example is the test set once. Very thorough, but you must train as many models as you have examples, so it is slow.'], hold: ['Holdout', 'One single split: about 70% train and 30% test. Simplest and fastest, but the result depends on one lucky or unlucky split.'] };
+  el.innerHTML = `<div class="ctrl">${seg([['kfold', 'K-Fold'], ['strat', 'Stratified'], ['loo', 'Leave-One-Out'], ['hold', 'Holdout']], 'kfold')}</div><div data-grid></div><div class="ctrl"><span class="badge" style="background:var(--soft)"><span style="display:inline-block;width:10px;height:10px;background:var(--u1);border-radius:2px"></span> class A</span><span class="badge" style="background:var(--soft)"><span style="display:inline-block;width:10px;height:10px;background:var(--u3);border-radius:2px"></span> class B</span><span class="badge" style="background:var(--soft)">solid with outline = test, faded = train</span></div><div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $('[data-grid]', el).innerHTML = rows[k].map((r, i) => `<div style="display:flex;align-items:center;gap:8px;margin:4px 0"><span class="ts" style="width:54px">Round ${i + 1}</span><div style="display:flex;gap:3px;flex:1">${r.map(s => `<span style="flex:1;height:22px;border-radius:3px;background:${col(s.c)};opacity:${s.test ? 1 : 0.3};outline:${s.test ? '2px solid var(--ink)' : 'none'};outline-offset:1px"></span>`).join('')}</div></div>`).join(''); $('.cap', el).innerHTML = `<b>${text[k][0]}.</b> ${text[k][1]}`; };
+  wireSeg($('.seg', el), draw); draw('kfold');
+};
+
+W.fs = function (el) {
+  const F = [['Credit score', 0.91], ['Income', 0.82], ['Loan amount', 0.58], ['Age', 0.33], ['Zip code', 0.11], ['Favourite colour', 0.02]];
+  el.innerHTML = `<div class="lbl">Task: decide loan approval. Bars show how useful each input column is.</div><div class="ctrl">${rng('t', 'Keep features above', 0, 0.9, 0.05, 0.3)}</div><div data-out></div><div class="cap" aria-live="polite"></div>`;
+  const draw = t => { $('[data-out]', el).innerHTML = bars(F.map(f => [f[0], f[1], f[1].toFixed(2), f[1] >= t ? 'g' : 'r'])); const k = F.filter(f => f[1] >= t).length; $('.cap', el).textContent = `Kept ${k} of ${F.length} features. Dropped ones (red) add noise, slow training and invite overfitting.`; };
+  onRng(el, 't', draw); draw(0.3);
+};
+
+W.cm = function (el) {
+  const P = { covid: [90, 50, 10, 850, 'COVID test'], spam: [40, 5, 5, 50, 'Spam filter'] };
+  el.innerHTML = `<div class="ctrl">${btn('covid', 'COVID test example')}${btn('spam', 'Spam filter example')}<span class="lbl">or type your own numbers</span></div>
+  <div class="two"><div><table style="min-width:0;text-align:center"><thead><tr><th></th><th>Predicted positive</th><th>Predicted negative</th></tr></thead><tbody>
+  <tr><td>Actually positive</td><td style="background:var(--goods)"><div class="lbl">True Positive</div><input data-i="tp" type="number" min="0" style="width:72px;font-weight:700"></td><td style="background:var(--bads)"><div class="lbl">False Negative (miss)</div><input data-i="fn" type="number" min="0" style="width:72px;font-weight:700"></td></tr>
+  <tr><td>Actually negative</td><td style="background:var(--bads)"><div class="lbl">False Positive (false alarm)</div><input data-i="fp" type="number" min="0" style="width:72px;font-weight:700"></td><td style="background:var(--goods)"><div class="lbl">True Negative</div><input data-i="tn" type="number" min="0" style="width:72px;font-weight:700"></td></tr></tbody></table></div>
+  <div data-out></div></div><div class="cap" aria-live="polite"></div>`;
+  const I = k => $(`[data-i="${k}"]`, el);
+  const draw = () => { const tp = +I('tp').value || 0, fn = +I('fn').value || 0, fp = +I('fp').value || 0, tn = +I('tn').value || 0, n = tp + fn + fp + tn || 1; const acc = (tp + tn) / n, pr = tp + fp ? tp / (tp + fp) : 0, rc = tp + fn ? tp / (tp + fn) : 0, f1 = pr + rc ? 2 * pr * rc / (pr + rc) : 0;
+    $('[data-out]', el).innerHTML = bars([['Accuracy', acc, pct(acc)], ['Precision', pr, pct(pr), 'w'], ['Recall', rc, pct(rc), 'r'], ['F1-score', f1, pct(f1), 'g']]);
+    $('.cap', el).textContent = `Accuracy looks high (${pct(acc)}) but recall is ${pct(rc)}: ${fn} real positive cases were missed. For disease detection, recall matters most.`; };
+  const set = k => { const p = P[k]; ['tp', 'fn', 'fp', 'tn'].forEach((n, i) => I(n).value = p[i]); draw(); };
+  $$('input', el).forEach(i => i.addEventListener('input', draw)); onBtn(el, 'covid', () => set('covid')); onBtn(el, 'spam', () => set('spam')); set('covid');
+};
+
+W.rm = function (el) {
+  const xs = [1, 2, 3, 4, 5, 6, 7, 8], pred = xs.map(x => x + 1), act0 = [2.4, 2.7, 4.5, 4.6, 6.5, 6.6, 8.4, 8.5]; let outl = false;
+  const w = 440, h = 240, X = x => 40 + (x - 0.5) / 8 * 360, Y = y => 215 - y / 15 * 190;
+  el.innerHTML = `<div class="ctrl">${btn('out', 'Add an outlier (last point)', 1)}${btn('rs', 'Reset')}</div>` + svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="M${X(0.5)} ${Y(1.5)} L${X(8.5)} ${Y(9.5)}" class="nf s-a" stroke-width="2.5"/><g data-g></g><text class="ts" x="46" y="20">prediction line, dots = actual values, red lines = errors</text>`, 'Regression line with actual values and error lines') + `<div class="two"><div data-out></div><div class="cap" data-c></div></div>`;
+  const draw = () => { const a = act0.slice(); if (outl) a[7] = 14; $('[data-g]', el).innerHTML = xs.map((x, i) => `<line x1="${X(x)}" x2="${X(x)}" y1="${Y(pred[i])}" y2="${Y(a[i])}" class="s-bad" stroke-width="2.5"/><circle cx="${X(x)}" cy="${Y(a[i])}" r="5" class="f-ink"/>`).join('');
+    const e = a.map((v, i) => v - pred[i]), n = a.length, mae = e.reduce((s, v) => s + Math.abs(v), 0) / n, mse = e.reduce((s, v) => s + v * v, 0) / n, rmse = Math.sqrt(mse), mean = a.reduce((s, v) => s + v, 0) / n, sst = a.reduce((s, v) => s + (v - mean) ** 2, 0), r2 = 1 - e.reduce((s, v) => s + v * v, 0) / sst;
+    $('[data-out]', el).innerHTML = bars([['MAE', Math.min(mae / 3, 1), mae.toFixed(2), 'w'], ['MSE', Math.min(mse / 12, 1), mse.toFixed(2), 'r'], ['RMSE', Math.min(rmse / 3.5, 1), rmse.toFixed(2), 'r'], ['R-squared', Math.max(r2, 0), r2.toFixed(2), 'g']]);
+    $('[data-c]', el).textContent = outl ? 'One big error: MSE explodes because errors are squared. MAE rises gently. R-squared falls because the line explains less.' : 'Small errors everywhere: all error measures are low and R-squared is close to 1.'; };
+  onBtn(el, 'out', () => { outl = true; draw(); }); onBtn(el, 'rs', () => { outl = false; draw(); }); draw();
+};
+
+/* ---------- Unit II widgets ---------- */
+W.px = function (el) {
+  const on = ['1,1', '1,2', '1,3', '1,4', '1,5', '2,5', '3,4', '4,4', '4,3', '5,3', '6,3'];
+  const M = Array.from({ length: 7 }, (_, r) => Array.from({ length: 7 }, (_, c) => on.includes(`${r},${c}`) ? 255 : (r === 0 || c === 0 || r === 6 || c === 6 ? 0 : 20)));
+  el.innerHTML = `<div class="ctrl">${seg([['g', 'Grayscale'], ['c', 'Colour (RGB)']], 'g')}</div><div data-view></div>`;
+  const v = $('[data-view]', el);
+  const gray = () => {
+    v.innerHTML = `<div class="ctrl">${seg([['pic', 'Picture'], ['num', 'Numbers']], 'pic')}</div><div class="two"><div class="cells" data-g style="grid-template-columns:repeat(7,1fr);width:min(100%,260px)"></div><div class="cap">A grayscale image is one grid. Every pixel holds one number from 0 (black) to 255 (white). The computer never sees a picture, only this matrix.</div></div>`;
+    const g = $('[data-g]', v); let mode = 'pic';
+    const paint = () => { g.innerHTML = M.flat().map(x => `<div class="cell sm" style="background:rgb(${x},${x},${x});color:${x > 120 ? '#111' : '#eee'};border-color:var(--line)">${mode === 'num' ? x : ''}</div>`).join(''); };
+    wireSeg($('.seg', v), m => { mode = m; paint(); }); paint();
+  };
+  const colour = () => {
+    v.innerHTML = `<div class="two"><div>${rng('r', 'Red', 0, 255, 1, 230)}${rng('g', 'Green', 0, 255, 1, 120)}${rng('b', 'Blue', 0, 255, 1, 40)}</div><div><div data-sw style="height:90px;border-radius:10px;border:1px solid var(--line)"></div><div class="big" data-t style="margin-top:8px"></div><div class="cap m">One colour pixel = 3 numbers. A colour image is 3 stacked grids (channels): red, green and blue.</div></div></div>`;
+    const s = {}; const draw = () => { $('[data-sw]', v).style.background = `rgb(${s.r},${s.g},${s.b})`; $('[data-t]', v).textContent = `(${s.r}, ${s.g}, ${s.b})`; };
+    ['r', 'g', 'b'].forEach(k => { const r = onRng(v, k, x => { s[k] = x; draw(); }); s[k] = r.get(); }); draw();
+  };
+  wireSeg($('.seg', el), k => k === 'g' ? gray() : colour()); gray();
+};
+
+W.conv = function (el, o) {
+  o = o || {}; const n = 6;
+  const img = [[0, 0, 0, 0, 0, 0], [0, 9, 9, 9, 9, 0], [0, 9, 9, 9, 9, 0], [0, 9, 9, 9, 9, 0], [0, 9, 9, 9, 9, 0], [0, 0, 0, 0, 0, 0]];
+  const K = { v: ['Vertical edge', [[1, 0, -1], [1, 0, -1], [1, 0, -1]], 1], h: ['Horizontal edge', [[1, 1, 1], [0, 0, 0], [-1, -1, -1]], 1], b: ['Blur (average)', [[1, 1, 1], [1, 1, 1], [1, 1, 1]], 9] };
+  let kk = 'v', stride = o.stride || 1, pad = o.pad || 0, pos = -1;
+  el.innerHTML = `<div class="ctrl">${o.kernels === false ? '' : seg(Object.keys(K).map(k => [k, K[k][0]]), 'v')}${o.sp ? seg([['1', 'Stride 1'], ['2', 'Stride 2']], String(stride)) + seg([['0', 'No padding'], ['1', 'Zero padding']], String(pad)) : ''}</div>
+  <div class="two"><div><div class="lbl">Input image (dashed cells are added padding)</div><div data-in class="cells" style="width:min(100%,250px)"></div></div><div><div class="lbl">Filter (3x3)</div><div data-k class="cells" style="width:96px;grid-template-columns:repeat(3,1fr)"></div></div><div><div class="lbl">Feature map (output)</div><div data-out class="cells" style="width:min(100%,200px)"></div></div></div>
+  <div class="ctrl">${btn('step', 'Slide filter', 1)}${btn('all', 'Show all')}${btn('reset', 'Reset')}${btn('play', 'Play')}</div><div class="cap" aria-live="polite"></div>`;
+  const segs = $$('.seg', el); let m, P, out;
+  const build = () => {
+    const sz = n + 2 * pad; P = Array.from({ length: sz }, (_, r) => Array.from({ length: sz }, (_, c) => { const rr = r - pad, cc = c - pad; return rr >= 0 && cc >= 0 && rr < n && cc < n ? img[rr][cc] : null; }));
+    m = Math.floor((sz - 3) / stride) + 1; const ker = K[kk][1], dv = K[kk][2];
+    out = Array.from({ length: m }, (_, r) => Array.from({ length: m }, (_, c) => { let s = 0; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) s += (P[r * stride + i][c * stride + j] || 0) * ker[i][j]; return s / dv; }));
+    pos = -1; paint();
+  };
+  const paint = () => {
+    const sz = P.length; const cr = pos >= 0 ? Math.floor(pos / m) : -9, cc = pos >= 0 ? pos % m : -9;
+    const inEl = $('[data-in]', el); inEl.style.gridTemplateColumns = `repeat(${sz},1fr)`;
+    inEl.innerHTML = P.flatMap((row, r) => row.map((v, c) => { const hi = pos >= 0 && r >= cr * stride && r < cr * stride + 3 && c >= cc * stride && c < cc * stride + 3; return `<div class="cell sm${hi ? ' hi' : ''}${v === null ? ' pad' : ''}">${v === null ? 0 : v}</div>`; })).join('');
+    $('[data-k]', el).innerHTML = K[kk][1].flat().map(v => `<div class="cell sm" style="background:var(--as)">${v}</div>`).join('');
+    const oe = $('[data-out]', el); oe.style.gridTemplateColumns = `repeat(${m},1fr)`;
+    const mx = Math.max(1, ...out.flat().map(Math.abs));
+    oe.innerHTML = out.flatMap((row, r) => row.map((v, c) => { const idx = r * m + c, shown = idx <= pos; const a = Math.abs(v) / mx; return `<div class="cell sm${idx === pos ? ' hi' : ''}" style="${shown && idx !== pos ? `background:color-mix(in srgb,${v >= 0 ? 'var(--a)' : 'var(--bad)'} ${Math.round(a * 70)}%,var(--panel))` : ''}">${shown ? (Number.isInteger(v) ? v : v.toFixed(1)) : ''}</div>`; })).join('');
+    $('.cap', el).textContent = pos < 0 ? `Output size will be ${m} by ${m}. Press "Slide filter" to see the filter move.` : `Window ${pos + 1} of ${m * m}: multiply each pixel by the filter number under it and add everything up. Result: ${Number.isInteger(out[cr][cc]) ? out[cr][cc] : out[cr][cc].toFixed(1)}. High values appear where the image matches the filter pattern.`;
+  };
+  const step = () => { pos = pos + 1 >= m * m ? -1 : pos + 1; paint(); if (pos < 0) stop(el); };
+  segs.forEach(g => wireSeg(g, v => { const names = $$('.segb', g).map(b => b.dataset.v); if (names.includes('v')) kk = v; else if (names.includes('2')) stride = +v; else pad = +v; stop(el); build(); }));
+  onBtn(el, 'step', () => { stop(el); step(); }); onBtn(el, 'all', () => { stop(el); pos = m * m - 1; paint(); }); onBtn(el, 'reset', () => { stop(el); pos = -1; paint(); }); onBtn(el, 'play', () => { stop(el); pos = -1; every(el, 650, step); });
+  build();
+};
+W.sp = el => W.conv(el, { sp: true, kernels: false });
+
+W.relu = function (el) {
+  const M = [[-3, 5, -1, 8], [2, -4, 6, -2], [-1, 3, -5, 7], [4, -2, 1, -6]]; let on = false;
+  el.innerHTML = `<div class="ctrl">${btn('t', 'Apply ReLU', 1)}</div><div class="cells" data-g style="grid-template-columns:repeat(4,1fr);width:min(100%,260px)"></div><div class="cap" aria-live="polite"></div>`;
+  const paint = () => { $('[data-g]', el).innerHTML = M.flat().map(v => { const x = on ? Math.max(0, v) : v; return `<div class="cell" style="${x < 0 ? 'background:var(--bads);color:var(--bad)' : x > 0 ? 'background:var(--as);color:var(--a)' : ''};font-weight:700">${x}</div>`; }).join(''); $('.cap', el).textContent = on ? 'Every negative value became 0; positive values passed through unchanged. The strong features stay, and the network gains non-linearity.' : 'A feature map straight after convolution. Red cells are negative.'; $('[data-b]', el).textContent = on ? 'Undo' : 'Apply ReLU'; };
+  onBtn(el, 't', () => { on = !on; paint(); }); paint();
+};
+
+W.pool = function (el) {
+  let M = [[1, 3, 2, 4], [5, 6, 7, 8], [3, 2, 1, 0], [1, 2, 3, 4]], mode = 'max', sel = 0, shifted = false;
+  el.innerHTML = `<div class="ctrl">${seg([['max', 'Max pooling'], ['avg', 'Average pooling']], 'max')}${btn('shift', 'Shift the 8 one cell left')}</div><div class="two"><div><div class="lbl">Feature map 4x4 (2x2 window, stride 2)</div><div class="cells" data-in style="grid-template-columns:repeat(4,1fr);width:min(100%,230px)"></div></div><div><div class="lbl">Pooled output 2x2 (tap a cell)</div><div class="cells" data-out style="grid-template-columns:repeat(2,1fr);width:130px"></div></div></div><div class="cap" aria-live="polite"></div>`;
+  const win = (r, c) => [M[2 * r][2 * c], M[2 * r][2 * c + 1], M[2 * r + 1][2 * c], M[2 * r + 1][2 * c + 1]];
+  const val = (r, c) => { const w = win(r, c); return mode === 'max' ? Math.max(...w) : w.reduce((a, b) => a + b, 0) / 4; };
+  const paint = () => {
+    const sr = Math.floor(sel / 2), sc = sel % 2;
+    $('[data-in]', el).innerHTML = M.flatMap((row, r) => row.map((v, c) => `<div class="cell${Math.floor(r / 2) === sr && Math.floor(c / 2) === sc ? ' hi' : ''}">${v}</div>`)).join('');
+    $('[data-out]', el).innerHTML = [0, 1].flatMap(r => [0, 1].map(c => `<button type="button" class="cell${r * 2 + c === sel ? ' hi' : ''}" data-s="${r * 2 + c}" style="cursor:pointer;font-weight:700;font:inherit">${Number.isInteger(val(r, c)) ? val(r, c) : val(r, c).toFixed(2)}</button>`)).join('');
+    $$('[data-s]', el).forEach(b => b.addEventListener('click', () => { sel = +b.dataset.s; paint(); }));
+    const w = win(sr, sc); $('.cap', el).textContent = `Window values ${w.join(', ')} give ${mode === 'max' ? 'the largest: ' + Math.max(...w) : 'their average: ' + (w.reduce((a, b) => a + b, 0) / 4)}. A 4x4 map shrinks to 2x2, so less computation and less detail to memorise.${shifted ? ' The 8 moved one cell, yet the max output barely changes: pooling tolerates small shifts.' : ''}`;
+  };
+  wireSeg($('.seg', el), v => { mode = v; paint(); });
+  onBtn(el, 'shift', () => { shifted = !shifted; const t = M[1][3]; M[1][3] = M[1][2]; M[1][2] = t; paint(); });
+  paint();
+};
+
+W.flat = function (el) {
+  const A = [1, 2, 3, 4], B = [5, 6, 7, 8]; let on = false;
+  const grid = (a, c) => `<div class="cells" style="grid-template-columns:repeat(2,1fr);width:84px">${a.map(v => `<div class="cell" style="background:${c};font-weight:700">${v}</div>`).join('')}</div>`;
+  el.innerHTML = `<div class="ctrl">${btn('t', 'Flatten', 1)}</div><div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center"><div><div class="lbl">Feature map 1</div>${grid(A, 'var(--as)')}</div><div><div class="lbl">Feature map 2</div>${grid(B, 'var(--u3s)')}</div><div style="flex:1;min-width:230px"><div class="lbl">One long 1D vector</div><div data-view style="display:flex;gap:3px"></div></div></div><div class="cap" aria-live="polite"></div>`;
+  const paint = () => { $('[data-view]', el).innerHTML = on ? [...A.map(v => [v, 'var(--as)']), ...B.map(v => [v, 'var(--u3s)'])].map(([v, c]) => `<div class="cell" style="flex:1;background:${c};font-weight:700">${v}</div>`).join('') : '<span class="cap m">press Flatten</span>'; $('.cap', el).textContent = on ? 'The 2x2x2 block (8 numbers) is unrolled into a list of 8. No values change, only the arrangement, so the fully connected layer can read it.' : 'Two 2x2 feature maps stacked together (2x2x2 = 8 numbers).'; };
+  onBtn(el, 't', () => { on = !on; paint(); }); paint();
+};
+
+W.fc = function (el) {
+  const names = ['Whiskers', 'Pointy ears', 'Fur', 'Barking sound'], cls = ['Cat', 'Dog', 'Bird'];
+  const Wt = [[2.5, 2.2, 1.2, -2.5], [-1, -0.8, 1.2, 3], [-1.5, -0.5, -2, -1]]; let f = [0.9, 0.8, 0.7, 0.1];
+  el.innerHTML = `<div class="ctrl">${btn('cat', 'Cat-like input')}${btn('dog', 'Dog-like input')}</div><div class="two"><div>${names.map((n, i) => rng('f' + i, n, 0, 1, 0.1, f[i])).join('')}<div class="cap m">Extracted features go in. Each class has learned weights saying how much each feature matters.</div></div><div><div class="lbl">Class probabilities (softmax)</div><div data-out></div></div></div>`;
+  const rs = names.map((_, i) => onRng(el, 'f' + i, v => { f[i] = v; draw(); }));
+  const draw = () => { const sc = Wt.map(w => w.reduce((s, v, i) => s + v * f[i], 0)), e = sc.map(Math.exp), t = e.reduce((a, b) => a + b, 0), p = e.map(v => v / t), b = p.indexOf(Math.max(...p)); $('[data-out]', el).innerHTML = bars(cls.map((c, i) => [c + (i === b ? ' (chosen)' : ''), p[i], pct(p[i]), i === b ? 'g' : ''])); };
+  const set = a => { f = a.slice(); rs.forEach((r, i) => r.set(f[i])); draw(); };
+  onBtn(el, 'cat', () => set([0.9, 0.8, 0.7, 0.1])); onBtn(el, 'dog', () => set([0.1, 0.2, 0.8, 0.9])); draw();
+};
+
+W.share = function (el) {
+  const pxs = [0, 1, 2, 3, 4, 5].map(i => 30 + i * 28);
+  const dense = (() => { let s = ''; pxs.forEach(a => [0, 1, 2, 3].forEach(b => { s += `<line x1="40" y1="${a + 10}" x2="170" y2="${40 + b * 30}" class="s-line"/>`; })); pxs.forEach(a => s += `<rect x="30" y="${a}" width="20" height="20" class="f-soft s-muted"/>`); [0, 1, 2, 3].forEach(b => s += `<circle cx="170" cy="${40 + b * 30}" r="10" class="f-bad"/>`); return svg(200, 210, s + `<text class="tb" x="100" y="204" text-anchor="middle">Dense layer</text>`, 'Dense connections'); })();
+  const conv = (() => { let s = ''; pxs.forEach((a, i) => s += `<rect x="30" y="${a}" width="20" height="20" class="${i >= 1 && i <= 3 ? 'f-a' : 'f-soft'} s-muted"/>`); [0, 1, 2, 3].forEach(b => s += `<circle cx="170" cy="${50 + b * 30}" r="10" class="f-good"/>`); [1, 2, 3].forEach(i => s += `<line x1="50" y1="${pxs[i] + 10}" x2="170" y2="${80}" class="s-a" stroke-width="1.6"/>`); return svg(200, 210, s + `<text class="ts" x="100" y="22" text-anchor="middle">one small filter slides along</text><text class="tb" x="100" y="204" text-anchor="middle">Convolution layer</text>`, 'Convolution connections'); })();
+  el.innerHTML = `<div class="two"><div>${dense}</div><div>${conv}</div></div><div class="ctrl"><div class="gc"><b>Dense layer on a 28x28 image with 100 neurons</b>${28 * 28 * 100} weights to learn</div><div class="gc"><b>One 3x3 filter</b>9 weights, reused at every position, so it finds the pattern anywhere</div></div>`;
+};
+
+W.cnn = function (el) {
+  const B = [['Input', 'Image as a pixel matrix (3 channels for colour).', 96, 'var(--soft)', 'Raw pixels'], ['Convolution', 'Filters slide over the image and detect features such as edges. Output: feature maps.', 84, 'var(--u1)', 'Feature maps'], ['ReLU', 'Turns negatives into 0 and adds non-linearity.', 84, 'var(--u3)', 'Same size'], ['Pooling', 'Shrinks each feature map and keeps the key features.', 60, 'var(--u2)', 'Smaller maps'], ['Conv + ReLU', 'A second round learns more complex features (shapes, parts).', 60, 'var(--u1)', 'Deeper features'], ['Pooling', 'Shrinks again. Repeat conv + pool as needed.', 40, 'var(--u2)', 'Even smaller'], ['Flatten', 'Unrolls the maps into one long 1D vector.', 70, 'var(--u4)', '1D vector'], ['Fully connected', 'Combines all features to decide.', 56, 'var(--u1)', 'Class scores'], ['Softmax', 'Turns scores into class probabilities; the highest is chosen.', 36, 'var(--u5)', 'Probabilities']];
+  el.innerHTML = `<div style="overflow-x:auto"><div style="display:flex;gap:6px;align-items:flex-end;min-width:560px;height:130px">${B.map((b, i) => `<button type="button" data-i="${i}" style="flex:1;height:${b[2]}px;border:2px solid transparent;border-radius:8px;background:${b[3]};cursor:pointer;color:${i ? 'var(--on)' : 'var(--ink)'};font-size:11px;font-weight:700;padding:2px;line-height:1.15">${b[0]}</button>`).join('')}</div><div style="display:flex;min-width:560px;margin-top:6px;font-size:12px;color:var(--muted)"><div style="flex:6.2;border-top:3px solid var(--u1);padding-top:3px">Feature extraction</div><div style="flex:2.8;border-top:3px solid var(--u5);padding-top:3px;margin-left:6px">Decision making</div></div></div><div class="cap" aria-live="polite"></div>`;
+  const show = i => { $$('[data-i]', el).forEach(b => b.style.borderColor = +b.dataset.i === i ? 'var(--ink)' : 'transparent'); $('.cap', el).innerHTML = `<b>${B[i][0]}.</b> ${B[i][1]} <span class="badge">${B[i][4]}</span>`; };
+  $$('[data-i]', el).forEach(b => b.addEventListener('click', () => show(+b.dataset.i))); show(1);
+};
+
+W.hier = function (el) {
+  const L = [['Early layers', 'Simple features: edges, lines, corners'], ['Middle layers', 'Shapes, curves, textures (eyes, wheels)'], ['Deeper layers', 'Object parts (nose, car door)'], ['Final layers', 'Complete objects (full face, full car)']];
+  const g = [
+    `<g transform="translate(20,40)"><line x1="0" y1="0" x2="0" y2="40" class="s-ink" stroke-width="3"/><line x1="14" y1="40" x2="44" y2="40" class="s-ink" stroke-width="3"/><line x1="20" y1="0" x2="44" y2="30" class="s-ink" stroke-width="3"/></g>`,
+    `<g transform="translate(125,40)"><circle cx="18" cy="22" r="18" class="nf s-u2" stroke-width="3"/><rect x="44" y="6" width="36" height="32" class="nf s-u2" stroke-width="3"/></g>`,
+    `<g transform="translate(240,36)"><circle cx="18" cy="26" r="16" class="nf s-u3" stroke-width="3"/><circle cx="18" cy="26" r="4" class="f-u3"/><rect x="44" y="8" width="30" height="34" rx="3" class="nf s-u3" stroke-width="3"/></g>`,
+    `<g transform="translate(345,34)"><path d="M0 40 L0 26 L16 24 L26 10 L52 10 L62 24 L78 26 L78 40 Z" class="f-u4"/><circle cx="18" cy="42" r="8" class="f-ink"/><circle cx="60" cy="42" r="8" class="f-ink"/></g>`];
+  el.innerHTML = `<div class="ctrl">${seg(L.map((l, i) => [i, l[0]]), 0)}</div>` + svg(440, 120, [0, 1, 2, 3].map(i => `<g data-g="${i}" class="tr">${g[i]}</g>${i < 3 ? `<text x="${100 + i * 105}" y="64" class="ts">&gt;</text>` : ''}`).join('') + `<text class="ts" x="20" y="112">edges</text><text class="ts" x="125" y="112">shapes</text><text class="ts" x="240" y="112">parts</text><text class="ts" x="345" y="112">object</text>`, 'Features from edges to a car') + `<div class="cap" aria-live="polite"></div>`;
+  const show = i => { $$('[data-g]', el).forEach(n => n.classList.toggle('dim', +n.dataset.g !== i)); $('.cap', el).innerHTML = `<b>${L[i][0]}.</b> ${L[i][1]}. Each layer builds on the one before it.`; };
+  wireSeg($('.seg', el), v => show(+v)); show(0);
+};
+
+W.tasks = function (el) {
+  const scene = (extra, label) => svg(200, 130, `<rect width="200" height="130" class="f-soft"/><rect y="92" width="200" height="38" class="f-line"/><g><rect x="20" y="62" width="70" height="26" rx="4" class="f-u1"/><rect x="34" y="48" width="40" height="18" rx="3" class="f-u1"/><circle cx="36" cy="90" r="9" class="f-ink"/><circle cx="76" cy="90" r="9" class="f-ink"/></g><g><circle cx="140" cy="44" r="10" class="f-u3"/><rect x="130" y="56" width="20" height="36" rx="4" class="f-u3"/></g>${extra}`, label);
+  const face = svg(200, 130, `<rect width="200" height="130" class="f-soft"/><circle cx="100" cy="60" r="38" class="f-u3"/><circle cx="86" cy="54" r="5" class="f-ink"/><circle cx="114" cy="54" r="5" class="f-ink"/><path d="M84 76 q16 14 32 0" class="nf s-ink" stroke-width="3"/><rect x="62" y="96" width="76" height="22" rx="5" class="f-a"/><text x="100" y="111" text-anchor="middle" class="tw2">Aanya</text>`, 'Face recognition');
+  el.innerHTML = `<div class="two"><div><div class="vt">Image classification</div>${scene(`<rect x="52" y="8" width="96" height="22" rx="5" class="f-a"/><text x="100" y="23" text-anchor="middle" class="tw2">street scene</text>`, 'Classification')}<div class="cap m">One label for the whole image.</div></div><div><div class="vt">Face recognition</div>${face}<div class="cap m">Who is this person?</div></div><div><div class="vt">Object detection</div>${scene(`<rect x="14" y="42" width="82" height="52" class="nf s-bad" stroke-width="2.5"/><rect x="14" y="30" width="30" height="12" class="f-bad"/><text x="29" y="40" text-anchor="middle" class="tw2">car</text><rect x="122" y="30" width="36" height="66" class="nf s-good" stroke-width="2.5"/><rect x="122" y="18" width="46" height="12" class="f-good"/><text x="145" y="28" text-anchor="middle" class="tw2">person</text>`, 'Detection')}<div class="cap m">What is here, and where? Boxes show the location.</div></div></div>`;
+};
+
+W.nets = function (el) {
+  const box = (x, y, w, h, c, t) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" class="${c}"/>${t ? `<text x="${x + w / 2}" y="${y + h / 2 + 4}" text-anchor="middle" class="tw2">${t}</text>` : ''}`;
+  const D = {
+    alex: ['AlexNet (2012)', 'Won ImageNet by a large margin and started the deep-learning boom. Used ReLU (faster training), Dropout (less overfitting) and GPUs.', svg(440, 150, [[20, 70, 'f-u1'], [78, 56, 'f-u1'], [130, 44, 'f-u1'], [172, 44, 'f-u1'], [214, 44, 'f-u1'], [256, 80, 'f-u4'], [300, 80, 'f-u4'], [344, 40, 'f-u5']].map((b, i) => box(b[0], 75 - b[1] / 2, i < 5 ? 38 : 30, b[1], b[2], '')).join('') + `<text class="ts" x="20" y="140">5 convolution layers</text><text class="ts" x="256" y="140">3 fully connected</text><rect x="20" y="8" width="74" height="22" rx="11" class="f-u3"/><text class="tw2" x="57" y="23" text-anchor="middle">ReLU</text><rect x="102" y="8" width="84" height="22" rx="11" class="f-u2"/><text class="tw2" x="144" y="23" text-anchor="middle">Dropout</text><rect x="194" y="8" width="60" height="22" rx="11" class="f-u4"/><text class="tw2" x="224" y="23" text-anchor="middle">GPUs</text>`, 'AlexNet')],
+    vgg: ['VGGNet (2014)', 'Many small 3x3 filters stacked deeply work very well. Simple, uniform design with 16 to 19 layers. Showed that depth improves performance.', svg(440, 150, [0, 1, 2, 3, 4].map(b => [0, 1].concat(b > 1 ? [2] : []).map((k, j) => box(24 + b * 80, 100 - j * 22 - (b > 1 ? 0 : 0), 44, 18, 'f-u2', '3x3')).join('') + box(24 + b * 80, 104 + 4, 44, 8, 'f-u4', '')).join('') + `<text class="tb" x="24" y="30">Blocks of small 3x3 convolutions, then a pool</text><text class="ts" x="24" y="144">depth: 16 to 19 layers</text>`, 'VGG')],
+    goog: ['GoogLeNet / Inception (2014)', 'The inception module applies filters of several sizes at the same time and joins the results. It captures multi-scale features efficiently with fewer parameters.', svg(440, 150, `<rect x="20" y="62" width="60" height="26" rx="4" class="f-soft s-muted"/><text class="ts" x="50" y="79" text-anchor="middle">input</text>` + [['1x1', 14], ['3x3', 52], ['5x5', 90], ['pool', 128]].map((b, i) => `<line x1="80" y1="75" x2="170" y2="${b[1] + 8}" class="s-muted"/>${box(170, b[1] - 6, 90, 28, ['f-u1', 'f-u2', 'f-u3', 'f-u4'][i], b[0])}<line x1="260" y1="${b[1] + 8}" x2="330" y2="75" class="s-muted"/>`).join('') + box(330, 60, 90, 30, 'f-ink', 'concatenate'), 'Inception module')],
+    res: ['ResNet (2015)', 'Skip (residual) connections let information jump over layers. They solve the vanishing-gradient problem and allow networks with 100+ layers.', svg(440, 150, box(130, 14, 190, 30, 'f-u1', 'convolution') + box(130, 70, 190, 30, 'f-u1', 'convolution') + `<circle cx="225" cy="128" r="14" class="f-good"/><text x="225" y="133" text-anchor="middle" class="tw2">+</text><line x1="225" y1="44" x2="225" y2="70" class="s-muted" stroke-width="2"/><line x1="225" y1="100" x2="225" y2="114" class="s-muted" stroke-width="2"/><path d="M225 6 L360 6 L360 128 L239 128" class="nf s-bad" stroke-width="3"/><text x="368" y="70" class="tb" style="fill:var(--bad)">skip</text><text x="225" y="10" text-anchor="middle" class="ts">input x</text>`, 'Residual block')]
+  };
+  el.innerHTML = `<div class="ctrl">${seg([['alex', 'AlexNet'], ['vgg', 'VGGNet'], ['goog', 'GoogLeNet'], ['res', 'ResNet']], 'alex')}</div><div data-view></div><div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $('[data-view]', el).innerHTML = D[k][2]; $('.cap', el).innerHTML = `<b>${D[k][0]}.</b> ${D[k][1]}`; };
+  wireSeg($('.seg', el), draw); draw('alex');
+};
+
+/* ---------- Unit III widgets ---------- */
+const MARK = `<defs><marker id="arA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--a)"/></marker><marker id="arB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--bad)"/></marker><marker id="arM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--muted)"/></marker></defs>`;
+function rnnSvg(tokens, o) {
+  o = o || {}; const n = tokens.length, W0 = 440, xs = tokens.map((_, i) => 100 + i * ((W0 - 160) / Math.max(1, n - 1))), yx = 200, yh = 118, yy = 38; let s = MARK;
+  s += `<g data-h0 class="tr"><rect x="14" y="${yh - 14}" width="34" height="28" rx="6" class="f-soft s-muted"/><text x="31" y="${yh + 4}" text-anchor="middle" class="ts">h0</text><line x1="48" y1="${yh}" x2="${xs[0] - 24}" y2="${yh}" class="s-muted" stroke-width="2" marker-end="url(#arM)"/></g>`;
+  xs.forEach((x, t) => {
+    s += `<g data-t="${t}" class="tr">`;
+    if (t > 0) s += `<line data-fh="${t}" x1="${xs[t - 1] + 24}" y1="${yh}" x2="${x - 24}" y2="${yh}" class="s-a" stroke-width="3" marker-end="url(#arA)"/>${o.w ? `<text x="${(xs[t - 1] + x) / 2}" y="${yh - 10}" text-anchor="middle" class="tb" style="fill:var(--u3)">W</text>` : ''}`;
+    s += `<line data-fx="${t}" x1="${x}" y1="${yx - 16}" x2="${x}" y2="${yh + 26}" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line data-fy="${t}" x1="${x}" y1="${yh - 26}" x2="${x}" y2="${yy + 18}" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>`;
+    s += `<rect x="${x - 34}" y="${yx - 14}" width="68" height="28" rx="6" class="f-panel s-muted" stroke-width="1.5"/><text x="${x}" y="${yx + 5}" text-anchor="middle" class="t">${tokens[t]}</text>`;
+    s += `<rect data-hc="${t}" x="${x - 24}" y="${yh - 24}" width="48" height="48" rx="12" class="f-as s-a" stroke-width="2.5"/><text x="${x}" y="${yh + 5}" text-anchor="middle" class="tb">h${t + 1}</text>`;
+    s += `<rect data-yc="${t}" x="${x - 24}" y="${yy - 16}" width="48" height="30" rx="6" class="f-soft s-muted" stroke-width="1.5"/><text x="${x}" y="${yy + 4}" text-anchor="middle" class="ts">y${t + 1}</text>`;
+    if (o.w) s += `<text x="${x + 8}" y="${(yx + yh) / 2 + 12}" class="tb" style="fill:var(--u3)">U</text><text x="${x + 8}" y="${(yh + yy) / 2 + 6}" class="tb" style="fill:var(--u3)">V</text>`;
+    if (o.back && t > 0) s += `<path data-bk="${t}" d="M${x - 8} ${yh - 30} Q${(xs[t - 1] + x) / 2} ${yh - 66} ${xs[t - 1] + 8} ${yh - 30}" class="nf s-bad tr" stroke-width="3" marker-end="url(#arB)" opacity="0"/>`;
+    if (o.back) s += `<rect data-ls="${t}" x="${x + 14}" y="${yy - 22}" width="16" height="16" rx="3" class="f-bad tr" opacity="0"/>`;
+    s += `</g>`;
+  });
+  return svg(W0, 230, s, 'RNN unrolled through time');
+}
+W.rnn = function (el, o) { /* hidden state memory */
+  const tk = ['I', 'am', 'very', 'happy']; let st = -1;
+  el.innerHTML = rnnSvg(tk) + `<div class="ctrl">${btn('n', 'Read next word', 1)}${btn('r', 'Reset')}</div><div class="lbl">What the hidden state remembers (older words fade)</div><div data-mem style="display:flex;gap:6px;flex-wrap:wrap;min-height:34px"></div><div class="cap" aria-live="polite"></div>`;
+  const paint = () => { $$('[data-t]', el).forEach(g => g.style.opacity = +g.dataset.t <= st ? 1 : 0.3); $('[data-h0]', el).style.opacity = st >= 0 ? 1 : 0.4; $$('[data-hc]', el).forEach(h => h.style.fill = +h.dataset.hc === st ? 'var(--a)' : ''); $('[data-mem]', el).innerHTML = tk.slice(0, st + 1).map((w, i) => `<span class="chip" style="opacity:${(0.35 + 0.65 * (i + 1) / (st + 1)).toFixed(2)};background:var(--as)">${w}</span>`).join('') || '<span class="cap m">empty</span>'; $('.cap', el).textContent = st < 0 ? 'The hidden state h starts at zero (empty memory).' : st === 0 ? 'Step 1: the hidden state takes the first word. It combines current input with the previous (empty) memory.' : `Step ${st + 1}: the new hidden state blends the current word "${tk[st]}" with everything remembered so far, then passes it on.`; };
+  onBtn(el, 'n', () => { st = Math.min(st + 1, tk.length - 1); paint(); }); onBtn(el, 'r', () => { st = -1; paint(); }); paint();
+};
+W.unroll = function (el) {
+  const tk = ['I', 'love', 'NLP'];
+  const folded = svg(440, 230, MARK + `<line x1="220" y1="184" x2="220" y2="144" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="220" y1="92" x2="220" y2="68" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><rect x="186" y="${200 - 14}" width="68" height="28" rx="6" class="f-panel s-muted" stroke-width="1.5"/><text x="220" y="205" text-anchor="middle" class="t">input x</text><rect x="196" y="94" width="48" height="48" rx="12" class="f-as s-a" stroke-width="2.5"/><text x="220" y="123" text-anchor="middle" class="tb">h</text><path d="M244 108 C300 90 300 146 246 134" class="nf s-a" stroke-width="3" marker-end="url(#arA)"/><text x="300" y="125" class="ts">loop: the memory feeds back</text><rect x="196" y="38" width="48" height="30" rx="6" class="f-soft s-muted"/><text x="220" y="58" text-anchor="middle" class="ts">y</text>`, 'Folded RNN with a loop');
+  el.innerHTML = `<div class="ctrl">${seg([['f', 'Folded (loop)'], ['u', 'Unrolled through time']], 'u')}${btn('n', 'Next time step', 1)}${btn('r', 'Reset')}</div><div data-view></div><div class="cap" aria-live="polite"></div>`;
+  let mode = 'u', st = -1; const v = $('[data-view]', el);
+  const draw = () => { if (mode === 'f') { v.innerHTML = folded; $('.cap', el).textContent = 'The compact picture: one cell whose output loops back as input to itself.'; return; } v.innerHTML = rnnSvg(tk); $$('[data-t]', el).forEach(g => g.style.opacity = +g.dataset.t <= st ? 1 : 0.18); $('.cap', el).textContent = st < 0 ? 'Unrolling draws the loop as a chain: one copy of the cell for each word. Press "Next time step".' : `Copy ${st + 1} reads "${tk[st]}", takes the hidden state from copy ${st} and passes its new hidden state to copy ${st + 2}. The same cell (same weights) is used in every copy.`; };
+  wireSeg($('.seg', el), k => { mode = k; draw(); }); onBtn(el, 'n', () => { if (mode === 'f') return; st = Math.min(st + 1, tk.length - 1); draw(); }); onBtn(el, 'r', () => { st = -1; draw(); }); draw();
+};
+W.shared = function (el) {
+  const tk = ['1st word', '5th word', '20th word']; let on = true;
+  el.innerHTML = rnnSvg(tk, { w: true }) + `<div class="ctrl">${btn('t', 'Toggle sharing', 1)}</div><div class="two"><div class="gc"><b>Shared weights (RNN)</b>One set (W, U, V) is reused at every step. Fewer parameters; works for any sequence length.</div><div class="gc"><b>Without sharing</b>A separate set of weights per position: far more parameters and nothing learned at one position helps another.</div></div><div class="cap" aria-live="polite"></div>`;
+  const paint = () => { $$('[data-hc]', el).forEach(h => h.style.fill = on ? 'var(--u3s)' : ''); $$('[data-hc]', el).forEach((h, i) => h.style.stroke = on ? 'var(--u3)' : ['var(--u1)', 'var(--u2)', 'var(--u4)'][i]); $('.cap', el).textContent = on ? 'Same colour = same weights. A pattern learned at the 1st word is recognised at the 5th or 20th word too.' : 'Different colours would mean different weights per position (this is NOT how an RNN works).'; };
+  onBtn(el, 't', () => { on = !on; paint(); }); paint();
+};
+
+W.ffrnn = function (el) {
+  const node = (x, y, t, c) => `<circle cx="${x}" cy="${y}" r="16" class="${c}"/><text x="${x}" y="${y + 4}" text-anchor="middle" class="tw2">${t}</text>`;
+  const ff = `<g data-s="f" class="tr">${node(40, 150, 'x', 'f-u1')}${node(40, 90, 'h', 'f-u2')}${node(40, 30, 'y', 'f-u4')}<line x1="40" y1="134" x2="40" y2="106" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="40" y1="74" x2="40" y2="46" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>${node(120, 150, 'x', 'f-u1')}${node(120, 90, 'h', 'f-u2')}${node(120, 30, 'y', 'f-u4')}<line x1="120" y1="134" x2="120" y2="106" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="120" y1="74" x2="120" y2="46" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><text x="80" y="94" text-anchor="middle" class="ts" style="fill:var(--bad)">no link</text><text x="80" y="188" text-anchor="middle" class="tb">Feedforward</text></g>`;
+  const rn = `<g data-s="r" class="tr">${node(280, 150, 'x', 'f-u1')}${node(280, 90, 'h', 'f-u2')}${node(280, 30, 'y', 'f-u4')}<line x1="280" y1="134" x2="280" y2="106" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="280" y1="74" x2="280" y2="46" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>${node(380, 150, 'x', 'f-u1')}${node(380, 90, 'h', 'f-u2')}${node(380, 30, 'y', 'f-u4')}<line x1="380" y1="134" x2="380" y2="106" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="380" y1="74" x2="380" y2="46" class="s-muted" stroke-width="2" marker-end="url(#arM)"/><line x1="296" y1="90" x2="364" y2="90" class="s-a" stroke-width="3" marker-end="url(#arA)"/><text x="330" y="80" text-anchor="middle" class="tb" style="fill:var(--a)">memory</text><text x="330" y="188" text-anchor="middle" class="tb">RNN</text></g>`;
+  el.innerHTML = `<div class="ctrl">${seg([['b', 'Both'], ['f', 'Feedforward'], ['r', 'RNN']], 'b')}</div>` + svg(440, 200, MARK + ff + rn, 'Feedforward versus recurrent network') + `<div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $$('[data-s]', el).forEach(g => g.style.opacity = k === 'b' || g.dataset.s === k ? 1 : 0.15); $('.cap', el).textContent = k === 'r' ? 'The RNN passes a hidden state along the sequence, so earlier words influence later ones.' : k === 'f' ? 'A feedforward network treats every input independently: no memory, so "The sky is ..." cannot use earlier words to predict "blue".' : 'Left: no memory between inputs. Right: the hidden state links the steps.'; };
+  wireSeg($('.seg', el), draw); draw('b');
+};
+
+W.rnn4 = function (el) {
+  const T = [['One-to-One', [1], [1], 'Single image to one label'], ['One-to-Many', [1, 0, 0], [1, 1, 1], 'Image captioning: image to sentence'], ['Many-to-One', [1, 1, 1], [0, 0, 1], 'Sentiment analysis: sentence to positive or negative'], ['Many-to-Many', [1, 1, 1], [1, 1, 1], 'Machine translation: sequence to sequence']];
+  const one = t => { const n = t[1].length, xs = Array.from({ length: n }, (_, i) => n === 1 ? 90 : 36 + i * 54); let s = ''; xs.forEach((x, i) => { if (i) s += `<line x1="${xs[i - 1] + 14}" y1="80" x2="${x - 14}" y2="80" class="s-a" stroke-width="2.5" marker-end="url(#arA)"/>`; s += `<circle cx="${x}" cy="80" r="13" class="f-soft s-muted"/>`; if (t[1][i]) s += `<line x1="${x}" y1="126" x2="${x}" y2="96" class="s-muted" stroke-width="2"/><rect x="${x - 11}" y="124" width="22" height="18" rx="4" class="f-u1"/>`; if (t[2][i]) s += `<line x1="${x}" y1="64" x2="${x}" y2="40" class="s-muted" stroke-width="2"/><rect x="${x - 11}" y="22" width="22" height="18" rx="4" class="f-u5"/>`; }); return `<div class="gc" style="padding:6px">${svg(180, 150, MARK + s, t[0])}<b style="margin:0">${t[0]}</b>${t[3]}</div>`; };
+  el.innerHTML = `<div class="grid">${T.map(one).join('')}</div><div class="cap m">Blue = inputs, green = outputs, grey circles = the RNN cell passing memory along.</div>`;
+};
+
+W.bptt = function (el) {
+  const tk = ['w1', 'w2', 'w3', 'w4']; const P = [['Forward pass through time', 'Process the sequence step by step; store every hidden state and output.'], ['Calculate the loss', 'Compare each output with the correct answer; add up the error over all time steps.'], ['Backward pass through time', 'Send the error from the last step back to the first, computing gradients at each step.'], ['Update the weights', 'Add up the gradients from all steps (weights are shared) and update the single weight set.']]; let st = -1;
+  el.innerHTML = rnnSvg(tk, { back: true, w: true }) + `<div class="ctrl">${btn('n', 'Next phase', 1)}${btn('r', 'Reset')}</div><div class="cap" aria-live="polite"></div>`;
+  const paint = () => { $$('[data-fh],[data-fx],[data-fy]', el).forEach(a => { a.style.stroke = st === 0 ? 'var(--a)' : ''; a.style.strokeWidth = st === 0 ? 3.5 : ''; }); $$('[data-ls]', el).forEach(l => l.style.opacity = st >= 1 ? 1 : 0); $$('[data-bk]', el).forEach(b => b.style.opacity = st >= 2 ? 1 : 0); $$('[data-hc]', el).forEach(h => { h.style.stroke = st === 3 ? 'var(--u3)' : ''; h.style.fill = st === 3 ? 'var(--u3s)' : ''; }); $('.cap', el).innerHTML = st < 0 ? 'Press "Next phase" to walk through the four BPTT steps.' : `<b>Step ${st + 1} of 4: ${P[st][0]}.</b> ${P[st][1]}`; };
+  onBtn(el, 'n', () => { st = (st + 1) % 4; paint(); }); onBtn(el, 'r', () => { st = -1; paint(); }); paint();
+};
+
+W.trunc = function (el) {
+  const T = 12; let mode = 'full';
+  el.innerHTML = `<div class="ctrl">${seg([['full', 'Full BPTT'], ['tr', 'Truncated BPTT']], 'full')}${rng('k', 'Window size', 2, 6, 1, 4)}</div><div data-tl style="display:flex;gap:4px"></div><div class="lbl" style="margin-top:6px">Grey = steps the error reaches, white = steps it cannot reach</div><div data-b></div><div class="cap" aria-live="polite"></div>`;
+  const k = onRng(el, 'k', () => draw());
+  const draw = () => { const w = mode === 'full' ? T : k.get(); $('[data-tl]', el).innerHTML = Array.from({ length: T }, (_, i) => { const chunk = Math.floor(i / w); const c = mode === 'full' ? 'var(--a)' : ['var(--u1)', 'var(--u2)', 'var(--u3)', 'var(--u4)'][chunk % 4]; return `<div style="flex:1;height:34px;border-radius:5px;background:${c};display:grid;place-items:center;color:var(--on);font-size:12px;font-weight:700;${mode === 'tr' && i % w === 0 && i ? 'margin-left:6px' : ''}">${i + 1}</div>`; }).join(''); $('[data-b]', el).innerHTML = bars([['Memory needed', w / T, pct(w / T), mode === 'full' ? 'r' : 'g'], ['Speed', mode === 'full' ? 0.25 : Math.min(1, 0.25 + (1 - w / T) * 0.75), mode === 'full' ? 'slow' : 'fast', mode === 'full' ? 'r' : 'g'], ['Longest dependency reached', w / T, mode === 'full' ? 'all 12 steps' : w + ' steps', mode === 'full' ? 'g' : 'w']]); $('.cap', el).textContent = mode === 'full' ? 'Full BPTT sends the error back through the entire sequence: it captures every dependency but is slow and memory-heavy on long sequences.' : `Truncated BPTT sends the error back only ${w} steps at a time (each colour is one chunk): fast and light, but it may miss dependencies longer than ${w} steps.`; };
+  wireSeg($('.seg', el), v => { mode = v; draw(); }); draw();
+};
+
+W.grad = function (el) {
+  el.innerHTML = `<div class="ctrl">${rng('f', 'Size of the repeated multiplier', 0.4, 1.8, 0.05, 0.6)}${seg([['off', 'No clipping'], ['on', 'Gradient clipping']], 'off')}<span data-s class="badge"></span></div><div data-out></div><div class="cap" aria-live="polite"></div>`;
+  let clip = false; const f = onRng(el, 'f', () => draw());
+  const draw = () => { const m = f.get(); const rows = []; for (let d = 0; d < 10; d++) { let v = Math.pow(m, d); if (clip && v > 1) v = 1; const wv = v <= 1 ? v * 0.5 : 0.5 + Math.min(Math.log10(v) / 1.5, 1) * 0.5; rows.push([`Step ${10 - d}${d === 0 ? ' (latest)' : d === 9 ? ' (oldest)' : ''}`, wv, v < 100 ? v.toFixed(2) : '>100', v < 0.1 ? 'r' : v > 1.5 ? 'w' : 'g']); }
+    $('[data-out]', el).innerHTML = bars(rows); const s = $('[data-s]', el); const state = m < 0.9 ? 'Vanishing' : m > 1.1 ? 'Exploding' : 'Healthy'; s.textContent = state; s.className = 'badge ' + (state === 'Healthy' ? 'g' : 'b');
+    $('.cap', el).textContent = state === 'Vanishing' ? 'The gradient shrinks at every step back, so early steps get almost no learning signal: the network forgets early inputs. Fix: LSTM or GRU, ReLU, better initialisation.' : state === 'Exploding' ? (clip ? 'Gradient clipping caps the gradient at a maximum, so training stays stable.' : 'The gradient grows at every step back: huge weight updates, unstable training, even NaN values. Fix: gradient clipping and a smaller learning rate.') : 'The gradient stays about the same size: healthy learning across all steps.'; };
+  wireSeg($('.seg', el), v => { clip = v === 'on'; draw(); }); draw();
+};
+
+W.lstm = function (el) {
+  const G = { f: ['Forget gate', 'Decides which old information in memory is thrown away (0 = forget, 1 = keep).'], i: ['Input gate', 'Decides which new information is added to memory.'], o: ['Output gate', 'Decides what part of the memory is shown as output at this step.'] };
+  const old = 0.8, nw = 0.5;
+  const bx = (x, y, w, h, c, t, tc) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" class="${c}"/><text x="${x + w / 2}" y="${y + h / 2 + 4}" text-anchor="middle" class="${tc || 'tw2'}">${t}</text>`;
+  el.innerHTML = svg(440, 160, MARK + bx(4, 18, 84, 38, 'f-u3', 'old memory') + `<line x1="88" y1="37" x2="104" y2="37" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>` + bx(106, 18, 66, 38, 'f-bad', 'x forget') + `<line x1="172" y1="37" x2="188" y2="37" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>` + bx(190, 18, 66, 38, 'f-good', '+ input') + `<line x1="256" y1="37" x2="272" y2="37" class="s-muted" stroke-width="2" marker-end="url(#arM)"/>` + bx(274, 18, 84, 38, 'f-u3', 'new memory') + `<path d="M358 37 L394 37 L394 92" class="nf s-muted" stroke-width="2" marker-end="url(#arM)"/>` + bx(336, 94, 98, 36, 'f-u1', 'x output gate') + `<line x1="139" y1="82" x2="139" y2="58" class="s-bad" stroke-width="2"/><text class="ts" x="139" y="96" text-anchor="middle">forget gate F</text><line x1="223" y1="82" x2="223" y2="58" class="s-good" stroke-width="2"/><text class="ts" x="223" y="96" text-anchor="middle">input gate I</text><text class="ts" x="8" y="150">Each gate acts like a slider from 0 (block) to 1 (let through).</text>`, 'LSTM memory cell') + `<div class="two"><div>${rng('f', 'Forget gate F', 0, 1, 0.05, 0.9)}${rng('i', 'Input gate I', 0, 1, 0.05, 0.6)}${rng('o', 'Output gate O', 0, 1, 0.05, 0.8)}</div><div data-out></div></div><div class="grid">${Object.values(G).map(g => `<div class="gc"><b>${g[0]}</b>${g[1]}</div>`).join('')}</div><div class="cap" aria-live="polite"></div>`;
+  const s = { f: 0.9, i: 0.6, o: 0.8 }; ['f', 'i', 'o'].forEach(k => onRng(el, k, v => { s[k] = v; draw(); }));
+  const draw = () => { const kept = s.f * old, added = s.i * nw, mem = kept + added, out = s.o * mem; $('[data-out]', el).innerHTML = bars([['Old memory kept', kept, kept.toFixed(2), 'w'], ['New info added', added, added.toFixed(2), 'g'], ['New memory', Math.min(mem, 1), mem.toFixed(2)], ['Output shown', Math.min(out, 1), out.toFixed(2)]]); $('.cap', el).textContent = `Old memory is "France" (strength ${old}). With forget gate ${s.f}, ${pct(s.f)} of it survives. Lower the forget gate and watch the memory disappear.`; };
+  draw();
+};
+
+W.gru = function (el) {
+  el.innerHTML = `<div class="two"><div>${rng('r', 'Reset gate', 0, 1, 0.05, 0.5)}${rng('z', 'Update gate', 0, 1, 0.05, 0.4)}</div><div data-out></div></div><div class="grid"><div class="gc"><b>Reset gate</b>How much of the past to forget when forming the new candidate memory. Near 0: ignore the past. Near 1: use it fully.</div><div class="gc"><b>Update gate</b>How much old memory to keep versus new information to add in the final hidden state. Near 0: keep old. Near 1: mostly new.</div></div><div class="cap" aria-live="polite"></div>`;
+  const s = { r: 0.5, z: 0.4 }; ['r', 'z'].forEach(k => onRng(el, k, v => { s[k] = v; draw(); }));
+  const draw = () => { $('[data-out]', el).innerHTML = `<div class="lbl">Past used to build the candidate</div>${bars([['Reset gate', s.r, pct(s.r), 'w']])}<div class="lbl" style="margin-top:8px">Final hidden state is a blend of</div><div style="display:flex;height:24px;border-radius:8px;overflow:hidden"><div style="flex:${1 - s.z};background:var(--u3);color:var(--on);font-size:12px;display:grid;place-items:center;min-width:0">${(1 - s.z) > 0.15 ? 'old ' + pct(1 - s.z) : ''}</div><div style="flex:${s.z};background:var(--good);color:var(--on);font-size:12px;display:grid;place-items:center;min-width:0">${s.z > 0.15 ? 'new ' + pct(s.z) : ''}</div></div>`; $('.cap', el).textContent = 'Long review example: the reset gate drops irrelevant earlier words; the update gate keeps the key sentiment word ("excellent") until the end.'; };
+  draw();
+};
+
+W.order = function (el) {
+  let sw = false, sh = false; const stock = [10, 12, 13, 15, 14, 17, 19, 21, 22, 25], shuf = [17, 10, 25, 13, 21, 12, 22, 14, 19, 15];
+  el.innerHTML = `<div class="two"><div><div class="vt">Words: same words, new order</div><div class="ctrl">${btn('s', 'Swap order', 1)}</div><div data-w></div></div><div><div class="vt">Time series: order is the trend</div><div class="ctrl">${btn('h', 'Shuffle the days', 1)}</div><div data-c></div></div></div><div class="cap" aria-live="polite"></div>`;
+  const pw = () => { const a = sw ? ['Man', 'bites', 'dog'] : ['Dog', 'bites', 'man']; $('[data-w]', el).innerHTML = svg(220, 90, MARK + a.map((w, i) => `<rect x="${6 + i * 72}" y="38" width="66" height="30" rx="8" class="${i === 1 ? 'f-soft' : i === 0 ? 'f-a' : 'f-u3'}"/><text x="${39 + i * 72}" y="58" text-anchor="middle" class="${i === 1 ? 't' : 'tw2'}">${w}</text>`).join('') + `<text x="39" y="26" text-anchor="middle" class="ts">the biter</text><text x="183" y="26" text-anchor="middle" class="ts">the bitten</text>`, 'Sentence'); };
+  const pc = () => { const d = sh ? shuf : stock; $('[data-c]', el).innerHTML = svg(220, 120, `<line x1="10" y1="104" x2="210" y2="104" class="s-line"/><polyline class="nf ${sh ? 's-bad' : 's-a'}" stroke-width="3" points="${d.map((v, i) => `${14 + i * 21},${104 - (v - 8) * 4.6}`).join(' ')}"/>`, 'Series'); };
+  const cap = () => { $('.cap', el).textContent = (sw ? '"Man bites dog": the man is now the biter. ' : '"Dog bites man": the dog is the biter. ') + (sh ? 'Shuffled prices show no trend: order destroyed the pattern.' : 'Prices rise steadily over the days.'); };
+  onBtn(el, 's', () => { sw = !sw; pw(); cap(); }); onBtn(el, 'h', () => { sh = !sh; pc(); cap(); }); pw(); pc(); cap();
+};
+
+W.lgcmp = function (el) {
+  el.innerHTML = `<div class="two"><div class="gc"><b>LSTM</b>${bars([['Gates', 3 / 3, '3'], ['Parameters', 1, 'more', 'w'], ['Training speed', 0.55, 'slower', 'w'], ['Very long sequences', 0.95, 'excellent', 'g']])}Has a separate cell state.</div><div class="gc"><b>GRU</b>${bars([['Gates', 2 / 3, '2'], ['Parameters', 0.72, 'fewer', 'g'], ['Training speed', 0.85, 'faster', 'g'], ['Very long sequences', 0.78, 'good', 'g']])}No separate cell: memory is merged into the hidden state.</div></div>`;
+};
+
+/* ---------- Unit IV widgets ---------- */
+const bx4 = (x, y, w, h, c, t, tc) => { const L = String(t).split('|'), y0 = y + h / 2 + 4 - (L.length - 1) * 7; return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" class="${c}"/>` + (t ? `<text x="${x + w / 2}" y="${y0}" text-anchor="middle" class="${tc || 'tw2'}">${L.map((l, i) => `<tspan x="${x + w / 2}" dy="${i ? 14 : 0}">${l}</tspan>`).join('')}</text>` : ''); };
+const ar4 = (x1, y1, x2, y2, c) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${c || 's-muted'}" stroke-width="2" marker-end="url(#arM)"/>`;
+
+W.gan = function (el) {
+  const diagram = svg(480, 170, MARK + `<text x="240" y="12" text-anchor="middle" class="ts" style="fill:var(--bad)">feedback: your fakes were caught, improve them</text><g transform="translate(0,22)">` + bx4(4, 16, 66, 34, 'f-soft s-muted', 'noise z', 't') + ar4(70, 33, 92, 33) + bx4(94, 8, 86, 50, 'f-u3', 'Generator') + ar4(180, 33, 206, 33) + bx4(208, 16, 56, 34, 'f-soft s-muted', 'fake', 't') + ar4(264, 33, 298, 62) + bx4(4, 100, 70, 34, 'f-soft s-muted', 'real data', 't') + ar4(74, 117, 296, 86) + bx4(298, 52, 94, 46, 'f-u1', 'Discriminator') + ar4(392, 75, 412, 75) + `<text x="446" y="72" text-anchor="middle" class="tb">real</text><text x="446" y="87" text-anchor="middle" class="tb">or fake?</text><path d="M345 52 C345 -2 230 -8 136 8" class="nf s-bad" stroke-dasharray="5 4" stroke-width="2" marker-end="url(#arB)"/></g>`, 'GAN: generator and discriminator');
+  el.innerHTML = diagram + `<div class="lbl" style="margin-top:6px">Training in action: orange fakes learn to match the blue real data</div><div class="two"><div data-sc></div><div>${rng('t', 'Training progress', 0, 100, 1, 0)}<div data-out style="margin-top:8px"></div><div class="cap" aria-live="polite"></div></div></div>`;
+  const rnd = seeded(7), N = 36, real = Array.from({ length: N }, (_, i) => { const a = i / N * Math.PI * 2; return [110 + 60 * Math.cos(a), 100 + 60 * Math.sin(a)]; });
+  const start = Array.from({ length: N }, () => [30 + rnd() * 60, 120 + rnd() * 70]), tgt = Array.from({ length: N }, () => { const a = rnd() * Math.PI * 2, r = 60 + (rnd() - 0.5) * 8; return [110 + r * Math.cos(a), 100 + r * Math.sin(a)]; });
+  const draw = p => { const t = p / 100, e = t * t * (3 - 2 * t); $('[data-sc]', el).innerHTML = svg(220, 200, real.map(r => `<circle cx="${r[0].toFixed(1)}" cy="${r[1].toFixed(1)}" r="3.5" class="f-u1"/>`).join('') + start.map((s, i) => `<circle cx="${lerp(s[0], tgt[i][0], e).toFixed(1)}" cy="${lerp(s[1], tgt[i][1], e).toFixed(1)}" r="3.5" class="f-u3"/>`).join(''), 'Fake points moving onto real data ring');
+    const acc = 0.5 + 0.45 * (1 - e); $('[data-out]', el).innerHTML = bars([['Judge accuracy', acc, pct(acc), acc > 0.7 ? 'r' : 'g']]); $('.cap', el).textContent = t < 0.15 ? 'Early: fakes are obviously wrong, so the discriminator catches almost all of them.' : t < 0.85 ? 'The generator keeps adjusting to the feedback; fakes drift towards the real pattern.' : 'Fakes are now indistinguishable. The discriminator can only guess (about 50%).'; };
+  onRng(el, 't', draw); draw(0);
+};
+
+W.cgan = function (el) {
+  const diagram = svg(480, 150, MARK + bx4(4, 6, 60, 30, 'f-soft s-muted', 'noise', 't') + bx4(4, 82, 60, 30, 'f-warn', 'label', 'tw2') + ar4(64, 21, 96, 40) + ar4(64, 97, 96, 62) + bx4(98, 28, 84, 46, 'f-u3', 'Generator') + ar4(182, 51, 214, 51) + bx4(216, 36, 52, 30, 'f-soft s-muted', 'fake', 't') + ar4(268, 51, 296, 68) + `<path d="M34 112 L34 140 L342 140 L342 102" class="nf s-warn" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arM)"/>` + bx4(296, 56, 92, 46, 'f-u1', 'Discriminator') + ar4(388, 79, 410, 79) + `<text x="446" y="76" class="ts" text-anchor="middle">real and</text><text x="446" y="90" class="ts" text-anchor="middle">matching?</text><text x="190" y="134" class="ts" text-anchor="middle">the label goes to both networks</text>`, 'Conditional GAN');
+  el.innerHTML = diagram + `<div class="two"><div><div class="ctrl">${seg([['g', 'Normal GAN'], ['c', 'Conditional GAN']], 'c')}</div><div class="ctrl" data-l>${seg([['3', '3'], ['7', '7'], ['9', '9']], '7')}</div>${btn('gen', 'Generate', 1)}</div><div style="display:grid;place-items:center"><div data-o style="width:120px;height:120px;border:2px solid var(--a);border-radius:12px;display:grid;place-items:center;font:800 70px var(--font-d);color:var(--a);background:var(--panel)">?</div></div></div><div class="cap" aria-live="polite"></div>`;
+  let mode = 'c', lab = '7'; const segs = $$('.seg', el);
+  wireSeg(segs[0], v => { mode = v; $('[data-l]', el).style.opacity = mode === 'c' ? 1 : 0.35; }); wireSeg(segs[1], v => lab = v);
+  onBtn(el, 'gen', () => { const d = mode === 'c' ? lab : String([3, 7, 9][Math.floor(Math.random() * 3)]); $('[data-o]', el).textContent = d; $('.cap', el).textContent = mode === 'c' ? `Conditional GAN: you asked for the label "${lab}" and the generator produced a ${d}. Both networks receive the label.` : `Normal GAN: the output is random (here ${d}). You cannot choose what it generates.`; });
+};
+
+W.sr = function (el) {
+  const pic = `<svg viewBox="0 0 220 140" width="100%" style="display:block"><rect width="220" height="140" class="f-soft"/><circle cx="60" cy="70" r="40" class="nf s-u1" stroke-width="5"/><circle cx="60" cy="70" r="20" class="nf s-u3" stroke-width="5"/><rect x="120" y="30" width="80" height="80" class="nf s-u4" stroke-width="5"/><line x1="120" y1="30" x2="200" y2="110" class="s-ink" stroke-width="3"/><line x1="200" y1="30" x2="120" y2="110" class="s-ink" stroke-width="3"/></svg>`;
+  el.innerHTML = `<div style="position:relative;max-width:380px;border-radius:10px;overflow:hidden;border:1px solid var(--line)"><div data-a>${pic}</div><div data-b style="position:absolute;inset:0;filter:blur(4px) contrast(.85)">${pic}</div></div><div class="ctrl">${rng('s', 'Slide: blurry to GAN-sharpened (%)', 0, 100, 1, 0)}</div><div class="cap" aria-live="polite">Super-resolution: a GAN turns a blurry, low-resolution image into a sharp, high-resolution one.</div>`;
+  const draw = v => { $('[data-b]', el).style.clipPath = `inset(0 ${v}% 0 0)`; }; onRng(el, 's', draw); draw(0);
+};
+
+W.attn = function (el) {
+  const T = ['The', 'animal', 'did', 'not', 'cross', 'the', 'road', 'because', 'it', 'was', 'tired'];
+  const M = { it: [.02, .55, .02, .02, .05, .02, .12, .03, .07, .03, .07], tired: [.01, .40, .02, .03, .04, .01, .05, .04, .20, .06, .14], cross: [.02, .22, .12, .18, .12, .04, .20, .03, .02, .02, .03], animal: [.15, .30, .12, .10, .12, .04, .07, .03, .03, .02, .02] };
+  const gen = i => { const w = T.map((_, j) => Math.exp(-Math.pow((i - j) / 2.2, 2))); const s = w.reduce((a, b) => a + b, 0); return w.map(v => v / s); };
+  el.innerHTML = `<div class="lbl">Tap a word. The coloured chips show how much attention it pays to every word.</div><div data-t style="display:flex;flex-wrap:wrap;gap:8px"></div><div class="cap" aria-live="polite"></div>`;
+  let sel = 8; const draw = () => { const w = M[T[sel]] || gen(sel), mx = Math.max(...w); $('[data-t]', el).innerHTML = T.map((t, i) => `<button type="button" data-i="${i}" style="border:2px solid ${i === sel ? 'var(--ink)' : 'var(--line)'};border-radius:10px;padding:6px 10px 4px;background:color-mix(in srgb,var(--a) ${Math.round(w[i] / mx * 85)}%,var(--panel));color:${w[i] / mx > 0.55 ? 'var(--on)' : 'var(--ink)'};cursor:pointer;min-width:52px"><div style="font-weight:700">${t}</div><div style="font-size:11px">${pct(w[i])}</div></button>`).join(''); $$('[data-i]', el).forEach(b => b.addEventListener('click', () => { sel = +b.dataset.i; draw(); })); const top = w.indexOf(mx); $('.cap', el).innerHTML = `<b>"${T[sel]}"</b> pays most attention to <b>"${T[top]}"</b> (${pct(w[top])}).${sel === 8 ? ' "it" refers to the animal, not the road: attention links far-apart words.' : ''}`; };
+  draw();
+};
+
+W.pe = function (el) {
+  const P = 14, D = 24, cw = 14, ch = 11; let cells = '';
+  for (let p = 0; p < P; p++) for (let j = 0; j < D; j++) { const f = Math.pow(10000, -(j - (j % 2)) / D), v = j % 2 ? Math.cos(p * f * 6) : Math.sin(p * f * 6); cells += `<rect data-p="${p}" x="${40 + j * cw}" y="${14 + p * ch}" width="${cw - 1}" height="${ch - 1}" style="fill:color-mix(in srgb,var(--a) ${Math.round((v + 1) / 2 * 100)}%,var(--panel))"/>`; }
+  el.innerHTML = svg(390, 176, cells + `<text class="ts" x="40" y="10">dimension of the vector (left to right)</text><text class="ts" x="2" y="94">position</text>`, 'Positional encoding heatmap') + `<div class="ctrl">${rng('p', 'Highlight position', 0, P - 1, 1, 2)}</div><div class="cap">Every row is a unique pattern of waves (sine and cosine). Adding a row to a word vector tells the Transformer where the word sits.</div><div class="vt" style="margin-top:12px">Same words, different order</div><div data-s></div>`;
+  const draw = p => { $$('[data-p]', el).forEach(r => { r.style.stroke = +r.dataset.p === p ? 'var(--ink)' : 'none'; }); };
+  onRng(el, 'p', draw); draw(2);
+  const sent = (ws, tag) => `<div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0;align-items:center"><span class="ts" style="width:66px">${tag}</span>${ws.map((w, i) => `<span class="gc" style="padding:3px 8px"><b style="display:inline;margin-right:6px">${w}</b><span class="badge g">+ pos ${i + 1}</span></span>`).join('')}</div>`;
+  $('[data-s]', el).innerHTML = sent(['The', 'cat', 'chased', 'the', 'dog'], 'Sentence 1') + sent(['The', 'dog', 'chased', 'the', 'cat'], 'Sentence 2') + `<div class="cap m">Without positional encoding both sentences look identical (a bag of words). With it, "cat" at position 2 and "cat" at position 5 get different vectors.</div>`;
+};
+
+W.bertArch = function (el) {
+  let n = 12;
+  const draw = () => { $('[data-view]', el).innerHTML = svg(440, 320, MARK + ['[CLS]', 'The', 'cat', 'sat', '[SEP]'].map((t, i) => bx4(14 + i * 82, 284, 72, 26, i === 0 || i === 4 ? 'f-warn' : 'f-soft s-muted', t, i === 0 || i === 4 ? 'tw2' : 't')).join('') + `<rect x="30" y="236" width="380" height="32" rx="8" class="f-as"/><text x="220" y="256" text-anchor="middle" class="tb">Input = token + segment + position embeddings</text>` + ar4(220, 236, 220, 214) + `<rect x="50" y="26" width="340" height="186" rx="12" class="nf s-a" stroke-width="2" stroke-dasharray="5 4"/>` + [0, 1, 2].map(i => bx4(80, 150 - i * 52, 280, 40, i === 2 ? 'f-u4' : 'f-u1', i === 2 ? `Encoder layer ${n}` : i === 0 ? 'Encoder layer 1' : '...', 'tw2')).join('') + `<text x="220" y="16" text-anchor="middle" class="tb">Output: a context-aware vector for every token</text><text x="220" y="204" text-anchor="middle" class="ts" style="fill:var(--a)">each layer: multi-head self-attention + feed-forward</text>`, 'BERT architecture'); $('.cap', el).innerHTML = `<b>BERT-${n === 12 ? 'Base' : 'Large'}</b> stacks ${n} Transformer encoder layers (encoder only, no decoder). Each layer looks left and right at once, so it is bidirectional.`; };
+  el.innerHTML = `<div class="ctrl">${seg([['12', 'BERT-Base (12 layers)'], ['24', 'BERT-Large (24 layers)']], '12')}</div><div data-view></div><div class="cap" aria-live="polite"></div>`;
+  wireSeg($('.seg', el), v => { n = +v; draw(); }); draw();
+};
+
+W.bertPre = function (el) {
+  el.innerHTML = `<div class="two"><div class="gc"><b>Task 1: Masked Language Model</b>About 15% of words are hidden and BERT predicts them from the words on both sides.<div data-m style="margin:10px 0;font-size:17px"></div><div class="ctrl">${btn('mask', 'Mask a word', 1)}${btn('pred', 'Predict')}</div><div data-mo></div></div><div class="gc"><b>Task 2: Next Sentence Prediction</b>Does sentence B logically follow sentence A?<div data-n style="margin:10px 0"></div><div class="ctrl">${btn('y', 'B follows A')}${btn('n', 'Unrelated')}${btn('nx', 'Next pair')}</div><div class="cap" data-nc></div></div></div>`;
+  let masked = false, pred = false; const s = ['The', 'sun', 'is', 'shining', 'brightly'];
+  const pm = () => { $('[data-m]', el).innerHTML = s.map((w, i) => i === 1 && masked ? `<span class="badge" style="background:var(--warn);color:var(--on);font-size:15px">[MASK]</span>` : w).join(' '); $('[data-mo]', el).innerHTML = pred && masked ? bars([['sun', 0.82, '82%', 'g'], ['moon', 0.09, '9%'], ['star', 0.05, '5%'], ['light', 0.04, '4%']]) + '<div class="cap m">Uses both left ("The") and right ("is shining brightly") context.</div>' : ''; };
+  onBtn(el, 'mask', () => { masked = true; pred = false; pm(); }); onBtn(el, 'pred', () => { pred = true; pm(); }); pm();
+  const pairs = [['I went to the shop.', 'I bought some milk.', true], ['I went to the shop.', 'Penguins live in Antarctica.', false], ['She opened the book.', 'It was a story about dragons.', true]]; let pi = 0;
+  const pn = () => { const p = pairs[pi]; $('[data-n]', el).innerHTML = `<div class="chip" style="display:block;margin:4px 0;background:var(--as)"><b>A:</b> ${p[0]}</div><div class="chip" style="display:block;background:var(--u3s)"><b>B:</b> ${p[1]}</div>`; $('[data-nc]', el).textContent = 'Your guess?'; };
+  const guess = g => { const p = pairs[pi]; $('[data-nc]', el).textContent = (g === p[2] ? 'Correct. ' : 'Not quite. ') + (p[2] ? 'B follows A logically.' : 'B has nothing to do with A.'); };
+  onBtn(el, 'y', () => guess(true)); onBtn(el, 'n', () => guess(false)); onBtn(el, 'nx', () => { pi = (pi + 1) % pairs.length; pn(); }); pn();
+};
+
+W.bertFT = function (el) {
+  const T = { s: ['Sentiment analysis', 'Classification layer: positive or negative', '"The movie was wonderful" gives Positive'], q: ['Question answering', 'Span layer: start and end of the answer in a passage', 'Question + passage gives the answer text'], n: ['Named entity recognition', 'Token layer: a tag for every word', '"Sundar works at Google" gives Person, Organisation'], c: ['Text classification', 'Classification layer: topic label', 'News article gives Sports, Politics or Tech'] };
+  el.innerHTML = svg(440, 112, MARK + bx4(4, 20, 92, 56, 'f-u1', 'Pre-trained|BERT') + `<text x="50" y="96" class="ts" text-anchor="middle">general language</text>` + ar4(96, 48, 118, 48) + bx4(120, 20, 82, 56, 'f-warn', '+ task|layer') + ar4(202, 48, 224, 48) + bx4(226, 20, 108, 56, 'f-good', 'train on small|labelled data') + ar4(334, 48, 356, 48) + bx4(358, 20, 78, 56, 'f-u4', 'Fine-tuned|model'), 'Fine-tuning flow') + `<div class="ctrl">${seg(Object.keys(T).map(k => [k, T[k][0]]), 's')}</div><div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $('.cap', el).innerHTML = `<b>${T[k][0]}.</b> Add: ${T[k][1]}. Example: ${T[k][2]}. BERT's weights adjust slightly while the new layer learns the task (transfer learning).`; }; wireSeg($('.seg', el), draw); draw('s');
+};
+
+W.rl = function (el) {
+  const E = [['1. Observe the state', 'The agent sees the current situation of the environment.'], ['2. Choose an action', 'Using its policy (the neural network), the agent picks a move.'], ['3. Reward and new state', 'The environment returns a reward (or penalty) and the next state.'], ['4. Learn', 'The network is updated to prefer actions that earn higher rewards. Then repeat.']]; let st = -1;
+  const loop = svg(440, 176, MARK + bx4(20, 52, 120, 60, 'f-u4', 'Agent', 'tw2') + bx4(300, 52, 120, 60, 'f-u1', 'Environment', 'tw2') + `<path data-a="1" d="M140 66 L300 66" class="nf s-ink tr" stroke-width="3" marker-end="url(#arM)"/><text x="220" y="58" text-anchor="middle" class="tb">action</text><path data-a="2" d="M300 92 L140 92" class="nf s-good tr" stroke-width="3" marker-end="url(#arM)"/><text x="220" y="112" text-anchor="middle" class="tb">reward + new state</text><path data-a="0" d="M360 120 C360 160 80 160 80 120" class="nf s-a tr" stroke-width="3" marker-end="url(#arA)"/><text x="220" y="168" text-anchor="middle" class="ts">state: what the agent observes</text>`, 'Agent and environment loop');
+  const SZ = 5, goal = [0, 4], haz = [[2, 2], [1, 3], [3, 1]]; let pos = [4, 0], total = 0, moves = 0;
+  el.innerHTML = loop + `<div class="ctrl">${btn('n', 'Next step of the loop', 1)}</div><div class="cap" data-c aria-live="polite"></div><div class="vt" style="margin-top:14px">Try it: learn by trial and reward</div><div class="two"><div><div class="cells" data-g style="grid-template-columns:repeat(5,1fr);width:min(100%,230px)"></div></div><div><div class="ctrl">${btn('u', 'Up')}${btn('l', 'Left')}${btn('r', 'Right')}${btn('d', 'Down')}${btn('rs', 'Restart')}</div><div class="big" data-t></div><div class="cap m" data-m>Reach the goal (G). Each move costs 1 point, traps (X) cost 5, the goal gives 10.</div></div></div>`;
+  const paint = () => { $$('[data-a]', el).forEach(p => { const a = +p.dataset.a; p.style.opacity = st < 0 ? 0.5 : (st === 0 && a === 0) || (st === 1 && a === 1) || (st === 2 && a === 2) || st === 3 ? 1 : 0.15; }); $('[data-c]', el).innerHTML = st < 0 ? 'Press the button to walk through one turn of the loop.' : `<b>${E[st][0]}.</b> ${E[st][1]}`; };
+  onBtn(el, 'n', () => { st = (st + 1) % 4; paint(); });
+  const g = () => { $('[data-g]', el).innerHTML = Array.from({ length: SZ * SZ }, (_, i) => { const r = Math.floor(i / SZ), c = i % SZ; const isA = r === pos[0] && c === pos[1], isG = r === goal[0] && c === goal[1], isH = haz.some(h => h[0] === r && h[1] === c); return `<div class="cell" style="min-height:40px;font-weight:800;${isA ? 'background:var(--a);color:var(--on)' : isG ? 'background:var(--goods);color:var(--good)' : isH ? 'background:var(--bads);color:var(--bad)' : ''}">${isA ? 'A' : isG ? 'G' : isH ? 'X' : ''}</div>`; }).join(''); $('[data-t]', el).textContent = `Total reward: ${total}`; };
+  const mv = (dr, dc) => { if (pos[0] === goal[0] && pos[1] === goal[1]) return; const nr = clamp(pos[0] + dr, 0, SZ - 1), nc = clamp(pos[1] + dc, 0, SZ - 1); pos = [nr, nc]; moves++; let r = -1, msg = 'Moved: -1'; if (haz.some(h => h[0] === nr && h[1] === nc)) { r = -5; msg = 'Trap! Penalty: -5'; } if (nr === goal[0] && nc === goal[1]) { r = 10; msg = `Goal reached in ${moves} moves! Reward: +10`; } total += r; $('[data-m]', el).textContent = msg; g(); };
+  onBtn(el, 'u', () => mv(-1, 0)); onBtn(el, 'd', () => mv(1, 0)); onBtn(el, 'l', () => mv(0, -1)); onBtn(el, 'r', () => mv(0, 1)); onBtn(el, 'rs', () => { pos = [4, 0]; total = 0; moves = 0; $('[data-m]', el).textContent = 'Restarted. Find a path with the highest total reward.'; g(); });
+  paint(); g();
+};
+
+W.dqn = function (el) {
+  const S = { gap: ['Gap ahead', [0.2, 0.3, 0.9]], enemy: ['Enemy close', [0.7, 0.1, 0.4]], clear: ['Clear path', [0.1, 0.85, 0.2]] }, A = ['Move left', 'Move right', 'Jump']; let sc = 'gap'; const buf = [];
+  el.innerHTML = svg(440, 112, MARK + bx4(4, 28, 92, 54, 'f-soft s-muted', 'state:|game screen', 't') + ar4(96, 55, 122, 55) + [0, 1, 2, 3].map(i => [0, 1, 2].map(j => `<circle cx="${140 + i * 34}" cy="${26 + j * 28}" r="9" class="f-u1"/>`).join('')).join('') + `<text x="190" y="108" class="ts" text-anchor="middle">deep neural network</text>` + ar4(262, 55, 296, 55) + [['Q: move left'], ['Q: move right'], ['Q: jump']].map((t, j) => bx4(300, 8 + j * 32, 136, 28, 'f-u4', t[0], 'tw2')).join(''), 'DQN') + `<div class="ctrl">${seg(Object.keys(S).map(k => [k, S[k][0]]), 'gap')}${rng('e', 'Exploration (random)', 0, 1, 0.1, 0.2)}${btn('go', 'Choose action', 1)}${btn('tr', 'Train on random batch')}</div><div data-q></div><div class="cap" data-c aria-live="polite"></div><div class="lbl" style="margin-top:8px">Replay buffer (stored experiences)</div><div data-b class="chips"></div>`;
+  const e = onRng(el, 'e', () => { }); const dq = () => { $('[data-q]', el).innerHTML = bars(S[sc][1].map((v, i) => [A[i], v, v.toFixed(2), v === Math.max(...S[sc][1]) ? 'g' : ''])); };
+  wireSeg($('.seg', el), v => { sc = v; dq(); }); dq();
+  onBtn(el, 'go', () => { const q = S[sc][1], best = q.indexOf(Math.max(...q)), rnd = Math.random() < e.get(), a = rnd ? Math.floor(Math.random() * 3) : best, r = a === best ? 1 : -1; buf.push(`${S[sc][0]} / ${A[a]} / ${r > 0 ? '+1' : '-1'}`); if (buf.length > 8) buf.shift(); $('[data-b]', el).innerHTML = buf.map(b => `<span class="chip">${b}</span>`).join(''); $('.cap', el).textContent = rnd ? `Exploring: picked "${A[a]}" at random to discover something new.` : `Exploiting: picked "${A[a]}", the action with the highest Q-value.`; });
+  onBtn(el, 'tr', () => { $('.cap', el).textContent = buf.length ? `Trained on ${Math.min(3, buf.length)} random experiences from the buffer. Random sampling breaks the link between consecutive steps, and a slowly-updated target network keeps training stable.` : 'The buffer is empty. Choose some actions first.'; });
+};
+
+W.rlapps = function (el) {
+  const D = {
+    game: ['Gaming', 'Expert-level play in chess, Go and video games; discovers new strategies. AlphaGo beat world champions at Go.', svg(440, 170, [0, 1, 2, 3, 4].map(i => `<line x1="${120 + i * 50}" y1="14" x2="${120 + i * 50}" y2="154" class="s-muted"/><line x1="120" y1="${14 + i * 35}" x2="320" y2="${14 + i * 35}" class="s-muted"/>`).join('') + `<circle cx="170" cy="49" r="13" class="f-ink"/><circle cx="220" cy="84" r="13" class="f-panel s-ink" stroke-width="2"/><circle cx="270" cy="49" r="13" class="f-ink"/><circle cx="220" cy="119" r="13" class="f-ink"/><circle cx="170" cy="119" r="13" class="f-panel s-ink" stroke-width="2"/><text x="10" y="90" class="tb">State: the board</text><text x="340" y="90" class="tb">Reward: win</text>`, 'Go board')],
+    robot: ['Robotics', 'Learning to walk, grasp objects and balance; adapting to new environments. A robotic arm learns to pick and place objects.', svg(440, 170, `<rect x="40" y="130" width="80" height="22" rx="4" class="f-ink"/><line x1="80" y1="130" x2="150" y2="74" class="s-a" stroke-width="12" stroke-linecap="round"/><line x1="150" y1="74" x2="250" y2="92" class="s-a" stroke-width="10" stroke-linecap="round"/><circle cx="80" cy="130" r="9" class="f-warn"/><circle cx="150" cy="74" r="9" class="f-warn"/><path d="M250 92 l22 -12 M250 92 l22 14" class="nf s-ink" stroke-width="5" stroke-linecap="round"/><rect x="290" y="96" width="34" height="34" rx="4" class="f-u3"/><rect x="290" y="130" width="120" height="22" class="f-soft"/><text x="340" y="86" class="ts">object to pick</text><text x="14" y="30" class="tb">Action: joint movements. Reward: object placed.</text>`, 'Robot arm')],
+    auto: ['Automation', 'Self-driving cars (steer, brake, navigate), industrial control (factory processes and energy), resource management (data centres, traffic signals).', svg(440, 170, `<rect x="0" y="100" width="440" height="52" class="f-soft"/><line x1="0" y1="126" x2="440" y2="126" class="s-muted" stroke-dasharray="14 10" stroke-width="2"/><rect x="60" y="106" width="64" height="26" rx="6" class="f-u1"/><rect x="74" y="94" width="34" height="16" rx="4" class="f-u1"/><circle cx="80" cy="134" r="8" class="f-ink"/><circle cx="108" cy="134" r="8" class="f-ink"/><rect x="330" y="20" width="26" height="70" rx="6" class="f-ink"/><circle cx="343" cy="34" r="8" class="f-bad"/><circle cx="343" cy="55" r="8" class="f-warn"/><circle cx="343" cy="76" r="8" class="f-good"/><text x="14" y="30" class="tb">Learns to time signals and steer safely</text>`, 'Road with a car and a traffic light')]
+  };
+  el.innerHTML = `<div class="ctrl">${seg([['game', 'Gaming'], ['robot', 'Robotics'], ['auto', 'Automation']], 'game')}</div><div data-view></div><div class="cap" aria-live="polite"></div>`;
+  const draw = k => { $('[data-view]', el).innerHTML = D[k][2]; $('.cap', el).innerHTML = `<b>${D[k][0]}.</b> ${D[k][1]}`; }; wireSeg($('.seg', el), draw); draw('game');
+};
+
+/* ---------- content ---------- */
+const CARDS = [];
+const C = (u, o) => CARDS.push(Object.assign({ u }, o));
+
+/* ===== UNIT I ===== */
+C('u1', { id: 'fp', q: [1], title: 'Forward propagation', key: 'Input moves forward through the layers (input, hidden, output) to produce a prediction.', viz: ['fwd'],
+  flow: ['Take the input features', 'Multiply each input by its weight, add them up, add a bias', 'Pass the result through an activation function (adds non-linearity)', 'The output becomes the input of the next layer; repeat steps 2 and 3', 'The final layer gives the prediction'],
+  pts: ['It is the first half of training; backpropagation is the second half.', 'In the exam, write the maths in words: weighted sum of inputs plus bias, then the activation function of that sum.'], ex: 'Predicting house price from size and location.' });
+C('u1', { id: 'bp', q: [5], title: 'Backpropagation', key: 'The error is sent backward (output to input) to update the weights, so the network learns from its mistakes.', viz: ['bwd'],
+  flow: ['Forward pass gives a prediction', 'A loss function compares it with the correct answer to give the error', 'The error is sent backward through the layers', 'Using the chain rule, find how much each weight contributed (the gradient)', 'Adjust each weight slightly in the direction that reduces the error (size depends on learning rate and gradient)', 'Repeat over many examples until the error is small'],
+  pts: ['Gradient = the direction in which a weight should change to reduce the error.'], ex: 'A cat image predicted as a dog: the weights responsible are corrected.' });
+C('u1', { id: 'gd', q: [11], title: 'Gradient descent', key: 'An optimization method that moves the weights downhill, step by step, to reduce the error. Think of walking down a foggy hill.', viz: ['gd'],
+  flow: ['Start with random weights', 'Measure the error', 'Find the slope (gradient)', 'Move each weight opposite to the slope', 'Repeat until the error is minimum'],
+  pts: ['Learning rate = step size. Too large: overshoots the minimum. Too small: learns very slowly.'],
+  extra: tbl(['Type', 'Uses'], [['Batch', 'All data in each step'], ['Stochastic (SGD)', 'One example per step'], ['Mini-batch', 'Small groups (most common)']]) });
+C('u1', { id: 'opt', q: [8, 14], title: 'Adam and RMSProp', key: 'Adam = Momentum + RMSProp. RMSProp gives every weight its own adaptive learning rate using recent squared gradients.', viz: ['opt'],
+  extra: tbl(['', 'RMSProp (Q14)', 'Adam (Q8)'], [['Full form', 'Root Mean Square Propagation', 'Adaptive Moment Estimation'], ['Main idea', 'Adaptive learning rate per weight', 'Momentum + RMSProp combined'], ['Why needed', 'Plain gradient descent uses one learning rate for all weights (too big for some, too small for others)', 'Fast, smooth, needs little tuning'], ['Working', 'Tracks a moving average of recent squared gradients. Large gradients take smaller steps; small gradients take larger steps', 'Keeps a moving average of gradients (momentum) and of squared gradients (step scaling), applies bias correction, then updates each weight'], ['Best for', 'Uneven error surfaces, RNNs', 'Most deep networks (most widely used)']]),
+  pts: ['Momentum remembers the direction of past gradients, like a rolling ball gaining speed.'], ex: 'Image classifier: Adam trains faster and smoother than plain gradient descent.' });
+C('u1', { id: 'act', q: [12], title: 'Activation functions', key: 'A function applied to a neuron\u2019s output that decides whether and how strongly it fires. It adds non-linearity.', viz: ['act'],
+  pts: ['Without it the whole network behaves like one simple linear equation.', 'It makes stacking many layers meaningful (this is what enables deep learning).', 'It controls signal strength by squashing values into a useful range.'],
+  extra: tbl(['Function', 'Output', 'Use'], [['Sigmoid', 'Between 0 and 1', 'Probabilities (yes/no output)'], ['ReLU', 'Passes positives, negatives become 0', 'Hidden layers (fast, popular)'], ['Tanh', 'Between -1 and 1, centred on zero', 'Hidden layers'], ['Softmax', 'Probabilities of all classes that add to 1', 'Multiclass output layer']]), ex: 'ReLU in hidden layers, Softmax at the output (cat / dog / bird).' });
+C('u1', { id: 'fit', q: [2], title: 'Overfitting vs underfitting', key: 'Overfitting memorises the training data (noise included). Underfitting is too simple to learn even the basic pattern. The goal is a balanced model.', viz: ['fit'],
+  extra: tbl(['', 'Overfitting', 'Underfitting'], [['Meaning', 'Learns training data too well, including noise', 'Too simple, fails to learn basic patterns'], ['Cause', 'Model too complex', 'Model too simple'], ['Training accuracy', 'High', 'Low'], ['Test accuracy', 'Low', 'Low'], ['Analogy', 'Student who memorises answers', 'Student who did not study'], ['Fix', 'More data, regularization, dropout, simpler model', 'More complex model, more features, more training']]), ex: 'Overfit = 99% on training but 55% on new data. Underfit = 60% on both.' });
+C('u1', { id: 'drop', q: [3], title: 'Dropout', key: 'Randomly switch off neurons during training so the network cannot depend on any single neuron.', viz: ['drop'],
+  pts: ['It acts like training many small networks and combining them.', 'At testing time all neurons are used (no dropout).', 'Too much dropout leads to underfitting.'], ex: '98% train / 70% test; with dropout, test rises to 88%.' });
+C('u1', { id: 'reg', q: [6], title: 'Regularization: L1 and L2', key: 'Add a penalty to the loss that grows when weights become large. This keeps the model simple.', viz: ['reg'],
+  extra: tbl(['', 'L1 (Lasso)', 'L2 (Ridge)'], [['Penalty based on', 'Absolute values of weights', 'Squares of weights'], ['Effect', 'Pushes some weights exactly to zero', 'Shrinks weights close to zero, rarely exactly zero'], ['Result', 'Sparse model, removes features (feature selection)', 'Keeps all features, but small']]) });
+C('u1', { id: 'es', q: [9], title: 'Early stopping', key: 'Stop training at the right moment, before the model starts memorising.', viz: ['es'],
+  flow: ['Keep a validation set', 'Check the validation error every epoch', 'Note the best point', 'Stop if there is no improvement for several epochs', 'Save the best model\u2019s weights'],
+  pts: ['Benefits: prevents overfitting, saves time, improves generalization.'] });
+C('u1', { id: 'aug', q: [10], title: 'Data augmentation', key: 'Create new, slightly changed versions of existing data. The label stays the same: a rotated cat is still a cat.', viz: ['aug'],
+  extra: chips(['Rotation', 'Flipping', 'Zoom / crop', 'Shifting', 'Brightness / colour change', 'Adding noise']),
+  pts: ['Benefits: more data, less overfitting, better generalization, saves the cost of collecting real data.'], ex: '1,000 cat photos become thousands of varied images.' });
+C('u1', { id: 'cv', q: [13], title: 'Cross-validation', key: 'Test the model on several different splits and average the results. More reliable than one lucky or unlucky split.', viz: ['cv'],
+  extra: tbl(['Technique', 'How it works'], [['K-Fold', 'Split into K parts. Train on K minus 1, test on the remaining one. Repeat K times, then average'], ['Stratified K-Fold', 'Same, but every fold keeps the same class balance (good for unbalanced data)'], ['Leave-One-Out (LOOCV)', 'Each single example is the test set once; very thorough but slow'], ['Holdout', 'Data split once into train and test (simplest)']]), ex: '1,000 records with 5-fold: train on 4 parts, test on 1, repeat 5 times.' });
+C('u1', { id: 'fs', q: [15], title: 'Feature selection', key: 'Choose only the useful input features (columns) and drop the irrelevant ones. Weak features add noise, slow training and cause overfitting.', viz: ['fs'],
+  extra: tbl(['Method', 'How it works'], [['Filter', 'Rank features with statistics (like correlation) and keep the top ones'], ['Wrapper', 'Try different feature subsets and pick the one with the best model performance'], ['Embedded', 'Selection happens during training (e.g., L1 sets weak weights to zero)']]),
+  pts: ['Role: better accuracy, less overfitting, faster training, simpler model.'], ex: 'Loan approval: keep income and credit score, drop "favourite colour".' });
+C('u1', { id: 'cm', q: [16, 4], title: 'Confusion matrix, accuracy, precision, recall, F1', key: 'A table comparing predictions with the actual answers. It shows what kind of mistakes the model makes.', viz: ['cm'],
+  extra: tbl(['Term', 'Meaning', 'Note'], [['True Positive (TP)', 'Predicted positive, really positive', 'Correct'], ['True Negative (TN)', 'Predicted negative, really negative', 'Correct'], ['False Positive (FP)', 'Predicted positive, actually negative', 'False alarm (Type I error)'], ['False Negative (FN)', 'Predicted negative, actually positive', 'A miss (Type II error), often the most dangerous']]),
+  pts: ['Accuracy: correct predictions out of all predictions. Can mislead on unbalanced data.', 'Precision: of those predicted positive, how many were right (few false alarms).', 'Recall: of all real positives, how many were found (few misses).', 'F1-score: the balance of precision and recall; high only when both are high.', 'For disease detection, recall matters most.'], ex: 'COVID test: 90 sick detected, 850 healthy cleared, 10 healthy flagged, 50 sick missed. The 50 misses are worrying.' });
+C('u1', { id: 'rm', q: [7], title: 'Regression metrics: MAE, MSE, RMSE, R-squared', key: 'Regression predicts continuous values (like prices). MAE, MSE and RMSE are error amounts (lower is better). R-squared is a fit percentage (higher is better).', viz: ['rm'],
+  extra: tbl(['Metric', 'In words', 'Key point'], [['MAE', 'Average of the absolute differences between predicted and actual', 'Simple, treats all errors equally'], ['MSE', 'Average of the squared differences', 'Punishes large errors heavily; unit is squared'], ['RMSE', 'Square root of MSE', 'Back in the original unit, easy to read'], ['R-squared', 'How much of the variation the model explains', '0 to 1, higher is better (0.9 = 90% explained)']]), ex: 'Average error 2 lakh rupees (MAE), RMSE 3 lakh, R-squared 0.85.' });
+
+/* ===== UNIT II ===== */
+C('u2', { id: 'px', q: [1], title: 'How a computer sees an image', key: 'An image is a grid of pixels. Each pixel is a number, so the whole image is a matrix of numbers.', viz: ['px'],
+  extra: tbl(['Type', 'Numbers per pixel', 'Structure'], [['Grayscale', '1 number, 0 (black) to 255 (white)', 'One 2D matrix'], ['Colour (RGB)', '3 numbers (Red, Green, Blue), each 0 to 255', 'Three stacked matrices (3 channels)']]), pts: ['CNNs work directly on these pixel numbers.'] });
+C('u2', { id: 'conv', q: [2, 6], title: 'Convolution layer, filter and feature map', key: 'A small filter slides over the image and detects a pattern. The output is a feature map that lights up where the pattern is found.', viz: ['conv'],
+  flow: ['Place the filter on the top-left of the image', 'Multiply each filter number by the pixel under it and add into one number', 'Put that number in the feature map', 'Slide the filter and repeat', 'After covering the whole image the feature map is complete'],
+  pts: ['Filter (kernel): a small matrix (e.g., 3x3) that detects one specific pattern.', 'The same filter is reused across the whole image (filter sharing), which saves parameters.', 'Filters are not hand-made: the network learns the best values during training. Early layers learn simple patterns, deeper filters learn complex ones.'], extra: chips(['Edge filters', 'Vertical / horizontal line filters', 'Corner filters', 'Texture filters', 'Complex filters in deeper layers']), ex: 'On a zebra photo one filter detects vertical stripes, another detects body curves, and deeper filters combine them into the zebra shape.' });
+C('u2', { id: 'sp', q: [9], title: 'Stride and padding', key: 'Stride is how far the filter moves each time. Padding adds a border of zeros. Together they control the output size.', viz: ['sp'],
+  extra: tbl(['', 'Stride', 'Padding'], [['Meaning', 'Number of pixels the filter moves at each slide', 'A border of extra pixels (usually zeros) around the image'], ['Effect', 'Stride 1: larger, detailed output. Stride 2: smaller, faster, may miss fine detail', 'Keeps the output size and protects edge information'], ['Without it', '-', 'Output shrinks and edge information is lost']]),
+  pts: ['Valid padding = no padding (smaller output). Same padding = zeros added so the output size matches the input.'], ex: 'A 3x3 filter on a 5x5 image, stride 1, no padding gives a 3x3 output. With same padding it stays 5x5.' });
+C('u2', { id: 'relu', q: [14], title: 'ReLU after convolution', key: 'ReLU keeps positive values and turns negatives into 0. It adds non-linearity after the (linear) convolution.', viz: ['relu'],
+  pts: ['Convolution is a linear calculation (multiply and add). Stacking only linear steps cannot learn complex patterns.', 'Removes negative values and keeps strong activations.', 'Fast and simple; avoids the vanishing gradient problem (does not squash large values like sigmoid).'], ex: 'A feature map with -3, 5, -1, 8 becomes 0, 5, 0, 8.' });
+C('u2', { id: 'pool', q: [3, 7, 15], title: 'Pooling: max, average, working and importance', key: 'Pooling shrinks a feature map by summarising each small region into a single value.', viz: ['pool'],
+  flow: ['Choose a window size (usually 2x2)', 'Choose a stride (often 2, so windows do not overlap)', 'Slide the window across the feature map', 'Keep one value per window (maximum or average)', 'The values form a smaller map (4x4 becomes 2x2)'],
+  extra: tbl(['', 'Max pooling', 'Average pooling'], [['Keeps', 'The largest value in the window', 'The average of the window'], ['Effect', 'Highlights the strongest, sharpest features', 'Smoother, gentler summary'], ['Use', 'More common (good for sharp edges)', 'Softer, blended output'], ['Window 1, 3, 2, 4', '4', '2.5']]) + sub('Three benefits (Q7)') + grid([['Less computation', 'Smaller maps are faster and lighter.'], ['Less overfitting', 'Less detail means less chance of memorising noise.'], ['Shift tolerance', 'A feature that moves slightly is still captured (translation invariance).']]), ex: 'A cat\u2019s ear a few pixels to the left is still caught by max pooling.' });
+C('u2', { id: 'flat', q: [10], title: 'Flatten layer', key: 'Flatten turns the 2D/3D feature maps into one long 1D vector. It is the bridge from feature extraction to decision making.', viz: ['flat'],
+  pts: ['Fully connected layers accept only a 1D vector, so this step is needed.', 'It keeps all values and only changes their arrangement.'], ex: 'A 2x2x2 feature map (8 numbers) is unrolled into one list of 8 numbers.' });
+C('u2', { id: 'fc', q: [11], title: 'Fully connected layer', key: 'Every neuron connects to every neuron in the previous layer. It combines all extracted features and makes the final decision.', viz: ['fc'],
+  flow: ['Take the flattened vector', 'Multiply each feature by a learned weight and add them (important features get more influence)', 'Apply an activation function', 'The final layer gives a score for each class', 'Softmax turns scores into probabilities; the highest is chosen'], pts: ['It learns which feature combinations indicate which class: whiskers + pointy ears + fur means cat.'] });
+C('u2', { id: 'actcnn', q: [4], title: 'ReLU, Sigmoid and Softmax in CNNs', key: 'Hidden layers and output layers need different functions: ReLU inside, Sigmoid or Softmax at the output.', viz: [{ w: 'softmax', o: { names: ['Cat', 'Dog', 'Bird'], init: [2, 1, 0.1] } }],
+  extra: tbl(['Function', 'What it does', 'Where used in a CNN', 'Note'], [['ReLU', 'Keeps positives, negatives become 0', 'Hidden / convolution layers', 'Fast, simple, avoids vanishing gradient'], ['Sigmoid', 'Squashes any value between 0 and 1', 'Output layer, two-class problems', 'Can suffer vanishing gradients in deep layers'], ['Softmax', 'Turns scores into probabilities adding to 1', 'Output layer, many-class problems', 'Highest probability is chosen']]), ex: 'Cat vs dog: Sigmoid at the output. Cat vs dog vs bird: Softmax. ReLU in the convolution layers in both.' });
+C('u2', { id: 'whycnn', q: [5], title: 'What a CNN is and why it suits images', key: 'A Convolutional Neural Network detects features (edges, shapes, objects) automatically, with no manual feature design.', viz: ['share'],
+  pts: ['Ordinary networks treat every pixel separately and need far too many connections.', 'CNNs use small filters that slide and are shared across the image: efficient, and able to spot patterns anywhere (position-invariant).'] });
+C('u2', { id: 'arch', q: [13], title: 'CNN architecture and data flow', key: 'Raw pixels become features, then smaller features, then combined features, then the final class.', viz: ['cnn'],
+  flow: ['Input layer: image as a pixel matrix', 'Convolution layer: filters make feature maps', 'ReLU: adds non-linearity', 'Pooling layer: shrinks the maps', 'Repeat convolution + pooling: simple features first, complex features deeper', 'Flatten layer: unrolls into a 1D vector', 'Fully connected layers: combine features to decide', 'Output layer (Softmax): class probabilities, highest chosen'] });
+C('u2', { id: 'hier', q: [16], title: 'Hierarchical feature extraction', key: 'Hierarchical means arranged in levels, from simple to complex, like building with blocks.', viz: ['hier'],
+  extra: tbl(['Layer depth', 'What it detects'], [['Early layers', 'Simple features: edges, lines, corners'], ['Middle layers', 'Shapes, curves, textures (eyes, wheels)'], ['Deeper layers', 'Object parts (nose, car door)'], ['Final layers', 'Complete objects (full face, full car)']]), ex: 'Recognising a car: edges, then circles and rectangles, then doors and wheels, then the complete car.' });
+C('u2', { id: 'tasks', q: [8], title: 'Classification vs face recognition vs object detection', key: 'Classification: what is it? Recognition: who is it? Detection: what is here and where?', viz: ['tasks'],
+  extra: tbl(['Task', 'Question it answers', 'Output', 'Example'], [['Image classification', 'What is this image?', 'One label for the whole image', 'Photo labelled "cat"'], ['Face recognition', 'Whose face is this?', 'A specific person\u2019s identity', 'Phone unlock by the owner\u2019s face'], ['Object detection', 'What objects are here, and where?', 'Labels plus locations (bounding boxes)', 'Self-driving car spotting cars, people, signs']]) });
+C('u2', { id: 'nets', q: [12], title: 'AlexNet, VGGNet, GoogLeNet, ResNet', key: 'AlexNet = ReLU + Dropout + GPU. VGG = small filters, deep. GoogLeNet = Inception. ResNet = skip connections.', viz: ['nets'],
+  extra: tbl(['Network', 'Year', 'Key contribution'], [['AlexNet', '2012', 'Won ImageNet by a large margin; started the deep-learning boom. ReLU, Dropout, GPUs'], ['VGGNet', '2014', 'Many small 3x3 filters stacked deeply; 16 to 19 layers; proved depth improves performance'], ['GoogLeNet (Inception)', '2014', 'Inception module: filters of several sizes at once, multi-scale features with fewer parameters'], ['ResNet', '2015', 'Skip (residual) connections solve vanishing gradients and allow 100+ layers']]) });
+
+/* ===== UNIT III ===== */
+C('u3', { id: 'order', q: [1], title: 'Sequence data and why order matters', key: 'Sequence data is data whose elements come in a specific order, and the order carries meaning.', viz: ['order'],
+  extra: chips(['Sentences (words)', 'Time series (stock prices)', 'Music (notes)', 'DNA (bases)']),
+  pts: ['Order carries meaning: "Dog bites man" and "Man bites dog" use the same words but mean opposite things.', 'Context depends on order: each element is understood in relation to those before and after it.', 'Prediction needs order: to predict the next element, the model must know what came before.', 'Shuffling time-series data destroys the trend.'], ex: '"I am going to the ..." suggests a place word like "market". Shuffled ("the to going am I") the meaning is lost.' });
+C('u3', { id: 'ffnn', q: [5], title: 'Why feedforward networks struggle with sequences', key: 'A feedforward network sends data one way with no memory; each input is treated independently.', viz: ['ffrnn'],
+  flow: ['No memory: forgets earlier inputs, so context is lost', 'Ignores order: treats inputs independently', 'Fixed input size, but sentences have different lengths', 'No sharing across positions: does not reuse learning across time steps', 'Cannot link a word at the start to one at the end'],
+  pts: ['Impact: poor on language, speech and time series.', 'Solution: RNNs add a hidden state (memory), handle variable-length sequences and share weights.'], ex: '"The sky is ..." A feedforward network cannot use earlier words to predict "blue"; an RNN can.' });
+C('u3', { id: 'rnn', q: [2, 13], title: 'RNN equations and the hidden state', key: 'The hidden state is the RNN\u2019s memory: "what I see now + what I remember". The same weights are used at every step.', viz: ['rnn'],
+  flow: ['Hidden state update: combine the current input and the previous hidden state (each with its own weights), add a bias, pass through an activation (usually tanh)', 'Output: produced from the current hidden state using an output weight, a bias and an activation (e.g., Softmax)'],
+  pts: ['Start: the hidden state begins at zeros. At each step it blends the new input with everything remembered, then passes on.', 'Limitation: over very long sequences basic RNNs forget distant information (vanishing gradient); LSTM and GRU fix this.'], ex: '"I am very happy today": after "I am very" the hidden state remembers a positive build-up, so "happy" is understood in context.' });
+C('u3', { id: 'unroll', q: [10], title: 'Unrolling an RNN through time', key: 'Unrolling draws the RNN\u2019s loop as a chain of copies, one per time step.', viz: ['unroll'],
+  flow: ['Input 1 + initial hidden state gives hidden state 1 and output 1', 'Input 2 + hidden state 1 gives hidden state 2 and output 2', 'Input 3 + hidden state 2 gives hidden state 3 and output 3, and so on'],
+  pts: ['Why: the loop is hard to visualise and train; unrolling shows how memory flows and is essential for understanding BPTT.', 'Key points: the same weights in every copy; the hidden state carries memory forward.'], ex: '"I love NLP" gives 3 copies: "I" (h1), "love" using h1 (h2), "NLP" using h2 (h3).' });
+C('u3', { id: 'shared', q: [6], title: 'Role of shared weights', key: 'The same set of weights and biases is used at every time step. Only the inputs and hidden state change.', viz: ['shared'],
+  pts: ['Fewer parameters: smaller network, faster training.', 'Handles any sequence length.', 'Consistency: a pattern learned at one position is recognised at any other position. Better generalization.', 'In BPTT, gradients from all time steps are added together to update the single shared weight set.'], ex: 'If "not" is learned as important, it is recognised wherever it appears.' });
+C('u3', { id: 'arch4', q: [9], title: 'Four RNN input-output architectures', key: 'One-to-One, One-to-Many, Many-to-One, Many-to-Many.', viz: ['rnn4'],
+  extra: tbl(['Type', 'Input to output', 'Example'], [['One-to-One', '1 input, 1 output (no real sequence)', 'Single image classified into one label'], ['One-to-Many', '1 input, sequence of outputs', 'Image captioning'], ['Many-to-One', 'Sequence of inputs, 1 output', 'Sentiment analysis'], ['Many-to-Many', 'Sequence to sequence (equal length, or different length with encoder-decoder)', 'Machine translation']]) });
+C('u3', { id: 'bptt', q: [3, 14], title: 'BPTT: four steps and purpose', key: 'Backpropagation Through Time trains an RNN by extending backpropagation across all time steps.', viz: ['bptt'],
+  flow: ['Forward pass through time: process the sequence, store hidden states and outputs', 'Calculate the loss: total error across all time steps', 'Backward pass through time: send the error from the last step to the first, computing gradients (chain rule)', 'Update the weights: add up gradients from all steps (weights are shared) and update with an optimizer'],
+  pts: ['Purpose: find how each weight contributed to the error at every time step; update the shared weights correctly; let the RNN learn time dependencies; reduce the loss.', 'Strength: correctly trains RNNs. Weakness: slow and memory-heavy on long sequences; can cause vanishing or exploding gradients. Solutions: Truncated BPTT, LSTM/GRU.'], ex: 'Predicting the next word: forward over all words, total error, backward through every word, update shared weights.' });
+C('u3', { id: 'trunc', q: [7], title: 'Full BPTT vs Truncated BPTT', key: 'Truncated BPTT sends the error back only a short window of steps, trading long memory for speed.', viz: ['trunc'],
+  extra: tbl(['', 'Full BPTT', 'Truncated BPTT'], [['Backward range', 'Through the entire sequence', 'Only a fixed short window (chunk)'], ['Speed', 'Slow', 'Fast'], ['Memory', 'Heavy', 'Light'], ['Long dependencies', 'Captured fully', 'May miss the longest ones'], ['Use', 'Short sequences', 'Long sequences']]), ex: 'Training on a long document: Full BPTT goes back thousands of words (impractical); Truncated BPTT processes about 20 words at a time.' });
+C('u3', { id: 'grad', q: [8, 11], title: 'Vanishing vs exploding gradient', key: 'During BPTT the gradient is multiplied again and again. Values below 1 shrink to nothing; values above 1 blow up.', viz: ['grad'],
+  extra: tbl(['', 'Vanishing (Q8)', 'Exploding (Q11)'], [['Meaning', 'Gradients become extremely small going backward', 'Gradients become extremely large going backward'], ['Why', 'Repeated multiplication by values less than 1', 'Repeated multiplication by values greater than 1'], ['Effects', 'Early inputs forgotten; cannot learn long-term dependencies; slow, ineffective training', 'Unstable training; huge weights (overflow, NaN); no convergence'], ['Solutions', 'LSTM and GRU (gates), ReLU, better initialization', 'Gradient clipping (most common), smaller learning rate, better initialization, LSTM/GRU']]), ex: 'Vanishing: "I grew up in France ... so I speak fluent ___": the signal from "France" fades. Exploding: loss suddenly jumps to NaN; clipping makes training stable.' });
+C('u3', { id: 'lstm', q: [4], title: 'LSTM and its three gates', key: 'Long Short-Term Memory remembers information over long sequences using a memory cell and three gates, solving the vanishing gradient problem.', viz: ['lstm'],
+  pts: ['Gates use the sigmoid function: output 0 means block completely, 1 means allow fully.', 'Together: the forget gate clears unneeded old memory, the input gate stores important new memory, the output gate decides what to reveal.'], ex: '"I grew up in France ... so I speak fluent French": the input gate stores "France"; the output gate later uses it to predict "French".' });
+C('u3', { id: 'gru', q: [12], title: 'GRU: reset gate vs update gate', key: 'A Gated Recurrent Unit is a simplified LSTM with only two gates.', viz: ['gru'],
+  extra: tbl(['', 'Reset gate', 'Update gate'], [['Decides', 'How much of the past to forget when forming the new candidate memory', 'How much old memory to keep vs new information to add in the final hidden state'], ['Near 0', 'Ignores the past, focuses on current input', 'Mostly new information is used'], ['Near 1', 'Past is used fully', 'Most old memory is kept'], ['Focus', 'Candidate content (short-term relevance)', 'Final blend (long-term retention)']]), ex: 'Long review: the reset gate drops irrelevant earlier words; the update gate keeps the key sentiment word "excellent" until the end.' });
+C('u3', { id: 'lg', q: [15], title: 'LSTM vs GRU', key: 'Use GRU for speed and small data. Use LSTM for very long sequences and complex tasks.', viz: ['lgcmp'],
+  extra: tbl(['Feature', 'LSTM', 'GRU'], [['Gates', 'Three (forget, input, output)', 'Two (reset, update)'], ['Memory cell', 'Separate cell state', 'None (merged into hidden state)'], ['Complexity', 'More complex, more parameters', 'Simpler, fewer parameters'], ['Speed', 'Slower', 'Faster to train'], ['Data', 'Large, complex data, very long sequences', 'Works well on smaller data'], ['Performance', 'Both strong, often similar', 'Both strong, often similar']]), ex: 'Quick sentiment model on small data: GRU. Complex translation on huge data: LSTM.' });
+
+/* ===== UNIT IV ===== */
+C('u4', { id: 'gan', q: [1, 5], title: 'GAN: generator and discriminator', key: 'Two networks compete. The Generator creates fakes from random noise; the Discriminator judges real vs fake. Each improves the other.', viz: ['gan'],
+  extra: tbl(['', 'Generator (Q1)', 'Discriminator (Q5)'], [['Role', 'The creative part: makes fake data that looks real', 'The judge or detective: decides if data is real or fake'], ['Input', 'Random noise (latent vector)', 'A real sample or a fake from the generator'], ['Output', 'Generated data (e.g., a fake image)', 'A probability: close to 1 real, close to 0 fake'], ['Goal', 'Fool the discriminator', 'Catch the generator\u2019s fakes']]),
+  pts: ['Generator steps: random noise, pass through layers, fake data, discriminator feedback, adjust weights, repeat.', 'Discriminator steps: receive data, analyse through layers, output probability of real, compare with truth, update weights.', 'Without the discriminator\u2019s feedback the generator could not learn.'], ex: 'Generating fake human faces: early faces look strange (discriminator says "fake"); later they are realistic faces that belong to no real person.' });
+C('u4', { id: 'cgan', q: [9], title: 'Conditional GAN (cGAN)', key: 'A GAN whose output is controlled by an extra condition, usually a label. A normal GAN makes random samples; a cGAN makes the type you ask for.', viz: ['cgan'],
+  pts: ['Generator: takes noise + condition (label) and produces fake data matching the label.', 'Discriminator: takes data + the same condition and judges whether it is real AND matches the condition.', 'Uses: controlled generation, image-to-image translation, labelled image generation.'], ex: 'Noise + label "7" gives an image of the digit 7; label "3" gives a 3.' });
+C('u4', { id: 'ganapps', q: [10], title: 'Applications of GANs in images', key: 'GANs both generate new images and enhance existing ones.', viz: ['sr'],
+  extra: tbl(['Image generation', 'Image enhancement'], [['Realistic faces (people who do not exist)', 'Super-resolution (blurry to sharp, high resolution)'], ['Art and design generation', 'Denoising (remove noise and grain)'], ['Synthetic training data (expand small datasets)', 'Inpainting (fill missing or damaged parts)'], ['Text-to-image generation', 'Colorization (colour old black-and-white photos)'], ['', 'Style transfer (photo to painting)']]), ex: 'Restoring an old family photo: super-resolution sharpens, inpainting repairs tears, colorization adds colour.' });
+C('u4', { id: 'selfatt', q: [2], title: 'Self-attention mechanism', key: 'Each word looks at all the other words in its sentence and decides which are most important for understanding it. This is the core idea of Transformers.', viz: ['attn'],
+  flow: ['Create Query (Q), Key (K) and Value (V) vectors for each word', 'Compare: each word\u2019s Query is compared with every word\u2019s Key to give attention scores (relevance)', 'Softmax turns the scores into weights that add up to 1', 'Weighted sum of Values: each word\u2019s new representation blends all Values using those weights', 'Output: a context-aware representation of each word'],
+  pts: ['Simply: each word asks (Query) "which words matter to me?", checks all Keys, gives more weight to relevant ones, and blends their Values.', 'Benefits: captures context, handles long-distance links, allows fast parallel processing (unlike RNNs).'] });
+C('u4', { id: 'pos', q: [6], title: 'Positional encoding', key: 'Transformers read all words in parallel, so they do not know word order. Positional encoding adds a unique position pattern to each word vector.', viz: ['pe'],
+  pts: ['Each position gets a unique numerical pattern (often built from sine and cosine functions) that is added to the word vector: meaning + position.', 'Role: provides word order, preserves sequence structure lost by parallel processing, helps attention consider relative positions.', 'Without it a Transformer treats a sentence as an unordered bag of words.'], ex: '"The cat chased the dog" vs "The dog chased the cat": same words, different meaning.' });
+C('u4', { id: 'bertarch', q: [3], title: 'BERT architecture', key: 'BERT = Bidirectional Encoder Representations from Transformers (Google). It understands a word using context from both sides.', viz: ['bertArch'],
+  pts: ['Built by stacking many Transformer encoder layers (encoder only, no decoder).', 'Input = sum of three embeddings: token (the word), segment (which sentence), position (word position).', 'Special tokens: [CLS] at the start (used for classification), [SEP] to separate sentences.', 'Each layer has multi-head self-attention + a feed-forward network. Output: a context-aware vector for each token.', 'Sizes: BERT-Base = 12 encoder layers; BERT-Large = 24.'], ex: '"bank" in "I sat by the river bank" is understood as a riverside, not a money bank.' });
+C('u4', { id: 'bertpre', q: [7], title: 'BERT training (pre-training)', key: 'BERT is pre-trained on huge text (Wikipedia, books) using two tasks: Masked Language Model and Next Sentence Prediction.', viz: ['bertPre'],
+  extra: tbl(['Task', 'What happens'], [['1. Masked Language Model (MLM)', 'About 15% of words are randomly hidden; BERT predicts them using left and right context (deep bidirectional understanding)'], ['2. Next Sentence Prediction (NSP)', 'Given two sentences, BERT decides whether the second logically follows the first (sentence relationships)']]),
+  flow: ['Gather huge text', 'Tokenize, add [CLS]/[SEP], mask about 15%', 'Apply MLM', 'Apply NSP', 'Update weights with backpropagation and repeat'], pts: ['Pre-training = general language learning; later fine-tuning for a specific task.'] });
+C('u4', { id: 'bertft', q: [11], title: 'Fine-tuning BERT', key: 'Take the already pre-trained BERT and train it a little more on a specific task with a small labelled dataset. This is transfer learning.', viz: ['bertFT'],
+  flow: ['Start with pre-trained BERT', 'Add a task-specific output layer (e.g., a classification layer)', 'Provide labelled task data', 'Train BERT and the new layer together (BERT\u2019s weights adjust slightly)', 'Use the fine-tuned model'],
+  pts: ['Why useful: needs far less data and time than training from scratch; high accuracy; saves computing cost.'], ex: 'Fine-tune on a few thousand movie reviews labelled positive or negative to get an accurate sentiment model.' });
+C('u4', { id: 'rl', q: [4], title: 'Deep Reinforcement Learning', key: 'An agent learns by trial and error, getting rewards for good actions and penalties for bad ones. Deep RL = RL + deep neural networks.', viz: ['rl'],
+  extra: tbl(['Term', 'Meaning'], [['Agent', 'The learner / decision-maker'], ['Environment', 'The world the agent interacts with'], ['State', 'Current situation of the environment'], ['Action', 'A move the agent can make'], ['Reward', 'Feedback (positive or negative) after an action'], ['Policy', 'The agent\u2019s strategy for choosing actions']]),
+  pts: ['The neural network lets the agent learn complex tasks from high-dimensional data like images.'], ex: 'Video game: the agent sees the screen (state), makes a move (action), gets points (reward), and over many games learns the best moves.' });
+C('u4', { id: 'dqn', q: [8], title: 'Deep Q-Network (DQN)', key: 'DQN = Q-Learning + a deep neural network. The network replaces the Q-table, which fails when there are too many states.', viz: ['dqn'],
+  pts: ['Q-value = expected future reward of taking an action in a state.', 'Input: the current state (e.g., game screen pixels). The network outputs a Q-value for each possible action; usually the highest is chosen.', 'Replay buffer: stores past experiences (state, action, reward, next state) for later training on random samples.', 'Target network: a second, slowly-updated network that stabilises training.', 'Sometimes it explores randomly to discover better actions.'], ex: 'A DQN playing an Atari game takes screen input, estimates Q-values for left / right / jump and picks the best.' });
+C('u4', { id: 'rlapps', q: [12], title: 'Applications of Deep RL', key: 'Deep RL suits sequential decisions with feedback, learning from experience without exact instructions.', viz: ['rlapps'],
+  extra: tbl(['Area', 'Applications'], [['Gaming', 'Expert-level play (chess, Go, video games); discovers new strategies. Example: AlphaGo beat world champions at Go'], ['Robotics', 'Learning to walk, grasp objects and balance; adapting to new environments. Example: a robotic arm learns to pick and place objects'], ['Automation', 'Self-driving cars (steer, brake, navigate); industrial control (factory processes and energy); resource management (data centres, traffic signals). Example: a traffic-control system learns to time signals']]),
+  pts: ['Deep networks let it handle images and sensor data.'] });
+
+const SHEETS = {
+  u1: ['Learning loop: Forward prop, Loss, Backprop (chain rule gives gradients), Optimizer updates weights (Gradient Descent, RMSProp, Adam).', 'Adam = Momentum + RMSProp. RMSProp = adaptive learning rate using squared gradients.', 'Non-linearity comes from activation functions: Sigmoid (0 to 1), Tanh (-1 to 1), ReLU (zeroes negatives), Softmax (probabilities add to 1).', 'Overfit = high training, low test. Underfit = low on both.', 'Remedies: Dropout, L1/L2, Early Stopping, Data Augmentation, Cross-Validation, Feature Selection, more data.', 'L1 gives zero weights (feature selection). L2 gives small weights.', 'Dropout is off during testing. Early stopping keeps the best weights.', 'FP = Type I, FN = Type II. Precision is affected by FP; Recall by FN.', 'MSE punishes big errors. RMSE has the original unit. R-squared is the fit percentage.'],
+  u2: ['Image = grid of pixel numbers. Grayscale = 1 channel (0-255). RGB = 3 channels.', 'Filter detects a pattern. Feature map is the output. Filters are learned and shared.', 'CNN order: Input, Convolution, ReLU, Pooling (repeat), Flatten, Fully Connected, Softmax.', 'Stride = step size (bigger = smaller output). Padding = border of zeros (keeps size and edges).', 'ReLU after convolution. Sigmoid for 2 classes. Softmax for many classes.', 'Max pooling = strongest value. Average pooling = mean. Benefits: less computation, less overfitting, tolerance to small shifts.', 'Flatten = bridge from 2D/3D to 1D. FC layer = combines features and decides.', 'Hierarchy: edges, shapes, parts, objects. Classification = one label; Recognition = who; Detection = what and where.', 'AlexNet (ReLU, Dropout, GPU), VGG (small deep filters), GoogLeNet (Inception), ResNet (skip connections).'],
+  u3: ['Sequence data = order matters. Feedforward nets have no memory, so use an RNN.', 'RNN: hidden state = memory. New hidden state = current input + previous hidden state. Weights are shared across all steps.', 'Unrolling = the RNN loop drawn as a chain, one copy per time step.', '4 architectures: One-to-One, One-to-Many (captioning), Many-to-One (sentiment), Many-to-Many (translation).', 'BPTT 4 steps: forward pass, loss, backward pass through time, update (add gradients, update shared weights).', 'Full BPTT = whole sequence (slow, heavy). Truncated BPTT = short chunks (fast, light, may miss long dependencies).', 'Vanishing gradient: fix with LSTM/GRU. Exploding gradient: fix with gradient clipping and a smaller learning rate.', 'LSTM gates: Forget (remove old), Input (add new), Output (reveal). GRU gates: Reset, Update.', 'LSTM = 3 gates + cell state (powerful, slower). GRU = 2 gates, no cell (simple, faster).'],
+  u4: ['GAN = Generator (noise to fake data) vs Discriminator (real or fake?). Adversarial training makes fakes realistic.', 'cGAN = GAN + label given to both networks, for controlled output.', 'GAN uses: faces, art, synthetic data, text-to-image, super-resolution, denoising, inpainting, colorization, style transfer.', 'Self-attention: Query, Key, Value; Softmax weights; weighted sum of Values.', 'Positional encoding: sine/cosine position patterns added to embeddings because Transformers read words in parallel.', 'BERT: encoder only, bidirectional; token + segment + position embeddings; [CLS] and [SEP]; Base = 12 layers, Large = 24.', 'BERT pre-training: MLM (mask about 15%) + NSP. Fine-tuning = add task layer + small labelled data (transfer learning).', 'Deep RL = RL + deep networks: Agent, Environment, State, Action, Reward, Policy.', 'DQN: neural network replaces the Q-table; replay buffer and target network; sometimes explores randomly.', 'Deep RL applications: gaming (AlphaGo), robotics, automation (self-driving cars, traffic).']
+};
+
+/* ---------- UI shell ---------- */
+const UNITS = [
+  { id: 'u1', tab: 'Unit I', name: 'How a network learns, and how to judge it', desc: 'Forward and backward passes, optimizers, overfitting remedies and evaluation metrics.' },
+  { id: 'u2', tab: 'Unit II', name: 'Convolutional neural networks', desc: 'How images become numbers, what each CNN layer does, and the famous architectures.' },
+  { id: 'u3', tab: 'Unit III', name: 'Recurrent networks: RNN, BPTT, LSTM, GRU', desc: 'Sequence data, memory, training through time, and the gates that fix forgetting.' },
+  { id: 'u4', tab: 'Unit IV', name: 'GANs, Transformers, BERT and deep reinforcement learning', desc: 'Generating data, attention, pre-trained language models, and learning from rewards.' },
+  { id: 'qb', tab: 'Blanks', name: 'Fill in the blanks', desc: 'Tap a card to reveal the answer.' },
+  { id: 'qm', tab: 'MCQs', name: 'Multiple choice questions', desc: 'Pick an answer to see right away if you are correct.' }
+];
+let QT = {}, FILL = [], MCQ = [];
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { } } };
+let done = new Set(); try { done = new Set(JSON.parse(store.get('dnn-viz-done') || '[]')); } catch (e) { }
+const TOTAL = CARDS.length;
+
+function qlabel(c) { return c.q.length === 1 ? `Q${c.q[0]}` : c.q.length === 2 ? `Q${c.q[0]} and Q${c.q[1]}` : 'Q' + c.q.slice(0, -1).join(', Q') + ' and Q' + c.q[c.q.length - 1]; }
+function cardHtml(c) {
+  const id = c.u + '-' + c.id;
+  const search = (c.title + ' ' + c.key + ' ' + c.q.map(n => (QT[c.u] || {})[n] || '').join(' ')).toLowerCase();
+  return `<article class="card" id="${id}" data-id="${id}" data-s="${esc(search)}"><button type="button" class="chead" aria-expanded="false"><span class="qref">${qlabel(c)}</span><span class="ctitle">${esc(c.title)}</span><span class="tick" aria-hidden="true">&#10003;</span><span class="chev" aria-hidden="true"></span></button><div class="cbody"></div></article>`;
+}
+function fillBody(card, c) {
+  const body = $('.cbody', card);
+  const qt = c.q.map(n => `<p><b>Q${n}.</b> ${esc((QT[c.u] || {})[n] || '')}</p>`).join('');
+  body.innerHTML = `<div class="qtext"><div class="lbl">Question from the bank</div>${qt}</div><div class="key">${c.key}</div>` +
+    (c.viz || []).map((v, i) => `<div class="viz" data-vz="${i}"></div>`).join('') + (c.flow ? flow(c.flow) : '') + (c.extra || '') + (c.pts && c.pts.length ? `<ul class="pts">${c.pts.map(p => `<li>${p}</li>`).join('')}</ul>` : '') + (c.ex ? ex(c.ex) : '') +
+    `<div class="cfoot"><button type="button" class="donebtn" aria-pressed="false">Mark as revised</button></div>`;
+  (c.viz || []).forEach((v, i) => { const spec = typeof v === 'string' ? { w: v } : v; const host = $(`[data-vz="${i}"]`, body); try { W[spec.w](host, spec.o); } catch (e) { host.innerHTML = '<div class="cap m">This visual could not load.</div>'; console.error(spec.w, e); } });
+  const db = $('.donebtn', body); const sync = () => { const d = done.has(card.dataset.id); card.classList.toggle('done', d); db.setAttribute('aria-pressed', d); db.textContent = d ? 'Revised' : 'Mark as revised'; };
+  db.addEventListener('click', () => { toggleDone(card.dataset.id); });
+  card._sync = sync; sync();
+}
+function toggleDone(id) { done.has(id) ? done.delete(id) : done.add(id); store.set('dnn-viz-done', JSON.stringify([...done])); const card = document.getElementById(id); if (card) { card.classList.toggle('done', done.has(id)); const b = $('.donebtn', card); if (b) { b.setAttribute('aria-pressed', done.has(id)); b.textContent = done.has(id) ? 'Revised' : 'Mark as revised'; } } updateProgress(); }
+function updateProgress() {
+  const n = CARDS.filter(c => done.has(c.u + '-' + c.id)).length;
+  $('#pb').style.width = (n / TOTAL * 100) + '%'; $('#pt').textContent = `${n} of ${TOTAL} topics revised`;
+  UNITS.slice(0, 4).forEach(u => { const all = CARDS.filter(c => c.u === u.id), d = all.filter(c => done.has(c.u + '-' + c.id)).length; const s = $(`.tab[data-u="${u.id}"] small`); if (s) s.textContent = `${d}/${all.length}`; });
+}
+function openCard(card, open) {
+  const c = CARDS.find(x => x.u + '-' + x.id === card.dataset.id); const was = card.classList.contains('open');
+  const want = open === undefined ? !was : open; card.classList.toggle('open', want); $('.chead', card).setAttribute('aria-expanded', want);
+  if (want && !card.dataset.m) { card.dataset.m = 1; fillBody(card, c); }
+}
+function build() {
+  const app = $('#app'), tabs = $('#tabs');
+  tabs.innerHTML = UNITS.map((u, i) => `<button type="button" role="tab" class="tab" data-u="${u.id}" aria-selected="${i === 0}" style="--c:var(--u${i < 4 ? i + 1 : 5})"><span class="dot"></span>${u.tab}${i < 4 ? ` <small></small>` : ''}</button>`).join('');
+  app.innerHTML = UNITS.map((u, i) => {
+    const head = `<div class="sechead"><h2>${u.tab}: ${u.name}</h2><p>${u.desc}</p></div>`;
+    if (i < 4) {
+      const cs = CARDS.filter(c => c.u === u.id);
+      return `<section class="sec${i === 0 ? ' show' : ''}" data-u="${u.id}">${head}<div class="tools"><button type="button" class="chipbtn" data-act="open">Open all</button><button type="button" class="chipbtn" data-act="close">Close all</button><span class="cap m" style="margin:0;align-self:center">${cs.length} cards cover Q${Math.min(...Object.keys(QT[u.id]).map(Number))} to Q${Math.max(...Object.keys(QT[u.id]).map(Number))} of this unit</span></div>${cs.map(cardHtml).join('')}<div class="sheet"><h3>Last-minute sheet for ${u.tab}</h3><ul>${SHEETS[u.id].map(l => `<li>${esc(l)}</li>`).join('')}</ul></div></section>`;
+    }
+    if (u.id === 'qb') return `<section class="sec" data-u="q" data-q="qb">${head}<div class="tools"><button type="button" class="chipbtn" data-act="reveal">Reveal all</button><button type="button" class="chipbtn" data-act="hide">Hide all</button></div><div class="fc-grid" id="fills"></div></section>`;
+    return `<section class="sec" data-u="q" data-q="qm">${head}<div class="score" id="score" aria-live="polite">Score: 0 of 0 answered (25 questions)</div><div id="mcqs"></div><div class="tools"><button type="button" class="chipbtn" data-act="mreset">Restart quiz</button></div></section>`;
+  }).join('');
+  $('#fills').innerHTML = FILL.map((f, i) => `<button type="button" class="fcard" data-i="${i}"><span>${i + 1}. ${esc(f.q).replace(/_{3,}/g, '<span class="blank"></span>')}</span><span class="hint">Tap to reveal</span><span class="ans">${esc(f.a)}</span></button>`).join('');
+  $$('.fcard').forEach(b => b.addEventListener('click', () => b.classList.toggle('show')));
+  let answered = 0, correct = 0;
+  const mq = $('#mcqs'); mq.innerHTML = MCQ.map((m, i) => `<div class="mq" data-i="${i}"><h3>${i + 1}. ${esc(m.q)}</h3>${m.o.map((o, j) => `<button type="button" class="opt" data-j="${j}">${'ABCD'[j]}. ${esc(o)}</button>`).join('')}</div>`).join('');
+  $$('.mq').forEach(q => $$('.opt', q).forEach(b => b.addEventListener('click', () => { if (q.classList.contains('locked')) return; q.classList.add('locked'); const m = MCQ[+q.dataset.i], j = +b.dataset.j; answered++; if (j === m.a) { correct++; b.classList.add('ok'); } else { b.classList.add('no'); $$('.opt', q)[m.a].classList.add('ok'); } $('#score').textContent = `Score: ${correct} of ${answered} answered (25 questions)`; })));
+  /* events */
+  $$('.chead').forEach(h => h.addEventListener('click', () => openCard(h.parentElement)));
+  $$('[data-act]').forEach(b => b.addEventListener('click', () => {
+    const sec = b.closest('.sec'), a = b.dataset.act;
+    if (a === 'open' || a === 'close') $$('.card', sec).forEach(c => openCard(c, a === 'open'));
+    if (a === 'reveal' || a === 'hide') $$('.fcard').forEach(f => f.classList.toggle('show', a === 'reveal'));
+    if (a === 'mreset') { answered = 0; correct = 0; $$('.mq').forEach(q => { q.classList.remove('locked'); $$('.opt', q).forEach(o => o.classList.remove('ok', 'no')); }); $('#score').textContent = 'Score: 0 of 0 answered (25 questions)'; }
+  }));
+  $$('.tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.u)));
+  const first = $('.card'); if (first) openCard(first, true);
+  updateProgress();
+}
+function showTab(id) {
+  const q = id === 'qb' || id === 'qm';
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.u === id));
+  $$('.sec').forEach(s => s.classList.toggle('show', q ? s.dataset.q === id : s.dataset.u === id));
+  const top = $('#app').offsetTop - 140; if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top), behavior: RM ? 'auto' : 'smooth' });
+}
+function wireSearch() {
+  const inp = $('#q'); inp.addEventListener('input', () => {
+    const v = inp.value.trim().toLowerCase(); document.body.classList.toggle('searching', !!v); let any = 0;
+    $$('.card').forEach(c => { const hit = !v || c.dataset.s.includes(v); c.style.display = hit ? '' : 'none'; if (hit && v) any++; });
+    $$('.sec').forEach(s => { if (s.dataset.q) { s.style.display = v ? 'none' : ''; } else { const vis = $$('.card', s).some(c => c.style.display !== 'none'); s.style.display = vis ? '' : 'none'; $$('.sheet,.tools,.sechead', s).forEach(x => x.style.display = v ? 'none' : ''); } });
+    $('#none').style.display = v && !any ? 'block' : 'none';
+    if (!v) { $$('.sec').forEach(s => s.style.display = ''); $$('.sheet,.tools,.sechead').forEach(x => x.style.display = ''); }
+  });
+}
+function wireTheme() {
+  const b = $('#theme'), root = document.documentElement; const saved = store.get('dnn-viz-theme'); if (saved) root.dataset.theme = saved;
+  const eff = () => root.dataset.theme || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const lab = () => { b.textContent = eff() === 'dark' ? 'Light mode' : 'Dark mode'; }; lab();
+  b.addEventListener('click', () => { const n = eff() === 'dark' ? 'light' : 'dark'; root.dataset.theme = n; store.set('dnn-viz-theme', n); lab(); });
+}
+function boot(data) {
+  QT = data.QT; FILL = data.FILL; MCQ = data.MCQ;
+  build(); wireSearch(); wireTheme();
+  try { W.hero($('#hero')); } catch (e) { console.error(e); }
+}
+
+boot({"QT": {"u1": {"1": "Explain Forward Propagation and its steps with suitable mathematical expressions.", "2": "Differentiate between Overfitting and Underfitting.", "3": "Evaluate the use of Dropout in neural networks.", "4": "Describe Accuracy, Precision, Recall, and F1-Score.", "5": "Describe the Backpropagation process used for neural network learning.", "6": "Discuss Regularization and its L1 and L2 approaches.", "7": "Compare MAE, MSE, RMSE, and R-squared regression metrics.", "8": "Explain the working principle of Adam Optimization.", "9": "Evaluate the concept of Early Stopping and its role in model training.", "10": "Describe Data Augmentation and its importance in deep learning.", "11": "Explain Gradient Descent as a neural network optimization method.", "12": "Discuss the role of Activation Functions in neural networks.", "13": "Explain Cross-Validation and its major techniques.", "14": "Describe RMSProp optimization and its working principle.", "15": "Describe Feature Selection and its role in model improvement.", "16": "Interpret the components of a Confusion Matrix."}, "u2": {"1": "Describe how a computer represents a digital image as numerical data.", "2": "Explain the working of a convolution layer using a filter and feature map.", "3": "Differentiate between Max Pooling and Average Pooling.", "4": "Compare the roles of ReLU, Sigmoid, and Softmax activation functions in CNNs.", "5": "Evaluate the concept of CNN and its ability to detect image features.", "6": "Discuss the role of filters in detecting different visual patterns in an image.", "7": "Explain the importance of pooling in reducing computations, overfitting, and sensitivity to small position shifts.", "8": "Differentiate image classification, face recognition, and object detection as applications of CNNs.", "9": "Explain the significance of stride and padding in convolution.", "10": "Illustrate the role and working of the Flatten layer in CNN architecture with suitable example.", "11": "Discuss how Fully Connected layers combine extracted features to make a final prediction with suitable example.", "12": "Describe the key contributions of AlexNet, VGGNet, GoogLeNet, and ResNet.", "13": "Discuss the overall architecture and data flow of a CNN.", "14": "Discuss the role of ReLU activation after the convolution operation.", "15": "Demonstrate the working principle of the pooling layer in a CNN.", "16": "Discuss how CNNs perform hierarchical feature extraction from simple edges to complete objects."}, "u3": {"1": "Define sequence data and explain why the order of elements is important, with suitable examples.", "2": "Explain the basic equations used in an RNN with suitable example.", "3": "Assess the four steps of the BPTT algorithm.", "4": "Describe the three gates of an LSTM and their roles.", "5": "Assess the limitations of feedforward networks for sequence data.", "6": "Describe the role of shared weights in an RNN.", "7": "Differentiate between Full BPTT and Truncated BPTT.", "8": "Explain the vanishing gradient problem in RNNs.", "9": "Compare and contrast the four RNN input-output architectures.", "10": "Illustrate the unrolling of an RNN through time.", "11": "Examine the exploding gradient problem in RNNs.", "12": "Differentiate between reset and update gates of a GRU.", "13": "Illustrate how an RNN hidden state stores previous information.", "14": "Explain the purpose of BPTT in RNN training.", "15": "Compare LSTM and GRU based on their key features."}, "u4": {"1": "Discuss the working of the Generator in a GAN and describe how it generates realistic data from random noise.", "2": "Illustrate the self-attention mechanism in Transformers.", "3": "Explain the architecture of BERT.", "4": "Define Deep Reinforcement Learning and describe its process.", "5": "Illustrate the working of the discriminator in a GAN with example.", "6": "Discuss the role of positional encoding in Transformers.", "7": "Describe the training process of BERT.", "8": "Explain the architecture and working of a Deep Q-Network (DQN).", "9": "Illustrate the architecture and working of a Conditional GAN (cGAN).", "10": "Discuss applications of GANs in image generation and enhancement.", "11": "Explain the fine-tuning of BERT for NLP tasks.", "12": "Describe applications of Deep Reinforcement Learning in gaming, robotics, and automation."}}, "FILL": [{"q": "The variable that is predicted by a supervised learning model is called the __________ variable.", "a": "Target"}, {"q": "GoogLeNet introduced the __________ module.", "a": "Inception"}, {"q": "The process of converting categorical values into numerical form is called __________ encoding.", "a": "Categorical"}, {"q": "A model that performs well on training data but poorly on unseen data suffers from __________.", "a": "Overfitting"}, {"q": "A digital image is made up of a grid of small units called __________.", "a": "Pixels"}, {"q": "The process of passing input data through the layers of a neural network to produce an output is called __________ propagation.", "a": "Forward"}, {"q": "PCA is used for __________ reduction.", "a": "Dimensionality"}, {"q": "The pooling method that calculates the mean value of each window is called __________.", "a": "Average Pooling"}, {"q": "In supervised learning, data contains features and correct __________.", "a": "Labels"}, {"q": "The number of pixels by which a filter moves across an image is called __________.", "a": "Stride"}, {"q": "The first step in the machine learning workflow is __________.", "a": "Data Collection"}, {"q": "The technique of dividing data into multiple parts for repeated training and validation is called __________.", "a": "Cross-validation"}, {"q": "A __________ is an additional value added to adjust the output before applying the activation function.", "a": "Bias"}, {"q": "K-Means algorithm is commonly used for __________.", "a": "Clustering"}, {"q": "Adding a border of zeros around an image before convolution is called __________.", "a": "Padding"}, {"q": "Supervised learning is mainly divided into classification and __________.", "a": "Regression"}, {"q": "Identifying unusual or abnormal data points is called __________ detection.", "a": "Anomaly"}, {"q": "The CNN architecture that won the 2012 ImageNet competition by a large margin was __________.", "a": "AlexNet"}, {"q": "The process of dividing a dataset into training and testing portions is called __________.", "a": "Train-test split"}, {"q": "Standardization commonly transforms numerical features to have a mean of __________ and standard deviation of one.", "a": "Zero"}, {"q": "The pooling method that keeps the largest value from each window is called __________.", "a": "Max Pooling"}, {"q": "Machine Learning is a branch of __________ that allows computers to learn from data without being explicitly programmed for every task.", "a": "Artificial Intelligence"}, {"q": "The Flatten layer converts a 2D or 3D feature map into a __________.", "a": "1D vector"}, {"q": "In Reinforcement Learning, the learner or decision-maker is referred to as __________.", "a": "Agent"}, {"q": "The process of propagating the error backward through a neural network to update weights is called __________.", "a": "Backpropagation"}, {"q": "A digital image can be represented as a __________ of numerical values.", "a": "Matrix"}], "MCQ": [{"q": "What is the main objective of GAN training?", "o": ["To classify images", "To reduce dataset size", "To generate realistic data", "To sort data"], "a": 2}, {"q": "Which strategy allows an RL agent to sometimes choose a random action to discover better choices?", "o": ["Classification", "Exploration", "Encoding", "Normalization"], "a": 1}, {"q": "LSTM stands for:", "o": ["Long Short-Term Memory", "Linear Short-Term Machine", "Long Sequence Training Model", "Long State Transfer Model"], "a": 0}, {"q": "What is the role of positional encoding in a Transformer?", "o": ["To reduce the vocabulary size", "To provide information about token order", "To remove unnecessary tokens", "To increase the number of layers"], "a": 1}, {"q": "Which technique initializes weights so that repeated terms remain close to a suitable range?", "o": ["Dropout", "Max Pooling", "Feature Scaling", "Better Initialization"], "a": 3}, {"q": "In an LSTM, which gate controls what information should be removed from the cell state?", "o": ["Input gate", "Forget gate", "Output gate", "Update gate"], "a": 1}, {"q": "BERT is primarily designed for which type of data?", "o": ["Numerical tables only", "Text", "Audio only", "Sensor readings only"], "a": 1}, {"q": "Which technique limits the size of a gradient before updating the weights?", "o": ["Padding", "Dropout", "Data Normalization", "Gradient Clipping"], "a": 3}, {"q": "Which architecture uses separate encoder and decoder components for sequence-to-sequence tasks?", "o": ["Autoencoder", "Encoder-decoder architecture", "CNN", "K-Means"], "a": 1}, {"q": "Full BPTT on a very long sequence is generally:", "o": ["Fast and memory-free", "Independent of sequence length", "Slow and memory-heavy", "Used only for images"], "a": 2}, {"q": "Which mechanism allows a Transformer to focus on important parts of the input?", "o": ["Classification", "Sampling", "Pooling", "Self-attention"], "a": 3}, {"q": "In reinforcement learning, what does an agent receive after taking an action?", "o": ["Reward", "Feature vector", "Token", "Gradient"], "a": 0}, {"q": "Which component of a Transformer helps convert input tokens into numerical representations?", "o": ["Token embedding", "Replay buffer", "Reward function", "Q-table"], "a": 0}, {"q": "Which RNN architecture is designed to learn long-term dependencies in sequential data?", "o": ["LSTM", "K-Means", "CNN", "Decision Tree"], "a": 0}, {"q": "What problem can occur when gradients become extremely small during RNN training?", "o": ["Vanishing gradient problem", "Over-sampling problem", "Data duplication problem", "Feature selection problem"], "a": 0}, {"q": "Which of the following is a component commonly associated with a Transformer encoder?", "o": ["Feed-forward network", "Replay buffer", "Reward table", "Generator"], "a": 0}, {"q": "Which technique shortens the backward window during training?", "o": ["Full BPTT", "Forward Pass", "Truncated BPTT", "Gradient Boosting"], "a": 2}, {"q": "Which part of a GAN creates new samples from random input?", "o": ["Discriminator", "Generator", "Encoder", "Classifier"], "a": 1}, {"q": "GRU stands for:", "o": ["General Recurrent Unit", "Generalized Random Unit", "Gated Recurrent Unit", "Gradient Recurrent Utility"], "a": 2}, {"q": "A smaller learning rate can help reduce the damage caused by:", "o": ["Long inputs", "Large gradient updates", "Missing values", "Extra features"], "a": 1}, {"q": "What is the main purpose of fine-tuning a pre-trained NLP model?", "o": ["Adapt it to a specific task", "Remove all learned knowledge", "Convert text into images", "Stop the training permanently"], "a": 0}, {"q": "What is a major feature of the Transformer architecture?", "o": ["It processes only images", "It can process sequence elements efficiently", "It does not use numerical data", "It requires no training"], "a": 1}, {"q": "Query, Key and Value are associated with which mechanism in Transformers?", "o": ["Attention", "Pooling", "Q-learning", "GAN loss"], "a": 0}, {"q": "Which is an example of a task where long-range dependencies can be important?", "o": ["Machine translation", "File compression", "Image cropping", "Sorting numbers"], "a": 0}, {"q": "In BERT, what does the bidirectional nature mainly allow the model to use?", "o": ["Only previous words", "Only next words", "Context from both directions", "Only numerical features"], "a": 2}]});
+})();
+</script>
+</body>
+</html>
