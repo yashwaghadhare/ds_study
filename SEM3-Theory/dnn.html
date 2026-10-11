@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>DNN Visual Study Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
@@ -184,13 +185,87 @@ td:first-child{font-weight:600}
 .foot{padding:26px 0 40px;color:var(--muted);font-size:13px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
+/* ===== mobile-first refinements ===== */
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+.wrap{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.top{background:var(--bg)}
+.tabsbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabsbar .tabs{padding:8px 0;scroll-snap-type:x proximity}
+.tab{scroll-snap-align:center}
+.search,input[type=number]{font-size:16px}
+.score{top:calc(env(safe-area-inset-top,0px) + 62px)}
+.viz{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.viz.scrolls::after{content:"Swipe sideways to see the whole diagram";display:block;position:sticky;left:0;font-size:12px;color:var(--muted);margin-top:6px}
+button,.btn,.segb,.tab,.opt,.cell{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media (pointer:coarse){
+  .btn,.segb,.chipbtn,.ibtn,.tab,.opt,.donebtn{min-height:44px}
+  .chead{min-height:56px}
+  .rng input{height:34px}
+  .tick{width:26px;height:26px}
+  .segb{min-width:44px}
+  [data-s].cell{min-height:44px}
+}
+@media (max-width:640px){
+  .wrap{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+  .bar-row{flex-wrap:wrap;gap:8px 10px;padding:12px 0 6px}
+  .brand{flex:1;font-size:19px}
+  .search{order:3;flex:1 1 100%;width:auto;max-width:none;padding:10px 16px}
+  .prog{order:4;flex:1 1 100%;padding-bottom:6px}
+  .prog span{display:inline}
+  .hero{padding:10px 0 4px;gap:16px}
+  .hero h1{font-size:30px;max-width:none}
+  .hero p{font-size:15px}
+  .sechead{padding-top:12px}
+  .sechead h2{font-size:23px}
+  .tools .cap{flex:1 1 100%}
+  .chead{padding:12px;gap:9px}
+  .ctitle{font-size:16px}
+  .qref{font-size:12px;padding:2px 7px}
+  .cbody{padding:2px 12px 16px}
+  .qtext{font-size:14px}
+  .key{font-size:15.5px;padding:11px 12px}
+  .pts{font-size:15.5px}
+  .viz{padding:8px;border-radius:10px}
+  .cap{font-size:15px}
+  .flow li{flex:1 1 100%;max-width:none}
+  .grid{grid-template-columns:1fr}
+  .ctrl{gap:8px}
+  .seg{display:flex;width:100%}
+  .segb{flex:1 1 auto;padding:9px 8px}
+  .rng{flex:1 1 100%}
+  .rng span{flex:0 0 120px;line-height:1.2}
+  .rng input{flex:1;width:auto;max-width:none}
+  .barrow{grid-template-columns:88px 1fr 46px;font-size:13px}
+  .viz svg:not(.chart){min-width:360px;max-width:none}
+  .viz .two svg,.viz .gc svg{min-width:0;max-width:300px}
+  .viz svg.chart .ts{font-size:13px}
+  .fc-grid{grid-template-columns:1fr}
+  .mq{padding:12px}
+  .opt{font-size:15px;padding:11px 12px}
+  .sheet{padding:12px}
+  .sheet ul{font-size:15px}
+  /* tables become stacked cards */
+  .tw{border:0;background:none;overflow:visible;margin-bottom:10px}
+  .tw table{min-width:0;display:block}
+  .tw thead{display:none}
+  .tw tbody,.tw tr{display:block}
+  .tw tr{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--a);border-radius:10px;margin:0 0 8px;padding:8px 12px}
+  .tw td{display:block;border:0;padding:3px 0}
+  .tw td:first-child{font-size:15px;color:var(--a);padding-bottom:4px}
+  .tw td+td::before{content:attr(data-l);display:block;font-size:12px;font-weight:700;color:var(--muted);margin-top:2px}
+}
+@media (max-width:380px){
+  .brand{font-size:17px}.hero h1{font-size:27px}.tab{padding:7px 10px;font-size:13px}
+  .rng span{flex-basis:104px}
+}
+
 </style>
 </head>
 <body>
-<div class="bar"><div class="wrap">
-  <div class="bar-row"><div class="brand">DNN, drawn out</div><div class="prog"><i><b id="pb"></b></i><span id="pt"></span></div><input class="search" id="q" type="search" placeholder="Search topics" aria-label="Search topics"><button class="ibtn" id="theme" type="button">Dark mode</button></div>
-  <div class="tabs" id="tabs" role="tablist" aria-label="Units"></div>
-</div></div>
+<header class="top"><div class="wrap">
+  <div class="bar-row"><div class="brand">DNN, drawn out</div><button class="ibtn" id="theme" type="button">Dark mode</button><input class="search" id="q" type="search" placeholder="Search topics" aria-label="Search topics" enterkeyhint="search"><div class="prog"><i><b id="pb"></b></i><span id="pt"></span></div></div>
+</div></header>
+<nav class="tabsbar" aria-label="Units"><div class="wrap"><div class="tabs" id="tabs" role="tablist"></div></div></nav>
 <main class="wrap">
   <section class="hero" aria-label="Introduction">
     <div>
@@ -219,9 +294,9 @@ const timers = new WeakMap();
 function every(el, ms, fn) { stop(el); const id = setInterval(fn, ms); timers.set(el, id); return id; }
 function stop(el) { const id = timers.get(el); if (id) { clearInterval(id); timers.delete(el); } }
 let SVGN = 0;
-function svg(w, h, inner, label) {
+function svg(w, h, inner, label, cls) {
   const u = ++SVGN; inner = inner.replace(/id="(ar[AMB])"/g, `id="$1${u}"`).replace(/url\(#(ar[AMB])\)/g, `url(#$1${u})`);
-  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label || 'diagram')}">${inner}</svg>`;
+  return `<svg viewBox="0 0 ${w} ${h}"${cls ? ` class="${cls}"` : ''} role="img" aria-label="${esc(label || 'diagram')}">${inner}</svg>`;
 }
 function seg(items, active) {
   return `<div class="seg" role="group">${items.map(([v, l]) => `<button type="button" class="segb${v === active ? ' on' : ''}" data-v="${v}" aria-pressed="${v === active}">${l}</button>`).join('')}</div>`;
@@ -247,7 +322,7 @@ function seeded(seed) { let s = seed; return () => { s = (s * 16807) % 214748364
 /* content builders */
 function flow(steps) { return `<ol class="flow">${steps.map(s => `<li>${s}</li>`).join('')}</ol>`; }
 function tbl(head, rows) {
-  return `<div class="tw"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return `<div class="tw"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td data-l="${esc(head[i] || '')}">${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 function grid(items) { return `<div class="grid">${items.map(([t, d]) => `<div class="gc"><b>${t}</b>${d}</div>`).join('')}</div>`; }
 function chips(list) { return `<div class="chips">${list.map(c => `<span class="chip">${c}</span>`).join('')}</div>`; }
@@ -275,7 +350,7 @@ function netStep(el, o) {
     b: o.capsB || ['The error is measured at the output', 'The error flows back to the previous layer', 'Each weight learns how much it contributed', 'Weights are adjusted to reduce the error'] };
   const ctl = o.hero ? `<div class="ctrl">${seg([['f', 'Forward pass'], ['b', 'Backward pass']], mode)}${btn('play', RM ? 'Next step' : 'Pause')}</div>`
     : `<div class="ctrl">${btn('step', 'Next step', 1)}${btn('play', 'Play')}${btn('reset', 'Reset')}${o.switch ? seg([['f', 'Forward'], ['b', 'Backward']], mode) : ''}</div>`;
-  el.innerHTML = svg(w, h, s, 'Neural network with layers lighting up') + `<div class="cap" aria-live="polite"></div>` + ctl;
+  el.innerHTML = svg(w, h, s, 'Neural network with layers lighting up', 'chart') + `<div class="cap" aria-live="polite"></div>` + ctl;
   const cap = $('.cap', el);
   const paint = () => {
     const last = L.length - 1;
@@ -283,7 +358,7 @@ function netStep(el, o) {
     $$('[data-e]', el).forEach(e => { const i = +e.dataset.e; const lit = st >= 0 && (mode === 'f' ? i + 1 <= st : last - i - 1 <= st); e.style.stroke = lit ? (mode === 'f' ? 'var(--a)' : 'var(--bad)') : ''; e.style.strokeWidth = lit ? 2 : ''; });
     cap.textContent = st < 0 ? 'Press a button to send a signal through the network.' : (caps[mode][Math.min(st, caps[mode].length - 1)] || '');
   };
-  const next = () => { st = (st + 1) % (L.length + 1); if (st === L.length) st = -1; if (st === -1 && o.hero && !RM) { mode = mode === 'f' ? 'b' : 'f'; const g = $('.seg', el); if (g) $$('.segb', g).forEach(b => { b.classList.toggle('on', b.dataset.v === mode); b.setAttribute('aria-pressed', b.dataset.v === mode); }); } paint(); };
+  const next = () => { if (o.hero && document.hidden) return; st = (st + 1) % (L.length + 1); if (st === L.length) st = -1; if (st === -1 && o.hero && !RM) { mode = mode === 'f' ? 'b' : 'f'; const g = $('.seg', el); if (g) $$('.segb', g).forEach(b => { b.classList.toggle('on', b.dataset.v === mode); b.setAttribute('aria-pressed', b.dataset.v === mode); }); } paint(); };
   const g = $('.seg', el); if (g) wireSeg(g, v => { mode = v; st = -1; paint(); });
   const pb = onBtn(el, 'play', () => {
     if (o.hero && RM) { next(); return; }
@@ -300,7 +375,7 @@ W.bwd = el => netStep(el, { mode: 'b', switch: true, capsB: ['Loss function meas
 W.gd = function (el) {
   const w = 440, h = 230, X = x => 40 + (x + 2.4) / 4.8 * 360, Y = y => 205 - y / 5.8 * 175;
   let curve = ''; for (let i = 0; i <= 60; i++) { const x = -2.4 + i * 0.08; curve += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(x * x).toFixed(1); }
-  el.innerHTML = svg(w, h, `<path d="${curve}" class="nf s-ink" stroke-width="2.5"/><line x1="40" y1="205" x2="400" y2="205" class="s-line"/><polyline data-trail class="nf s-a" stroke-width="2" stroke-dasharray="4 3" points=""/><circle data-ball r="9" class="f-a"/><text class="ts" x="${X(0)}" y="222" text-anchor="middle">minimum error</text><text class="ts" x="46" y="22">error</text>`, 'Error curve with a ball rolling down')
+  el.innerHTML = svg(w, h, `<path d="${curve}" class="nf s-ink" stroke-width="2.5"/><line x1="40" y1="205" x2="400" y2="205" class="s-line"/><polyline data-trail class="nf s-a" stroke-width="2" stroke-dasharray="4 3" points=""/><circle data-ball r="9" class="f-a"/><text class="ts" x="${X(0)}" y="222" text-anchor="middle">minimum error</text><text class="ts" x="46" y="22">error</text>`, 'Error curve with a ball rolling down', 'chart')
     + `<div class="ctrl">${rng('lr', 'Learning rate', 0.05, 1.1, 0.05, 0.3)}${btn('step', 'Take a step', 1)}${btn('auto', 'Run')}${btn('reset', 'Reset')}</div><div class="cap" aria-live="polite"></div>`;
   let x, trail, steps; const ball = $('[data-ball]', el), tr = $('[data-trail]', el), cap = $('.cap', el);
   const r = onRng(el, 'lr', () => {});
@@ -329,7 +404,7 @@ W.opt = function (el) {
   let ell = ''; [0.4, 1.2, 2.6, 4.2].forEach(c => { ell += `<ellipse cx="${X(0)}" cy="${Y(0)}" rx="${Math.sqrt(c / 0.1) * 30}" ry="${Math.sqrt(c) * 46}" class="nf s-line" stroke-width="1.5"/>`; });
   const cols = { gd: 's-muted', rms: 's-u3', adam: 's-a' };
   el.innerHTML = svg(w, h, ell + `<circle cx="${X(0)}" cy="${Y(0)}" r="4" class="f-good"/><text class="ts" x="${X(0) + 7}" y="${Y(0) - 6}">goal</text>` +
-    ['gd', 'rms', 'adam'].map(k => `<polyline data-p="${k}" class="nf ${cols[k]}" stroke-width="2.4" points=""/><circle data-d="${k}" r="5" class="${k === 'gd' ? 'f-muted' : k === 'rms' ? 'f-u3' : 'f-a'}"/>`).join(''), 'Paths of three optimizers toward the minimum')
+    ['gd', 'rms', 'adam'].map(k => `<polyline data-p="${k}" class="nf ${cols[k]}" stroke-width="2.4" points=""/><circle data-d="${k}" r="5" class="${k === 'gd' ? 'f-muted' : k === 'rms' ? 'f-u3' : 'f-a'}"/>`).join(''), 'Paths of three optimizers toward the minimum', 'chart')
     + `<div class="ctrl">${rng('n', 'Steps taken', 0, N, 1, N)}${btn('run', 'Replay', 1)}</div>
      <div class="ctrl"><span class="badge" style="background:var(--soft)">Gray: plain gradient descent zigzags</span><span class="badge" style="background:var(--u3s);color:var(--u3)">Orange: RMSProp adapts step size</span><span class="badge" style="background:var(--as);color:var(--a)">Blue: Adam adds momentum</span></div><div class="cap m">The valley is steep up and down, shallow left to right. One learning rate suits only one direction; adaptive optimizers scale each direction separately.</div>`;
   const draw = n => { Object.keys(paths).forEach(k => { const pts = paths[k].slice(0, n + 1); $(`[data-p="${k}"]`, el).setAttribute('points', pts.map(p => X(clamp(p[0], -5, 5)).toFixed(1) + ',' + Y(clamp(p[1], -2.2, 2.2)).toFixed(1)).join(' ')); const l = pts[pts.length - 1]; const d = $(`[data-d="${k}"]`, el); d.setAttribute('cx', X(clamp(l[0], -5, 5))); d.setAttribute('cy', Y(clamp(l[1], -2.2, 2.2))); }); };
@@ -342,7 +417,7 @@ W.act = function (el) {
   const info = { sigmoid: 'Output stays between 0 and 1: good for probabilities.', tanh: 'Output between -1 and 1, centred on zero.', relu: 'Negative inputs become 0; positive inputs pass through unchanged.' };
   const w = 440, h = 230, X = x => 220 + x * 45, Y = y => 125 - y * 42;
   el.innerHTML = `<div class="ctrl">${seg([['sigmoid', 'Sigmoid'], ['tanh', 'Tanh'], ['relu', 'ReLU']], 'relu')}${rng('x', 'Input x', -4, 4, 0.1, 1.5)}</div>` +
-    svg(w, h, `<line x1="30" y1="${Y(0)}" x2="410" y2="${Y(0)}" class="s-line"/><line x1="${X(0)}" y1="20" x2="${X(0)}" y2="210" class="s-line"/><path data-c class="nf s-a" stroke-width="3" d=""/><line data-vl x1="0" x2="0" y1="${Y(0)}" y2="${Y(0)}" class="s-muted" stroke-dasharray="3 3"/><circle data-pt r="7" class="f-a"/><text class="ts" x="404" y="${Y(0) - 6}" text-anchor="end">x</text><text class="ts" x="${X(0) + 6}" y="26">output</text>`, 'Activation function curve') + `<div class="cap" aria-live="polite"></div>`;
+    svg(w, h, `<line x1="30" y1="${Y(0)}" x2="410" y2="${Y(0)}" class="s-line"/><line x1="${X(0)}" y1="20" x2="${X(0)}" y2="210" class="s-line"/><path data-c class="nf s-a" stroke-width="3" d=""/><line data-vl x1="0" x2="0" y1="${Y(0)}" y2="${Y(0)}" class="s-muted" stroke-dasharray="3 3"/><circle data-pt r="7" class="f-a"/><text class="ts" x="404" y="${Y(0) - 6}" text-anchor="end">x</text><text class="ts" x="${X(0) + 6}" y="26">output</text>`, 'Activation function curve', 'chart') + `<div class="cap" aria-live="polite"></div>`;
   let cur = 'relu'; const cap = $('.cap', el);
   const draw = () => { let d = ''; for (let i = 0; i <= 80; i++) { const x = -4 + i * 0.1; d += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(F[cur](x)).toFixed(1); } $('[data-c]', el).setAttribute('d', d); const x = r.get(), y = F[cur](x); const p = $('[data-pt]', el); p.setAttribute('cx', X(x)); p.setAttribute('cy', Y(y)); const v = $('[data-vl]', el); v.setAttribute('x1', X(x)); v.setAttribute('x2', X(x)); v.setAttribute('y2', Y(y)); cap.textContent = `Input ${x.toFixed(1)} gives output ${y.toFixed(2)}. ${info[cur]}`; };
   wireSeg($('.seg', el), v => { cur = v; draw(); }); const r = onRng(el, 'x', draw); draw();
@@ -366,7 +441,7 @@ W.fit = function (el) {
   let good = ''; for (let i = 0; i <= 60; i++) { const x = i / 60; good += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(truth(x)).toFixed(1); }
   const curves = { under: `M${X(0)} ${Y(0.5)} L${X(1)} ${Y(0.5)}`, good, over: sp };
   const info = { under: ['Underfitting', 'Train 60%', 'Test 60%', 'Too simple: misses the pattern everywhere.'], good: ['Balanced fit', 'Train 90%', 'Test 88%', 'Captures the pattern, ignores the noise. This is the goal.'], over: ['Overfitting', 'Train 99%', 'Test 55%', 'Passes through every training point, noise included, so new points land far from the curve.'] };
-  el.innerHTML = `<div class="ctrl">${seg([['under', 'Underfit'], ['good', 'Good fit'], ['over', 'Overfit']], 'over')}</div>` + svg(w, h, `<line x1="30" y1="215" x2="410" y2="215" class="s-line"/><path data-c class="nf s-a" stroke-width="3"/>` + tr.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="f-ink"/>`).join('') + te.map(p => `<circle data-te cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="nf s-bad" stroke-width="2"/>`).join('') + `<circle cx="40" cy="18" r="4.5" class="f-ink"/><text class="ts" x="49" y="22">training data</text><circle cx="150" cy="18" r="4.5" class="nf s-bad" stroke-width="2"/><text class="ts" x="159" y="22">new data</text>`, 'Scatter plot with three fitted curves') + `<div class="ctrl" data-b2></div><div class="cap" aria-live="polite"></div>`;
+  el.innerHTML = `<div class="ctrl">${seg([['under', 'Underfit'], ['good', 'Good fit'], ['over', 'Overfit']], 'over')}</div>` + svg(w, h, `<line x1="30" y1="215" x2="410" y2="215" class="s-line"/><path data-c class="nf s-a" stroke-width="3"/>` + tr.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="f-ink"/>`).join('') + te.map(p => `<circle data-te cx="${X(p[0])}" cy="${Y(p[1])}" r="4.5" class="nf s-bad" stroke-width="2"/>`).join('') + `<circle cx="40" cy="18" r="4.5" class="f-ink"/><text class="ts" x="49" y="22">training data</text><circle cx="150" cy="18" r="4.5" class="nf s-bad" stroke-width="2"/><text class="ts" x="159" y="22">new data</text>`, 'Scatter plot with three fitted curves', 'chart') + `<div class="ctrl" data-b2></div><div class="cap" aria-live="polite"></div>`;
   const draw = k => { $('[data-c]', el).setAttribute('d', curves[k]); const i = info[k]; $('[data-b2]', el).innerHTML = `<span class="big">${i[0]}</span><span class="badge ${k === 'over' ? 'b' : 'g'}">${i[1]}</span><span class="badge ${k === 'good' ? 'g' : 'b'}">${i[2]}</span>`; $('.cap', el).textContent = i[3]; };
   wireSeg($('.seg', el), draw); draw('over');
 };
@@ -375,7 +450,7 @@ W.drop = function (el) {
   const L = [4, 6, 6, 3], w = 440, h = 240, G = netGeom(L, w, h, 40); let s = '';
   for (let i = 0; i < 3; i++) G[i].forEach((a, ai) => G[i + 1].forEach((b, bi) => { s += `<line data-e="${i}-${ai}-${bi}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" class="s-line" stroke-width="1"/>`; }));
   G.forEach((ly, i) => ly.forEach((p, j) => { s += `<circle data-n="${i}-${j}" cx="${p.x}" cy="${p.y}" r="11" class="f-a tr"/>`; }));
-  el.innerHTML = `<div class="ctrl">${btn('train', 'Next training step', 1)}${btn('test', 'Test mode (all neurons on)')}${rng('p', 'Drop probability', 0.1, 0.8, 0.1, 0.5)}</div>` + svg(w, h, s, 'Network with random neurons switched off') + `<div class="cap" aria-live="polite">Press the button to see which neurons are switched off in a training step.</div>`;
+  el.innerHTML = `<div class="ctrl">${btn('train', 'Next training step', 1)}${btn('test', 'Test mode (all neurons on)')}${rng('p', 'Drop probability', 0.1, 0.8, 0.1, 0.5)}</div>` + svg(w, h, s, 'Network with random neurons switched off', 'chart') + `<div class="cap" aria-live="polite">Press the button to see which neurons are switched off in a training step.</div>`;
   let off = new Set();
   const paint = () => { $$('[data-n]', el).forEach(n => { n.style.opacity = off.has(n.dataset.n) ? 0.12 : 1; }); $$('[data-e]', el).forEach(e => { const [i, a, b] = e.dataset.e.split('-'); e.style.opacity = off.has(`${i}-${a}`) || off.has(`${+i + 1}-${b}`) ? 0.05 : 1; }); };
   const p = onRng(el, 'p', () => { });
@@ -399,7 +474,7 @@ W.es = function (el) {
   const tr = e => Math.exp(-0.09 * e) + 0.04, va = e => 0.95 * Math.exp(-0.14 * e) + 0.1 + 0.0009 * e * e; let best = 1, bv = 9; for (let e = 1; e <= 40; e++) if (va(e) < bv) { bv = va(e); best = e; }
   const w = 440, h = 240, X = e => 40 + e / 40 * 360, Y = v => 215 - v / 1.1 * 190; let c1 = '', c2 = '';
   for (let e = 1; e <= 40; e++) { c1 += (e > 1 ? 'L' : 'M') + X(e).toFixed(1) + ' ' + Y(tr(e)).toFixed(1); c2 += (e > 1 ? 'L' : 'M') + X(e).toFixed(1) + ' ' + Y(va(e)).toFixed(1); }
-  el.innerHTML = svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="${c1}" class="nf s-u1" stroke-width="3"/><path d="${c2}" class="nf s-bad" stroke-width="3"/><line data-m x1="0" x2="0" y1="20" y2="215" class="s-muted" stroke-dasharray="4 3"/><circle cx="${X(best)}" cy="${Y(va(best))}" r="7" class="f-good"/><text class="tb" x="${X(best)}" y="${Y(va(best)) - 12}" text-anchor="middle">stop here</text><text class="ts" x="400" y="232" text-anchor="end">training rounds (epochs)</text><line x1="150" y1="20" x2="174" y2="20" class="s-u1" stroke-width="3"/><text x="180" y="24" class="ts">training error</text><line x1="150" y1="38" x2="174" y2="38" class="s-bad" stroke-width="3"/><text x="180" y="42" class="ts">validation error</text>`, 'Training and validation error curves') + `<div class="ctrl">${rng('e', 'Epoch', 1, 40, 1, 8)}</div><div class="cap" aria-live="polite"></div>`;
+  el.innerHTML = svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="${c1}" class="nf s-u1" stroke-width="3"/><path d="${c2}" class="nf s-bad" stroke-width="3"/><line data-m x1="0" x2="0" y1="20" y2="215" class="s-muted" stroke-dasharray="4 3"/><circle cx="${X(best)}" cy="${Y(va(best))}" r="7" class="f-good"/><text class="tb" x="${X(best)}" y="${Y(va(best)) - 12}" text-anchor="middle">stop here</text><text class="ts" x="400" y="232" text-anchor="end">training rounds (epochs)</text><line x1="150" y1="20" x2="174" y2="20" class="s-u1" stroke-width="3"/><text x="180" y="24" class="ts">training error</text><line x1="150" y1="38" x2="174" y2="38" class="s-bad" stroke-width="3"/><text x="180" y="42" class="ts">validation error</text>`, 'Training and validation error curves', 'chart') + `<div class="ctrl">${rng('e', 'Epoch', 1, 40, 1, 8)}</div><div class="cap" aria-live="polite"></div>`;
   const draw = e => { const m = $('[data-m]', el); m.setAttribute('x1', X(e)); m.setAttribute('x2', X(e)); $('.cap', el).textContent = e < best - 1 ? 'Both errors are falling: the model is still learning.' : e <= best + 1 ? `Best point (epoch ${best}): validation error is lowest. Save these weights and stop.` : 'Validation error is rising while training error keeps falling: the model is memorising. Stopping earlier would have been better.'; };
   onRng(el, 'e', draw); draw(8);
 };
@@ -457,7 +532,7 @@ W.cm = function (el) {
 W.rm = function (el) {
   const xs = [1, 2, 3, 4, 5, 6, 7, 8], pred = xs.map(x => x + 1), act0 = [2.4, 2.7, 4.5, 4.6, 6.5, 6.6, 8.4, 8.5]; let outl = false;
   const w = 440, h = 240, X = x => 40 + (x - 0.5) / 8 * 360, Y = y => 215 - y / 15 * 190;
-  el.innerHTML = `<div class="ctrl">${btn('out', 'Add an outlier (last point)', 1)}${btn('rs', 'Reset')}</div>` + svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="M${X(0.5)} ${Y(1.5)} L${X(8.5)} ${Y(9.5)}" class="nf s-a" stroke-width="2.5"/><g data-g></g><text class="ts" x="46" y="20">prediction line, dots = actual values, red lines = errors</text>`, 'Regression line with actual values and error lines') + `<div class="two"><div data-out></div><div class="cap" data-c></div></div>`;
+  el.innerHTML = `<div class="ctrl">${btn('out', 'Add an outlier (last point)', 1)}${btn('rs', 'Reset')}</div>` + svg(w, h, `<line x1="40" y1="215" x2="400" y2="215" class="s-line"/><path d="M${X(0.5)} ${Y(1.5)} L${X(8.5)} ${Y(9.5)}" class="nf s-a" stroke-width="2.5"/><g data-g></g><text class="ts" x="46" y="20">line = prediction, dots = actual, red = error</text>`, 'Regression line with actual values and error lines', 'chart') + `<div class="two"><div data-out></div><div class="cap" data-c></div></div>`;
   const draw = () => { const a = act0.slice(); if (outl) a[7] = 14; $('[data-g]', el).innerHTML = xs.map((x, i) => `<line x1="${X(x)}" x2="${X(x)}" y1="${Y(pred[i])}" y2="${Y(a[i])}" class="s-bad" stroke-width="2.5"/><circle cx="${X(x)}" cy="${Y(a[i])}" r="5" class="f-ink"/>`).join('');
     const e = a.map((v, i) => v - pred[i]), n = a.length, mae = e.reduce((s, v) => s + Math.abs(v), 0) / n, mse = e.reduce((s, v) => s + v * v, 0) / n, rmse = Math.sqrt(mse), mean = a.reduce((s, v) => s + v, 0) / n, sst = a.reduce((s, v) => s + (v - mean) ** 2, 0), r2 = 1 - e.reduce((s, v) => s + v * v, 0) / sst;
     $('[data-out]', el).innerHTML = bars([['MAE', Math.min(mae / 3, 1), mae.toFixed(2), 'w'], ['MSE', Math.min(mse / 12, 1), mse.toFixed(2), 'r'], ['RMSE', Math.min(rmse / 3.5, 1), rmse.toFixed(2), 'r'], ['R-squared', Math.max(r2, 0), r2.toFixed(2), 'g']]);
@@ -507,7 +582,7 @@ W.conv = function (el, o) {
     $('[data-k]', el).innerHTML = K[kk][1].flat().map(v => `<div class="cell sm" style="background:var(--as)">${v}</div>`).join('');
     const oe = $('[data-out]', el); oe.style.gridTemplateColumns = `repeat(${m},1fr)`;
     const mx = Math.max(1, ...out.flat().map(Math.abs));
-    oe.innerHTML = out.flatMap((row, r) => row.map((v, c) => { const idx = r * m + c, shown = idx <= pos; const a = Math.abs(v) / mx; return `<div class="cell sm${idx === pos ? ' hi' : ''}" style="${shown && idx !== pos ? `background:color-mix(in srgb,${v >= 0 ? 'var(--a)' : 'var(--bad)'} ${Math.round(a * 70)}%,var(--panel))` : ''}">${shown ? (Number.isInteger(v) ? v : v.toFixed(1)) : ''}</div>`; })).join('');
+    oe.innerHTML = out.flatMap((row, r) => row.map((v, c) => { const idx = r * m + c, shown = idx <= pos; const a = Math.abs(v) / mx; return `<div class="cell sm${idx === pos ? ' hi' : ''}" style="${shown && idx !== pos ? `background:${v >= 0 ? 'var(--as)' : 'var(--bads)'};background:color-mix(in srgb,${v >= 0 ? 'var(--a)' : 'var(--bad)'} ${Math.round(a * 70)}%,var(--panel))` : ''}">${shown ? (Number.isInteger(v) ? v : v.toFixed(1)) : ''}</div>`; })).join('');
     $('.cap', el).textContent = pos < 0 ? `Output size will be ${m} by ${m}. Press "Slide filter" to see the filter move.` : `Window ${pos + 1} of ${m * m}: multiply each pixel by the filter number under it and add everything up. Result: ${Number.isInteger(out[cr][cc]) ? out[cr][cc] : out[cr][cc].toFixed(1)}. High values appear where the image matches the filter pattern.`;
   };
   const step = () => { pos = pos + 1 >= m * m ? -1 : pos + 1; paint(); if (pos < 0) stop(el); };
@@ -567,7 +642,7 @@ W.share = function (el) {
 };
 
 W.cnn = function (el) {
-  const B = [['Input', 'Image as a pixel matrix (3 channels for colour).', 96, 'var(--soft)', 'Raw pixels'], ['Convolution', 'Filters slide over the image and detect features such as edges. Output: feature maps.', 84, 'var(--u1)', 'Feature maps'], ['ReLU', 'Turns negatives into 0 and adds non-linearity.', 84, 'var(--u3)', 'Same size'], ['Pooling', 'Shrinks each feature map and keeps the key features.', 60, 'var(--u2)', 'Smaller maps'], ['Conv + ReLU', 'A second round learns more complex features (shapes, parts).', 60, 'var(--u1)', 'Deeper features'], ['Pooling', 'Shrinks again. Repeat conv + pool as needed.', 40, 'var(--u2)', 'Even smaller'], ['Flatten', 'Unrolls the maps into one long 1D vector.', 70, 'var(--u4)', '1D vector'], ['Fully connected', 'Combines all features to decide.', 56, 'var(--u1)', 'Class scores'], ['Softmax', 'Turns scores into class probabilities; the highest is chosen.', 36, 'var(--u5)', 'Probabilities']];
+  const B = [['Input', 'Image as a pixel matrix (3 channels for colour).', 96, 'var(--soft)', 'Raw pixels'], ['Convolution', 'Filters slide over the image and detect features such as edges. Output: feature maps.', 84, 'var(--u1)', 'Feature maps'], ['ReLU', 'Turns negatives into 0 and adds non-linearity.', 84, 'var(--u3)', 'Same size'], ['Pooling', 'Shrinks each feature map and keeps the key features.', 60, 'var(--u2)', 'Smaller maps'], ['Conv + ReLU', 'A second round learns more complex features (shapes, parts).', 60, 'var(--u1)', 'Deeper features'], ['Pooling', 'Shrinks again. Repeat conv + pool as needed.', 48, 'var(--u2)', 'Even smaller'], ['Flatten', 'Unrolls the maps into one long 1D vector.', 70, 'var(--u4)', '1D vector'], ['Fully connected', 'Combines all features to decide.', 56, 'var(--u1)', 'Class scores'], ['Softmax', 'Turns scores into class probabilities; the highest is chosen.', 48, 'var(--u5)', 'Probabilities']];
   el.innerHTML = `<div style="overflow-x:auto"><div style="display:flex;gap:6px;align-items:flex-end;min-width:560px;height:130px">${B.map((b, i) => `<button type="button" data-i="${i}" style="flex:1;height:${b[2]}px;border:2px solid transparent;border-radius:8px;background:${b[3]};cursor:pointer;color:${i ? 'var(--on)' : 'var(--ink)'};font-size:11px;font-weight:700;padding:2px;line-height:1.15">${b[0]}</button>`).join('')}</div><div style="display:flex;min-width:560px;margin-top:6px;font-size:12px;color:var(--muted)"><div style="flex:6.2;border-top:3px solid var(--u1);padding-top:3px">Feature extraction</div><div style="flex:2.8;border-top:3px solid var(--u5);padding-top:3px;margin-left:6px">Decision making</div></div></div><div class="cap" aria-live="polite"></div>`;
   const show = i => { $$('[data-i]', el).forEach(b => b.style.borderColor = +b.dataset.i === i ? 'var(--ink)' : 'transparent'); $('.cap', el).innerHTML = `<b>${B[i][0]}.</b> ${B[i][1]} <span class="badge">${B[i][4]}</span>`; };
   $$('[data-i]', el).forEach(b => b.addEventListener('click', () => show(+b.dataset.i))); show(1);
@@ -580,7 +655,7 @@ W.hier = function (el) {
     `<g transform="translate(125,40)"><circle cx="18" cy="22" r="18" class="nf s-u2" stroke-width="3"/><rect x="44" y="6" width="36" height="32" class="nf s-u2" stroke-width="3"/></g>`,
     `<g transform="translate(240,36)"><circle cx="18" cy="26" r="16" class="nf s-u3" stroke-width="3"/><circle cx="18" cy="26" r="4" class="f-u3"/><rect x="44" y="8" width="30" height="34" rx="3" class="nf s-u3" stroke-width="3"/></g>`,
     `<g transform="translate(345,34)"><path d="M0 40 L0 26 L16 24 L26 10 L52 10 L62 24 L78 26 L78 40 Z" class="f-u4"/><circle cx="18" cy="42" r="8" class="f-ink"/><circle cx="60" cy="42" r="8" class="f-ink"/></g>`];
-  el.innerHTML = `<div class="ctrl">${seg(L.map((l, i) => [i, l[0]]), 0)}</div>` + svg(440, 120, [0, 1, 2, 3].map(i => `<g data-g="${i}" class="tr">${g[i]}</g>${i < 3 ? `<text x="${100 + i * 105}" y="64" class="ts">&gt;</text>` : ''}`).join('') + `<text class="ts" x="20" y="112">edges</text><text class="ts" x="125" y="112">shapes</text><text class="ts" x="240" y="112">parts</text><text class="ts" x="345" y="112">object</text>`, 'Features from edges to a car') + `<div class="cap" aria-live="polite"></div>`;
+  el.innerHTML = `<div class="ctrl">${seg(L.map((l, i) => [i, l[0]]), 0)}</div>` + svg(440, 120, [0, 1, 2, 3].map(i => `<g data-g="${i}" class="tr">${g[i]}</g>${i < 3 ? `<text x="${100 + i * 105}" y="64" class="ts">&gt;</text>` : ''}`).join('') + `<text class="ts" x="20" y="112">edges</text><text class="ts" x="125" y="112">shapes</text><text class="ts" x="240" y="112">parts</text><text class="ts" x="345" y="112">object</text>`, 'Features from edges to a car', 'chart') + `<div class="cap" aria-live="polite"></div>`;
   const show = i => { $$('[data-g]', el).forEach(n => n.classList.toggle('dim', +n.dataset.g !== i)); $('.cap', el).innerHTML = `<b>${L[i][0]}.</b> ${L[i][1]}. Each layer builds on the one before it.`; };
   wireSeg($('.seg', el), v => show(+v)); show(0);
 };
@@ -746,14 +821,14 @@ W.attn = function (el) {
   const M = { it: [.02, .55, .02, .02, .05, .02, .12, .03, .07, .03, .07], tired: [.01, .40, .02, .03, .04, .01, .05, .04, .20, .06, .14], cross: [.02, .22, .12, .18, .12, .04, .20, .03, .02, .02, .03], animal: [.15, .30, .12, .10, .12, .04, .07, .03, .03, .02, .02] };
   const gen = i => { const w = T.map((_, j) => Math.exp(-Math.pow((i - j) / 2.2, 2))); const s = w.reduce((a, b) => a + b, 0); return w.map(v => v / s); };
   el.innerHTML = `<div class="lbl">Tap a word. The coloured chips show how much attention it pays to every word.</div><div data-t style="display:flex;flex-wrap:wrap;gap:8px"></div><div class="cap" aria-live="polite"></div>`;
-  let sel = 8; const draw = () => { const w = M[T[sel]] || gen(sel), mx = Math.max(...w); $('[data-t]', el).innerHTML = T.map((t, i) => `<button type="button" data-i="${i}" style="border:2px solid ${i === sel ? 'var(--ink)' : 'var(--line)'};border-radius:10px;padding:6px 10px 4px;background:color-mix(in srgb,var(--a) ${Math.round(w[i] / mx * 85)}%,var(--panel));color:${w[i] / mx > 0.55 ? 'var(--on)' : 'var(--ink)'};cursor:pointer;min-width:52px"><div style="font-weight:700">${t}</div><div style="font-size:11px">${pct(w[i])}</div></button>`).join(''); $$('[data-i]', el).forEach(b => b.addEventListener('click', () => { sel = +b.dataset.i; draw(); })); const top = w.indexOf(mx); $('.cap', el).innerHTML = `<b>"${T[sel]}"</b> pays most attention to <b>"${T[top]}"</b> (${pct(w[top])}).${sel === 8 ? ' "it" refers to the animal, not the road: attention links far-apart words.' : ''}`; };
+  let sel = 8; const draw = () => { const w = M[T[sel]] || gen(sel), mx = Math.max(...w); $('[data-t]', el).innerHTML = T.map((t, i) => `<button type="button" data-i="${i}" style="border:2px solid ${i === sel ? 'var(--ink)' : 'var(--line)'};border-radius:10px;padding:6px 10px 4px;background:var(--as);background:color-mix(in srgb,var(--a) ${Math.round(w[i] / mx * 85)}%,var(--panel));color:${w[i] / mx > 0.55 ? 'var(--on)' : 'var(--ink)'};cursor:pointer;min-width:52px"><div style="font-weight:700">${t}</div><div style="font-size:11px">${pct(w[i])}</div></button>`).join(''); $$('[data-i]', el).forEach(b => b.addEventListener('click', () => { sel = +b.dataset.i; draw(); })); const top = w.indexOf(mx); $('.cap', el).innerHTML = `<b>"${T[sel]}"</b> pays most attention to <b>"${T[top]}"</b> (${pct(w[top])}).${sel === 8 ? ' "it" refers to the animal, not the road: attention links far-apart words.' : ''}`; };
   draw();
 };
 
 W.pe = function (el) {
   const P = 14, D = 24, cw = 14, ch = 11; let cells = '';
-  for (let p = 0; p < P; p++) for (let j = 0; j < D; j++) { const f = Math.pow(10000, -(j - (j % 2)) / D), v = j % 2 ? Math.cos(p * f * 6) : Math.sin(p * f * 6); cells += `<rect data-p="${p}" x="${40 + j * cw}" y="${14 + p * ch}" width="${cw - 1}" height="${ch - 1}" style="fill:color-mix(in srgb,var(--a) ${Math.round((v + 1) / 2 * 100)}%,var(--panel))"/>`; }
-  el.innerHTML = svg(390, 176, cells + `<text class="ts" x="40" y="10">dimension of the vector (left to right)</text><text class="ts" x="2" y="94">position</text>`, 'Positional encoding heatmap') + `<div class="ctrl">${rng('p', 'Highlight position', 0, P - 1, 1, 2)}</div><div class="cap">Every row is a unique pattern of waves (sine and cosine). Adding a row to a word vector tells the Transformer where the word sits.</div><div class="vt" style="margin-top:12px">Same words, different order</div><div data-s></div>`;
+  for (let p = 0; p < P; p++) for (let j = 0; j < D; j++) { const f = Math.pow(10000, -(j - (j % 2)) / D), v = j % 2 ? Math.cos(p * f * 6) : Math.sin(p * f * 6); cells += `<rect data-p="${p}" x="${40 + j * cw}" y="${14 + p * ch}" width="${cw - 1}" height="${ch - 1}" style="fill:var(--as);fill:color-mix(in srgb,var(--a) ${Math.round((v + 1) / 2 * 100)}%,var(--panel))"/>`; }
+  el.innerHTML = svg(390, 176, cells + `<text class="ts" x="40" y="10">dimension of the vector (left to right)</text><text class="ts" x="2" y="94">position</text>`, 'Positional encoding heatmap', 'chart') + `<div class="ctrl">${rng('p', 'Highlight position', 0, P - 1, 1, 2)}</div><div class="cap">Every row is a unique pattern of waves (sine and cosine). Adding a row to a word vector tells the Transformer where the word sits.</div><div class="vt" style="margin-top:12px">Same words, different order</div><div data-s></div>`;
   const draw = p => { $$('[data-p]', el).forEach(r => { r.style.stroke = +r.dataset.p === p ? 'var(--ink)' : 'none'; }); };
   onRng(el, 'p', draw); draw(2);
   const sent = (ws, tag) => `<div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0;align-items:center"><span class="ts" style="width:66px">${tag}</span>${ws.map((w, i) => `<span class="gc" style="padding:3px 8px"><b style="display:inline;margin-right:6px">${w}</b><span class="badge g">+ pos ${i + 1}</span></span>`).join('')}</div>`;
@@ -996,10 +1071,13 @@ function updateProgress() {
   $('#pb').style.width = (n / TOTAL * 100) + '%'; $('#pt').textContent = `${n} of ${TOTAL} topics revised`;
   UNITS.slice(0, 4).forEach(u => { const all = CARDS.filter(c => c.u === u.id), d = all.filter(c => done.has(c.u + '-' + c.id)).length; const s = $(`.tab[data-u="${u.id}"] small`); if (s) s.textContent = `${d}/${all.length}`; });
 }
+function checkScroll() { $$('.viz').forEach(v => v.classList.toggle('scrolls', v.scrollWidth > v.clientWidth + 6)); }
+let rsz; window.addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(checkScroll, 150); });
+document.addEventListener('click', e => { if (e.target.closest && e.target.closest('.viz')) setTimeout(checkScroll, 60); });
 function openCard(card, open) {
   const c = CARDS.find(x => x.u + '-' + x.id === card.dataset.id); const was = card.classList.contains('open');
   const want = open === undefined ? !was : open; card.classList.toggle('open', want); $('.chead', card).setAttribute('aria-expanded', want);
-  if (want && !card.dataset.m) { card.dataset.m = 1; fillBody(card, c); }
+  if (want && !card.dataset.m) { card.dataset.m = 1; fillBody(card, c); setTimeout(checkScroll, 30); }
 }
 function build() {
   const app = $('#app'), tabs = $('#tabs');
@@ -1033,8 +1111,9 @@ function build() {
 function showTab(id) {
   const q = id === 'qb' || id === 'qm';
   $$('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.u === id));
-  $$('.sec').forEach(s => s.classList.toggle('show', q ? s.dataset.q === id : s.dataset.u === id));
-  const top = $('#app').offsetTop - 140; if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top), behavior: RM ? 'auto' : 'smooth' });
+  const tb = $(`.tab[data-u="${id}"]`), tr = $('#tabs'); if (tb && tr && tr.scrollTo) tr.scrollTo({ left: Math.max(0, tb.offsetLeft - (tr.clientWidth - tb.offsetWidth) / 2), behavior: RM ? 'auto' : 'smooth' });
+  $$('.sec').forEach(s => s.classList.toggle('show', q ? s.dataset.q === id : s.dataset.u === id)); setTimeout(checkScroll, 30);
+  const top = $('#app').offsetTop - 70; if (window.scrollY > top) window.scrollTo({ top: Math.max(0, top), behavior: RM ? 'auto' : 'smooth' });
 }
 function wireSearch() {
   const inp = $('#q'); inp.addEventListener('input', () => {
