@@ -1,6 +1,6 @@
 # TMNLP (Text Mining and NLP): Complete Compressed Notes (Units 1 to 4)
 
-> Exam-revision notes. Every question from the question bank is covered, merged by theme, with **no formulas** (formulas are explained in words).
+> Exam-revision notes (updated to the latest question bank: removed questions are no longer included). Every remaining question is covered, merged by theme, with **no formulas** (formulas are explained in words).
 > Q numbers in brackets (e.g., Q5) match the question bank of that unit.
 > Each unit ends with a **Last-Minute Cheat Sheet**. The file ends with **Fill-in-the-Blanks and MCQ answers**.
 
@@ -17,7 +17,7 @@
 # UNIT 1: NLP Foundations, Applications, Language Structure and Compilers
 
 ## BLOCK A: What NLP Is and What It Does
-*(Q6, Q3, Q4, Q5, Q8, Q9, Q14, Q11)*
+*(Q6, Q3, Q4, Q5, Q8, Q9, Q11)*
 
 ### Q6. NLP: definition, purpose, applications, importance
 - **NLP = Natural Language Processing.** The branch of computer science and AI that lets computers **understand, interpret and generate human language** (English, Hindi, etc.).
@@ -83,13 +83,6 @@
 
 - *Example:* a news app showing a 3-line summary above a long article.
 
-### Q14. Spam Detection
-- Automatically identifying and filtering unwanted or harmful messages. NLP learns the difference between normal (**"ham"**) and **spam** messages and classifies each new message.
-
-**Steps:** data collection (emails labelled spam or not) → pre-processing (clean, lowercase, remove stop-words) → feature extraction (word frequencies or **TF-IDF**) → model training (classifier like **Naive Bayes**) → classification of new emails.
-
-- *Example:* "Congratulations! You WON a FREE prize, click here NOW!" → spam-like words ("WON", "FREE", "click here", urgency) → classified as spam.
-
 ### Q11. Named Entity Recognition (NER)
 - An NLP task that **finds and labels named real-world things (entities)** in text. It highlights who, where, when and which organisation.
 
@@ -108,28 +101,8 @@
 
 ---
 
-## BLOCK B: Language Structure (POS, Syntax, Token and Lexeme)
-*(Q13, Q1, Q7)*
-
-### Q13. Part-of-Speech (POS) Tagging
-- **Labelling every word** in a sentence with its grammatical category.
-
-| Tag | Meaning | Example |
-|---|---|---|
-| **NN** | Noun | dog |
-| **VB** | Verb | run |
-| **JJ** | Adjective | happy |
-| **RB** | Adverb | quickly |
-| Others | Pronoun, preposition, conjunction | |
-
-**How it works:** break the sentence into tokens → study each word and its **context** → assign the tag using rules or machine-learning models.
-
-**Importance:**
-- Reveals the grammatical role of each word.
-- **Resolves ambiguity** (the same word can be different parts of speech: "book" as noun or verb).
-- A key step **before parsing** and building a parse tree.
-- Supports NER, translation, summarization.
-- *Example:* "She books a ticket" → "books" is a **verb** here.
+## BLOCK B: Language Structure (Syntax, Token and Lexeme)
+*(Q1, Q7)*
 
 ### Q1. Syntax Analysis, Parser and Parse Tree
 - **Syntax analysis** = checking whether a sentence (or line of code) follows the **grammar rules** and understanding how its parts fit together. It comes **after tokenization**.
@@ -205,23 +178,6 @@
 
 ---
 
-## BLOCK E: Challenges in NLP
-*(Q15)*
-
-### Q15. Synonyms, Polysemy, Sarcasm, Human Emotions
-
-| Challenge | Meaning | Problem for NLP | Example |
-|---|---|---|---|
-| **Synonyms** | Different words, same meaning | Words look completely different to a computer; similar sentences may be treated as unrelated | big, large, huge |
-| **Polysemy** | One word, **multiple meanings** depending on context | Choosing the correct meaning from surrounding words | "bank" = riverbank or money bank |
-| **Sarcasm** | Saying the **opposite** of what is meant | Words say one thing, feeling is the opposite; fools sentiment analysis | "Oh great, another traffic jam!" (positive word, negative meaning) |
-| **Human emotions** | Feelings (joy, anger, sadness, fear) in text | Subtle, mixed or hidden; same words carry different emotions in different situations | |
-
-- Ignoring them causes wrong results in translation and sentiment analysis.
-- *Example:* "Wow, fantastic service, I only waited two hours!" → looks positive but is sarcastic and angry.
-
----
-
 ## Unit 1: Last-Minute Cheat Sheet
 - **NLP** = computers understanding human language. Apps: translation, chatbots, sentiment, summarization, spam detection, speech recognition.
 - **Text mining steps:** collect → pre-process → tokenize → feature extraction → apply techniques → information.
@@ -229,14 +185,12 @@
 - **MT steps:** input → tokenize → parse → meaning → transfer → generate → output.
 - **Chatbot:** input → pre-process → **intent** → **entities** → decision → response → output.
 - **Summarization:** **extractive** (picks sentences) vs **abstractive** (writes new ones).
-- **Spam detection:** Naive Bayes + TF-IDF. **NER:** Person, Location, Organisation, Date, Money.
-- **POS tags:** NN noun, VB verb, JJ adjective, RB adverb.
+- **NER:** Person, Location, Organisation, Date, Money.
 - **Parser** builds a **parse tree** (root = sentence, leaves = words).
 - **Lexeme = actual text. Token = its category.**
 - **Compiler phases (6):** Lexical → Syntax → Semantic → Intermediate Code → Optimization → Code Generation (+ Symbol table, Error handler).
 - **Intermediate code** = machine-independent (three-address code).
 - **Embeddings:** Word2Vec (context: CBOW/Skip-Gram), GloVe (global co-occurrence), FastText (subwords).
-- **Challenges:** synonyms, polysemy, sarcasm, emotions.
 
 ---
 
@@ -394,27 +348,6 @@
 
 ---
 
-## BLOCK D: Comparing Representation Types
-*(Q13, Q14)*
-
-### Q13 + Q14. Sparse vs Dense and Frequency-based vs Distributed
-
-| | **Sparse / Frequency-based** | **Dense / Distributed** |
-|---|---|---|
-| Methods | **BoW, TF-IDF**, one-hot | **Word2Vec, GloVe, FastText, BERT** |
-| Basis | **Counts** of words | **Context learning** |
-| Vector size | **Very long** (equals vocabulary size) | **Short** (e.g., 100 or 300 numbers) |
-| Content | **Mostly zeros** | Mostly meaningful real numbers |
-| Meaning | **Ignores meaning** and word order | **Captures meaning and similarity** |
-| Relationships | No analogies | Captures analogies (king − man + woman = queen) |
-| Complexity | Simpler | Needs more training |
-
-- *Example (sparse):* "happy" as a one-hot vector = a single 1 among thousands of 0s, no meaning. *(dense):* a compact 300-number vector sitting close to "joyful".
-- *Search example:* TF-IDF matches only exact words ("car" ≠ "automobile"); Word2Vec knows they are similar.
-- Frequency-based methods are still useful as **simple baselines**.
-
----
-
 ## Unit 2: Last-Minute Cheat Sheet
 - **Pre-processing:** lowercase → remove punctuation → tokenize → stop-words → stem/lemmatize.
 - **Word tokenization** = words. **Sentence tokenization** = sentences.
@@ -424,7 +357,6 @@
 - **CBOW** = context → word (fast, small data). **Skip-Gram** = word → context (rare words, large data).
 - **GloVe** = global co-occurrence matrix. **FastText** = subwords (rare, unseen, misspelled words).
 - **BERT** = bidirectional, self-attention, MLM, **context-dependent vectors**.
-- **Sparse** (BoW, TF-IDF): long, mostly zeros, no meaning. **Dense** (embeddings): short, meaningful, similar words close.
 
 ---
 
@@ -432,7 +364,7 @@
 # UNIT 3: Text Classification and Machine Learning Models
 
 ## BLOCK A: Text Classification Basics
-*(Q8, Q9, Q14)*
+*(Q8, Q9)*
 
 ### Q8. Text Classification and its applications
 - Automatically **assigning a piece of text to one or more categories** based on its content (teaching a computer to decide which labelled "box" the text belongs to).
@@ -455,19 +387,6 @@
 7. **Splitting data:** training set and testing set.
 
 - *Why each step:* cleaning removes noise; tokenization and normalization make words consistent; feature extraction makes text machine-readable; splitting lets us test fairly on unseen data.
-
-### Q14. Binary vs Multiclass classification
-
-| | **Binary** | **Multiclass** |
-|---|---|---|
-| Number of classes | **Two** | **Three or more** |
-| Output function | Often **Sigmoid** (one probability) | Uses **Softmax** (probabilities across all classes) |
-| Complexity | Simpler | More complex |
-| Example | Spam / not spam; positive / negative | Sports / politics / technology |
-
-- *Example:* positive/negative reviews = binary; adding "neutral" makes it multiclass (softmax output).
-
----
 
 ## BLOCK B: Classification Algorithms
 *(Q2, Q12, Q3, Q4)*
@@ -517,9 +436,9 @@
 ---
 
 ## BLOCK C: Evaluating Models and Overfitting
-*(Q5, Q13, Q6)*
+*(Q5, Q6)*
 
-### Q5 + Q13. Confusion matrix, Precision, Recall, F1
+### Q5. Confusion matrix and its performance measures (accuracy, precision, recall, F1)
 A **confusion matrix** is a table comparing predictions with the actual answers.
 
 | Term | Meaning |
@@ -539,7 +458,7 @@ A **confusion matrix** is a table comparing predictions with the actual answers.
 - *Example:* spam test on 100 emails: TP = 40, TN = 50, FP = 5, FN = 5 → precision = 40 out of 45; recall = 40 out of 45.
 - *Example:* a disease-detection text system needs **high recall** so sick patients aren't missed.
 
-### Q6. Overfitting and generalization
+### Q6. Overfitting in text classification and generalization
 - **Overfitting:** the model learns training data too well (including noise) → excellent on training data, **poor on new data** (like a student who memorises answers).
 - **Generalization:** ability to perform well on **new, unseen data** (the real goal).
 - **Signs:** very high training accuracy, much lower test accuracy, model too complex for the data.
@@ -609,7 +528,6 @@ A **confusion matrix** is a table comparing predictions with the actual answers.
 ## Unit 3: Last-Minute Cheat Sheet
 - **Text classification** = assign text to categories (spam, sentiment, topic, language, intent, moderation).
 - **Data preparation:** collect labelled data → clean → tokenize → stop-words → stem/lemmatize → feature extraction → train/test split.
-- **Binary** = 2 classes (**sigmoid**). **Multiclass** = 3+ classes (**softmax**).
 - **Naive Bayes:** probability, assumes words independent, picks highest probability. **Logistic Regression:** sigmoid, threshold 0.5. **Softmax Regression:** probabilities sum to 1. **SVM:** max-margin hyperplane, support vectors, kernel trick.
 - **Confusion matrix:** TP, TN, FP (false alarm), FN (miss). **Precision** (FP matters), **Recall** (FN matters), **F1** (balance).
 - **Overfitting fixes:** more data, regularization, dropout, cross-validation, early stopping, simpler model, augmentation.
